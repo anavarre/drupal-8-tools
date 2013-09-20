@@ -1,0 +1,20 @@
+# Drupal variables
+WEBROOT="/var/www/html"
+TMP="/tmp"
+RELEASE="drupal-8.0-alpha3"
+COMPRESSION="tar.gz"
+DRUPAL="${RELEASE}.${COMPRESSION}"
+
+# Apache variables
+SITES_AVAILABLE="/etc/apache2/sites-available"
+SITES_ENABLED="/etc/apache2/sites-enabled"
+SUFFIX="local"
+
+# PHP
+PHP="php5-curl"
+
+# Colors
+GREEN_START="\033[38;5;148m"
+GREEN_END="\033[39m"
+RED_START="\033[0;31m"
+RED_END="\033[0m"
