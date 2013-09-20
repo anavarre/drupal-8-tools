@@ -1,6 +1,9 @@
 #!/bin/bash
 
-source common
+# Invoke the script from anywhere (e.g system alias)
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+source $DIR/common
 
 echo -e "Which Drupal docroot should we delete?"
 read SITE

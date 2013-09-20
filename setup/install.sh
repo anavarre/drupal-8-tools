@@ -1,6 +1,9 @@
 #!/bin/bash
 
-source common
+# Invoke the script from anywhere (e.g system alias)
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+source $DIR/common
 
 ################
 # REQUIREMENTS #
@@ -72,9 +75,9 @@ echo -e "\tAdding hosts file entry..."
 	sed -i "1i127.0.0.1\t$SITE.$SUFFIX" /etc/hosts
 
 # MySQL queries
-DB_CREATE="CREATE DATABASE IF NOT EXISTS $SITE CHARACTER SET utf8 COLLATE utf8_general_ci;"
+DB_CREATE="CREATE DATABASE IF NOT EXISTS $SITE DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci"
 DB_PERMS="GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES ON $SITE.* TO 'root'@'localhost' IDENTIFIED BY 'root'"
-SQL="${DB_CREATE}${DB_PERMS}"
+SQL="${DB_CREATE};${DB_PERMS}"
 
 echo -e "\tCreating MySQL database..."
 	$MYSQL -uroot -proot -e "$SQL"
