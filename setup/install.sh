@@ -62,11 +62,11 @@ cp $SITES_AVAILABLE/default $SITES_AVAILABLE/$SITE
 	sed -i "s:/var/www:/var/www/html/$SITE:g" $SITES_AVAILABLE/$SITE
 cd $SITES_ENABLED && ln -s $SITES_AVAILABLE/$SITE $SITES_ENABLED/$SITE
 apache2ctl graceful
-	# Updating hosts file
+
+echo -e "\tAdding hosts file entry..."
 	sed -i "1i127.0.0.1\t$SITE.$SUFFIX" /etc/hosts
 
-# MySQL setup
-MYSQL=`which mysql`
+# MySQL queries
 DB_CREATE="CREATE DATABASE IF NOT EXISTS $SITE CHARACTER SET utf8 COLLATE utf8_general_ci;"
 DB_PERMS="GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES ON $SITE.* TO 'root'@'localhost' IDENTIFIED BY 'root'"
 SQL="${DB_CREATE}${DB_PERMS}"
