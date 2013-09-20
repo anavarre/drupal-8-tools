@@ -5,11 +5,18 @@ source common
 echo -e "Which Drupal docroot should we delete?"
 read SITE
 
+# Docroot exists
+if [[ ! -d $WEBROOT/$SITE ]]; then
+	echo -e $GREEN_START"The $SITE docroot doesn't exist! Aborting."$GREEN_END
+	exit 0
+fi
+
 echo -e "\tDeleting Drupal docroot..."
 	rm -Rf $WEBROOT/$SITE
 
 echo -e "\tDeleting Apache vHost..."
-	rm -f $SITES_AVAILABLE/$SITE $SITES_ENABLED/$SITE
+	rm -f $SITES_AVAILABLE/$SITE
+	a2dissite $SITE
 
 echo -e "\tDeleting hosts file entry..."
 	sed -i "/$SITE.$SUFFIX/d" /etc/hosts

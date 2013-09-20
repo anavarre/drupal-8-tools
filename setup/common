@@ -15,7 +15,6 @@ PHP="php5-curl"
 
 # MySQL variables
 MYSQL=`which mysql`
-MYSQLADM=`which mysqladmin`
 
 # Colors
 GREEN_START="\033[38;5;148m"

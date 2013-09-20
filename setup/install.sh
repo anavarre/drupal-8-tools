@@ -55,13 +55,16 @@ chmod a+w $WEBROOT/$SITE/sites/default/settings.php
 
 # Apache setup
 echo -e "\tProvisionning Apache vhost..."
-cp $SITES_AVAILABLE/default $SITES_AVAILABLE/$SITE
+	cp $SITES_AVAILABLE/default $SITES_AVAILABLE/$SITE
 	# Adding ServerName directive
 	sed -i "3i\\\tServerName $SITE.$SUFFIX" $SITES_AVAILABLE/$SITE
 	# Modifying DocumentRoot and Directory directives
 	sed -i "s:/var/www:/var/www/html/$SITE:g" $SITES_AVAILABLE/$SITE
-cd $SITES_ENABLED && ln -s $SITES_AVAILABLE/$SITE $SITES_ENABLED/$SITE
-apache2ctl graceful
+
+echo -e "\tEnabling site..."
+	a2ensite $SITE
+#cd $SITES_ENABLED && ln -s $SITES_AVAILABLE/$SITE $SITES_ENABLED/$SITE
+service apache2 reload
 
 echo -e "\tAdding hosts file entry..."
 	sed -i "1i127.0.0.1\t$SITE.$SUFFIX" /etc/hosts
