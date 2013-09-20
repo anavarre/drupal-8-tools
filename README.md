@@ -20,10 +20,13 @@ Instead of using any *AMP stack, VM or container, why not simply use a shell scr
 The script assumes that your MySQL credentials are root/root and that you're downloading drupal-8.0-alpha3 to set up a new docroot under /var/www/html. Feel free to modify the script according to your preferences.
 
 setup/delete.sh
--------------------
+---------------
 
 Does the exact opposite and cleans up everything (docroot, DB, vhost, hosts entry).
 
-Note: make sure to make those files executable (i.e. chmod +x script.sh)
+Note: make sure to make this file executable (chmod +x script.sh)
 
-In the future, plan is to abstract all this even more.
+setup/common
+------------
+
+Simple admin script to store common variables.
