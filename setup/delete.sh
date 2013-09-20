@@ -5,8 +5,19 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source $DIR/common
 
+echo -e $RED_START"############################################################"$RED_END
+echo -e $RED_START"# WARNING! You're about to delete a site and all its data! #"$RED_END
+echo -e $RED_START"############################################################"$RED_END
+
 echo -e "Which Drupal docroot should we delete?"
 read SITE
+
+read -p "Are you sure? [Y/N] "
+if [[ $REPLY =~ ^[Nn]$ ]]
+then
+	echo -e $GREEN_START"Back to the comfort zone. Aborting."$GREEN_END
+	exit 0
+fi
 
 # Docroot exists
 if [[ ! -d $WEBROOT/$SITE ]]; then
