@@ -58,8 +58,10 @@ echo -e "\tProvisionning Apache vhost..."
 	cp $SITES_AVAILABLE/default $SITES_AVAILABLE/$SITE
 	# Adding ServerName directive
 	sed -i "3i\\\tServerName $SITE.$SUFFIX" $SITES_AVAILABLE/$SITE
-	# Modifying DocumentRoot and Directory directives
+	# Modifying directives
 	sed -i "s:/var/www:/var/www/html/$SITE:g" $SITES_AVAILABLE/$SITE
+	# Make sure that Drupal's .htaccess clean URLs will work fine
+	sed -i "s/AllowOverride None/AllowOverride All/g" $SITES_AVAILABLE/$SITE
 
 echo -e "\tEnabling site..."
 	a2ensite $SITE
