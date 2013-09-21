@@ -29,9 +29,10 @@ echo -e "\tDeleting Drupal docroot..."
 	rm -Rf $WEBROOT/$SITE
 
 echo -e "\tDeleting Apache vHost..."
+	a2dissite $SITE > /dev/null 2>&1
+	service apache2 reload > /dev/null 2>&1
 	rm -f $SITES_AVAILABLE/$SITE
-	a2dissite $SITE
-
+	
 echo -e "\tDeleting hosts file entry..."
 	sed -i "/$SITE.$SUFFIX/d" /etc/hosts
 

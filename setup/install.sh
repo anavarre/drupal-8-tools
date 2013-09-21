@@ -12,7 +12,7 @@ source $DIR/common
 # Enable mod_rewrite if needed
 if [[ ! -L /etc/apache2/mods-enabled/rewrite.load ]]; then
 	echo "Enabling mod_rewrite..."
-	a2enmod rewrite
+	a2enmod rewrite > /dev/null 2>&1
 	service apache2 restart
 fi
 
@@ -67,9 +67,8 @@ echo -e "\tProvisionning Apache vhost..."
 	sed -i "s/AllowOverride None/AllowOverride All/g" $SITES_AVAILABLE/$SITE
 
 echo -e "\tEnabling site..."
-	a2ensite $SITE
-#cd $SITES_ENABLED && ln -s $SITES_AVAILABLE/$SITE $SITES_ENABLED/$SITE
-service apache2 reload
+	a2ensite $SITE > /dev/null 2>&1
+	service apache2 reload > /dev/null 2>&1
 
 echo -e "\tAdding hosts file entry..."
 	sed -i "1i127.0.0.1\t$SITE.$SUFFIX" /etc/hosts

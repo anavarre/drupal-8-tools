@@ -3,6 +3,8 @@ Drupal 8 Tools
 
 This is a placeholder for simple D8 goodies that will hopefully help you speed up recurring tasks.
 
+Note: make sure all Shell scripts are executable (chmod +x script.sh)
+
 setup/install.sh
 -------------------
 
@@ -23,8 +25,6 @@ setup/delete.sh
 ---------------
 
 Does the exact opposite and cleans up everything (docroot, DB, vhost, hosts entry).
-
-Note: make sure to make this file executable (chmod +x script.sh)
 
 setup/common
 ------------
