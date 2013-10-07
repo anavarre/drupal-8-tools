@@ -1,7 +1,7 @@
 # Drupal variables
 WEBROOT="/var/www/html"
 TMP="/tmp"
-RELEASE="drupal-8.0-alpha3"
+RELEASE="drupal-8.x-dev"
 COMPRESSION="tar.gz"
 DRUPAL="${RELEASE}.${COMPRESSION}"
 
