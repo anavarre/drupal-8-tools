@@ -8,9 +8,9 @@ Note: make sure all Shell scripts are executable (chmod +x script.sh)
 Usage
 -----
 
-$ install <sitename>
+$ install {sitename}
 
-$ remove <sitename>
+$ remove {sitename}
 
 setup/install.sh
 ----------------
