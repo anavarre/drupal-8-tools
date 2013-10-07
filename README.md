@@ -9,6 +9,7 @@ Usage
 -----
 
 $ install <sitename>
+
 $ remove <sitename>
 
 setup/install.sh
