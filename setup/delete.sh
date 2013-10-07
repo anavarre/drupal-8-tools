@@ -3,6 +3,11 @@
 # Invoke the script from anywhere (e.g system alias)
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+if [ "$(whoami)" != "root" ]; then
+	echo "You are required to run this script as root or with sudo...aborting."
+	exit 1
+fi
+
 source ${DIR}/common
 
 echo -e "${RED_START}############################################################${RED_END}"
