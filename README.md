@@ -3,7 +3,11 @@ Drupal 8 Tools
 
 This is a placeholder for simple D8 goodies that will hopefully help you speed up recurring tasks.
 
-Note: make sure all Shell scripts are executable (chmod +x script.sh)
+Notes
+=====
+
+- All scripts have been tested against Ubuntu 12.04 LTS (Precise Pangolin) only. It will likely break with any other configuration.
+- Make sure all Shell scripts are executable (chmod +x script.sh)
 
 Usage
 -----
@@ -14,8 +18,6 @@ $ remove {sitename}
 
 setup/install.sh
 ----------------
-
-Caution: this script has only been tested with Ubuntu 12.04 to 13.04. It might break with any other configuration.
 
 Instead of using any *AMP stack, VM or container, why not simply use a shell script to provision a Drupal site? This is what this script is all about. Within a few seconds it will:
 
