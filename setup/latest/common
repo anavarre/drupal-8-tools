@@ -1,0 +1,23 @@
+# Drupal variables
+WEBROOT="/var/www/html"
+TMP="/tmp"
+RELEASE="drupal-8.x-dev"
+COMPRESSION="tar.gz"
+DRUPAL="${RELEASE}.${COMPRESSION}"
+
+# Apache variables
+SITES_AVAILABLE="/etc/apache2/sites-available"
+SITES_ENABLED="/etc/apache2/sites-enabled"
+SUFFIX="local"
+
+# PHP variables
+PHP="php5-curl"
+
+# MySQL variables
+MYSQL=`which mysql`
+
+# Colors
+GREEN_START="\033[38;5;148m"
+GREEN_END="\033[39m"
+RED_START="\033[0;31m"
+RED_END="\033[0m"
