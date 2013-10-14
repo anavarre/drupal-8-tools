@@ -8,6 +8,8 @@ DRUPAL="${RELEASE}.${COMPRESSION}"
 # Apache variables
 SITES_AVAILABLE="/etc/apache2/sites-available"
 SITES_ENABLED="/etc/apache2/sites-enabled"
+DEFAULT_VHOST_LTS="default"
+DEFAULT_VHOST_latest="000-default.conf"
 SUFFIX="local"
 
 # PHP variables

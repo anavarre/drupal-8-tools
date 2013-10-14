@@ -2,9 +2,10 @@
 
 # Invoke the script from anywhere (e.g .bashrc alias)
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
+echo ${DIR}/common
 source ${DIR}/common
-
+echo ${WEBROOT}
+exit 0
 if [ "$(whoami)" != "root" ]; then
 	echo -e "${RED_START}You are required to run this script as root or with sudo! Aborting...${RED_END}"
 	exit 1
@@ -66,9 +67,9 @@ chmod a+w ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
 # Apache setup
 echo -e "\tProvisionning Apache vhost..."
-	cp ${SITES_AVAILABLE}/default ${SITES_AVAILABLE}/${SITENAME}
+	cp ${SITES_AVAILABLE}/${DEFAULT_VHOST_latest} ${SITES_AVAILABLE}/${SITENAME}
 	# Adding ServerName directive
-	sed -i "3i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
+	sed -i "10i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
 	# Modifying directives
 	sed -i "s:/var/www:/var/www/html/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}
 	# Make sure that Drupal's .htaccess clean URLs will work fine

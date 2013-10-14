@@ -66,7 +66,7 @@ chmod a+w ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
 # Apache setup
 echo -e "\tProvisionning Apache vhost..."
-	cp ${SITES_AVAILABLE}/default ${SITES_AVAILABLE}/${SITENAME}
+	cp ${SITES_AVAILABLE}/${DEFAULT_VHOST_LTS} ${SITES_AVAILABLE}/${SITENAME}
 	# Adding ServerName directive
 	sed -i "3i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
 	# Modifying directives
