@@ -54,6 +54,7 @@ echo "Unpacking ${DRUPAL}..."
 tar -C ${WEBROOT} -xzf ${TMP}/${DRUPAL}
 
 mv ${WEBROOT}/${RELEASE} ${WEBROOT}/${SITENAME}
+chown -R $(whoami):$(whoami) ${WEBROOT}/${SITENAME}
 echo -e "${GREEN_START}Successfully created Drupal docroot under ${WEBROOT}/${SITENAME}${GREEN_END}"
 
 echo -e "\tCopying settings.php file..."
@@ -66,6 +67,9 @@ chmod a+w ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
 # Apache setup
 echo -e "\tProvisionning Apache vhost..."
+
+# First, determine if we're running Ubuntu LTS or latest
+if [[ -f ${SITES_AVAILABLE}/${DEFAULT_VHOST_LTS} ]]; then
 	cp ${SITES_AVAILABLE}/${DEFAULT_VHOST_LTS} ${SITES_AVAILABLE}/${SITENAME}
 	# Adding ServerName directive
 	sed -i "3i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
@@ -73,6 +77,15 @@ echo -e "\tProvisionning Apache vhost..."
 	sed -i "s:/var/www:/var/www/html/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}
 	# Make sure that Drupal's .htaccess clean URLs will work fine
 	sed -i "s/AllowOverride None/AllowOverride All/g" ${SITES_AVAILABLE}/${SITENAME}
+else
+	cp ${SITES_AVAILABLE}/${DEFAULT_VHOST_LATEST} ${SITES_AVAILABLE}/${SITENAME}
+	# Adding ServerName directive
+	sed -i "11i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
+	# Adding ServerAlias directive
+	sed -i "12i\\\tServerAlias ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
+	# Modifying directives
+	sed -i "s:/var/www:/var/www/html/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}
+fi
 
 echo -e "\tEnabling site..."
 	a2ensite ${SITENAME} > /dev/null 2>&1
