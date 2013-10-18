@@ -1,8 +1,8 @@
 # Apache variables
 SITES_AVAILABLE="/etc/apache2/sites-available"
 SITES_ENABLED="/etc/apache2/sites-enabled"
-DEFAULT_VHOST_LTS="default"
-DEFAULT_VHOST_LATEST="000-default.conf"
+APACHE_22_DEFAULT="default"
+APACHE_24_DEFAULT="000-default.conf"
 SUFFIX="local"
 
 # PHP variables

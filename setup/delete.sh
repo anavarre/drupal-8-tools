@@ -39,7 +39,13 @@ echo -e "\tDeleting Drupal docroot..."
 echo -e "\tDeleting Apache vHost..."
 	a2dissite ${SITENAME} > /dev/null 2>&1
 	service apache2 reload > /dev/null 2>&1
+
+# First, determine if we're running Apache 2.2 or 2.4
+if [[ -f ${SITES_AVAILABLE}/${SITENAME} ]]; then
 	rm -f ${SITES_AVAILABLE}/${SITENAME}
+else
+	rm -f ${SITES_AVAILABLE}/${SITENAME}.conf
+fi
 	
 echo -e "\tDeleting hosts file entry..."
 	sed -i "/${SITENAME}.${SUFFIX}/d" /etc/hosts

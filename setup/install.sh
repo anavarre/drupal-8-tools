@@ -68,28 +68,40 @@ chmod a+w ${WEBROOT}/${SITENAME}/sites/default/settings.php
 # Apache setup
 echo -e "\tProvisionning Apache vhost..."
 
-# First, determine if we're running Ubuntu LTS or latest
-if [[ -f ${SITES_AVAILABLE}/${DEFAULT_VHOST_LTS} ]]; then
-	cp ${SITES_AVAILABLE}/${DEFAULT_VHOST_LTS} ${SITES_AVAILABLE}/${SITENAME}
+# First, determine if we're running Apache 2.2 or 2.4
+if [[ -f ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ]]; then
+	cp ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}
 	# Adding ServerName directive
 	sed -i "3i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
 	# Modifying directives
 	sed -i "s:/var/www:/var/www/html/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}
 	# Make sure that Drupal's .htaccess clean URLs will work fine
 	sed -i "s/AllowOverride None/AllowOverride All/g" ${SITES_AVAILABLE}/${SITENAME}
+
+	echo -e "\tEnabling site..."
+	a2ensite ${SITENAME} > /dev/null 2>&1
 else
-	cp ${SITES_AVAILABLE}/${DEFAULT_VHOST_LATEST} ${SITES_AVAILABLE}/${SITENAME}
+	cp ${SITES_AVAILABLE}/${APACHE_24_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}.conf
 	# Adding ServerName directive
-	sed -i "11i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
+	sed -i "11i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}.conf
 	# Adding ServerAlias directive
-	sed -i "12i\\\tServerAlias ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
+	sed -i "12i\\\tServerAlias ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}.conf
+
+	sed -i "16i\\\t<Directory /var/www/${SITENAME}/>" ${SITES_AVAILABLE}/${SITENAME}.conf
+    sed -i "17i\\\t\tOptions Indexes FollowSymLinks" ${SITES_AVAILABLE}/${SITENAME}.conf
+	sed -i "18i\\\t\tAllowOverride All" ${SITES_AVAILABLE}/${SITENAME}.conf
+	sed -i "19i\\\t\tRequire all granted" ${SITES_AVAILABLE}/${SITENAME}.conf
+	sed -i "20i\\\t</Directory>" ${SITES_AVAILABLE}/${SITENAME}.conf
+
 	# Modifying directives
-	sed -i "s:/var/www:/var/www/html/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}
+	sed -i "s:/var/www:/var/www/html/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}.conf
+
+	echo -e "\tEnabling site..."
+	a2ensite ${SITENAME}.conf > /dev/null 2>&1
 fi
 
-echo -e "\tEnabling site..."
-	a2ensite ${SITENAME} > /dev/null 2>&1
-	service apache2 reload > /dev/null 2>&1
+# Restart Apache to apply the new configuration
+service apache2 reload > /dev/null 2>&1
 
 echo -e "\tAdding hosts file entry..."
 	sed -i "1i127.0.0.1\t${SITENAME}.${SUFFIX}" /etc/hosts
