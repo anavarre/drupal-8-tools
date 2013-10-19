@@ -71,7 +71,7 @@ echo -e "\tProvisionning Apache vhost..."
 # First, determine if we're running Apache 2.2 or 2.4
 if [[ -f ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ]]; then
 	cp ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}
-	# Adding ServerName directive
+	# ServerName directive
 	sed -i "3i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
 	# Modifying directives
 	sed -i "s:/var/www:/var/www/html/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}
@@ -82,12 +82,12 @@ if [[ -f ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ]]; then
 	a2ensite ${SITENAME} > /dev/null 2>&1
 else
 	cp ${SITES_AVAILABLE}/${APACHE_24_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}.conf
-	# Adding ServerName directive
+	# ServerName directive
 	sed -i "11i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}.conf
-	# Adding ServerAlias directive
+	# ServerAlias directive
 	sed -i "12i\\\tServerAlias ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}.conf
-
-	sed -i "16i\\\t<Directory /var/www/${SITENAME}/>" ${SITES_AVAILABLE}/${SITENAME}.conf
+	# vHost overrides
+	sed -i "16i\\\t<Directory /var/www/>" ${SITES_AVAILABLE}/${SITENAME}.conf
     sed -i "17i\\\t\tOptions Indexes FollowSymLinks" ${SITES_AVAILABLE}/${SITENAME}.conf
 	sed -i "18i\\\t\tAllowOverride All" ${SITES_AVAILABLE}/${SITENAME}.conf
 	sed -i "19i\\\t\tRequire all granted" ${SITES_AVAILABLE}/${SITENAME}.conf
