@@ -6,7 +6,7 @@ This is a placeholder for simple D8 goodies that will hopefully help you speed u
 Notes
 -----
 
-- All scripts have been tested against **Ubuntu 12.04 LTS** (Precise Pangolin) only
+- All scripts have been tested against **Ubuntu 12.04 LTS** (Precise Pangolin) and **13.10** (Saucy Salamander)
 - Make sure all Shell scripts are executable (**chmod +x script.sh**)
 - It's safer to run those scripts within a container or VM (e.g. Docker or Vagrant)
 
@@ -24,7 +24,7 @@ Apply changes without rebooting:
 
 <code>$ . ~/.bash_aliases</code>
 
-Then, invoke the _install.sh_ or _delete.sh_ script directly:
+Then, invoke the _install.sh_ or _delete.sh_ script directly and give it a sitename:
 
 <code>$ install/remove {sitename}</code>
 
