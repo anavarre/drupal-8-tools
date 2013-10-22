@@ -189,6 +189,48 @@ if [[ ${REPLY} =~ ^[Yy]$ ]]; then
 	echo -e "${GREEN}Successfully created Block scaffolding!${COLOR_ENDING}"
 fi
 
+# Offer to create Tests.
+read -p "Create Tests scaffolding? [Y/N] "
+if [[ ${REPLY} =~ ^[Yy]$ ]]; then
+
+	if [[ -d ${NAME} ]]; then
+		echo -e "\t${BLUE}${NAME} directory already exists! Skipping...${COLOR_ENDING}"
+	else
+		echo -e "\tCreating ${NAME} directory..."
+		mkdir ${NAME}
+	fi
+
+	if [[ -d ${NAME}/lib ]]; then
+		echo -e "\t${BLUE}${NAME}/lib directory already exists! Skipping...${COLOR_ENDING}"
+	else
+		echo -e "\tCreating ${NAME}/lib directory..."
+		mkdir ${NAME}/lib
+	fi
+
+	if [[ -d ${NAME}/lib/Drupal ]]; then
+		echo -e "\t${BLUE}${NAME}/lib/Drupal directory already exists! Skipping...${COLOR_ENDING}"
+	else
+		echo -e "\tCreating ${NAME}/lib/Drupal directory..."
+		mkdir ${NAME}/lib/Drupal
+	fi
+
+	if [[ -d ${NAME}/lib/Drupal/${NAME} ]]; then
+		echo -e "\t${BLUE}${NAME}/lib/Drupal/${NAME} directory already exists! Skipping...${COLOR_ENDING}"
+	else
+		echo -e "\tCreating ${NAME}/lib/Drupal/${NAME} directory..."
+		mkdir ${NAME}/lib/Drupal/${NAME}
+	fi
+
+	if [[ -d ${NAME}/lib/Drupal/${NAME}/Tests ]]; then
+		echo -e "\t${BLUE}${NAME}/lib/Drupal/${NAME}/Tests directory already exists! Skipping...${COLOR_ENDING}"
+	else
+		echo -e "\tCreating ${NAME}/lib/Drupal/${NAME}/Tests directory..."
+		mkdir ${NAME}/lib/Drupal/${NAME}/Tests
+	fi
+
+	echo -e "${GREEN}Successfully created Tests scaffolding!${COLOR_ENDING}"
+fi
+
 #################
 # Default files #
 #################
