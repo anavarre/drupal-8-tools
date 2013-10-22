@@ -220,7 +220,7 @@ description: '${DESCRIPTION}.'
 core: 8.x
 EOT
 
-# Only add package if any was enteBLUE.
+# Only add package if any was entered.
 if [[ ! -z ${PACKAGE} ]]; then
 	sed -i "4ipackage: ${PACKAGE}" ${NAME}/${NAME}.info.yml
 fi
