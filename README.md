@@ -16,8 +16,8 @@ Recommended usage
 Add the following bash aliases in your **.bash_aliases** file:
 
 <pre>
-alias install='sudo /path/to/drupal-8-tools/setup/latest/install.sh'
-alias delete='sudo /path/to/drupal-8-tools/setup/latest/delete.sh'
+alias install='sudo /path/to/drupal-8-tools/provisioning/latest/install.sh'
+alias delete='sudo /path/to/drupal-8-tools/provisioning/latest/delete.sh'
 </pre>
 
 Apply changes without rebooting:
