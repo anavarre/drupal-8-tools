@@ -7,13 +7,13 @@ source ${DIR}/common
 
 # Make sure only root can execute the script
 if [ "$(whoami)" != "root" ]; then
-	echo -e "${RED_START}You are required to run this script as root or with sudo! Aborting...${RED_END}"
+	echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
 	exit 1
 fi
 
-echo -e "${RED_START}############################################################${RED_END}"
-echo -e "${RED_START}# WARNING! You're about to delete a site and all its data! #${RED_END}"
-echo -e "${RED_START}############################################################${RED_END}"
+echo -e "${RED}############################################################${COLOR_ENDING}"
+echo -e "${RED}# WARNING! You're about to delete a site and all its data! #${COLOR_ENDING}"
+echo -e "${RED}############################################################${COLOR_ENDING}"
 
 SITENAME=$1
 if [ -z $1 ]; then
@@ -22,15 +22,14 @@ if [ -z $1 ]; then
 fi
 
 read -p "Are you sure? [Y/N] "
-if [[ ${REPLY} =~ ^[Nn]$ ]]
-then
-	echo -e "${GREEN_START}Back to the comfort zone. Aborting.${GREEN_END}"
+if [[ ${REPLY} =~ ^[Nn]$ ]]; then
+	echo -e "${GREEN}Back to the comfort zone. Aborting.${COLOR_ENDING}"
 	exit 0
 fi
 
 # Docroot exists
 if [[ ! -d ${WEBROOT}/${SITENAME} ]]; then
-	echo -e "${GREEN_START}The ${SITENAME} docroot doesn't exist! Aborting.${GREEN_END}"
+	echo -e "${GREEN}The ${SITENAME} docroot doesn't exist! Aborting.${COLOR_ENDING}"
 	exit 0
 fi
 
@@ -54,4 +53,4 @@ echo -e "\tDeleting hosts file entry..."
 echo -e "\tDeleting database..."
 	${MYSQL} -uroot -proot -e "DROP DATABASE IF EXISTS $SITENAME"
 
-echo -e "${GREEN_START}Successfully removed http://${SITENAME}.${SUFFIX}${GREEN_END}"
+echo -e "${GREEN}Successfully removed http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"

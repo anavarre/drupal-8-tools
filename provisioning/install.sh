@@ -7,7 +7,7 @@ source ${DIR}/common
 
 # Make sure only root can execute the script
 if [ "$(whoami)" != "root" ]; then
-	echo -e "${RED_START}You are required to run this script as root or with sudo! Aborting...${RED_END}"
+	echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
 	exit 1
 fi
 
@@ -41,7 +41,7 @@ fi
 
 # Docroot exists
 if [[ -d ${WEBROOT}/${SITENAME} ]]; then
-	echo -e "${RED_START}The ${SITENAME} docroot already exists! Aborting.${RED_END}"
+	echo -e "${RED}The ${SITENAME} docroot already exists! Aborting.${COLOR_ENDING}"
 	exit 0
 fi
 
@@ -56,7 +56,7 @@ tar -C ${WEBROOT} -xzf ${TMP}/${DRUPAL}
 
 mv ${WEBROOT}/${RELEASE} ${WEBROOT}/${SITENAME}
 chown -R $(whoami):$(whoami) ${WEBROOT}/${SITENAME}
-echo -e "${GREEN_START}Successfully created Drupal docroot under ${WEBROOT}/${SITENAME}${GREEN_END}"
+echo -e "${GREEN}Successfully created Drupal docroot under ${WEBROOT}/${SITENAME}${COLOR_ENDING}"
 
 echo -e "\tCopying settings.php file..."
 cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
@@ -115,7 +115,7 @@ SQL="${DB_CREATE};${DB_PERMS}"
 echo -e "\tCreating MySQL database..."
 	$MYSQL -uroot -proot -e "${SQL}"
 
-echo -e "${GREEN_START}Site is available at http://${SITENAME}.${SUFFIX}${GREEN_END}"
+echo -e "${GREEN}Site is available at http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"
 
 # echo -e "Reverting permissions for security reasons..."
 # chmod go-w sites/default
