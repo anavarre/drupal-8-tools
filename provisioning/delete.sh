@@ -5,6 +5,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source ${DIR}/common
 
+# Make sure only root can execute the script
 if [ "$(whoami)" != "root" ]; then
 	echo -e "${RED_START}You are required to run this script as root or with sudo! Aborting...${RED_END}"
 	exit 1
@@ -23,7 +24,7 @@ fi
 read -p "Are you sure? [Y/N] "
 if [[ ${REPLY} =~ ^[Nn]$ ]]
 then
-	echo -e "${GREEN_START}Back to the comfort zone. Aborting.{$GREEN_END}"
+	echo -e "${GREEN_START}Back to the comfort zone. Aborting.${GREEN_END}"
 	exit 0
 fi
 

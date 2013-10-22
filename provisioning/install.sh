@@ -5,6 +5,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source ${DIR}/common
 
+# Make sure only root can execute the script
 if [ "$(whoami)" != "root" ]; then
 	echo -e "${RED_START}You are required to run this script as root or with sudo! Aborting...${RED_END}"
 	exit 1
