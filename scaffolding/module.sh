@@ -6,7 +6,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source ${DIR}/common
 
 # Make sure only root can execute the script.
-if [ "$(whoami)" != "root" ]; then
+if [[ "$(whoami)" != "root" ]]; then
 	echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
 	exit 1
 fi
@@ -205,11 +205,16 @@ if [[ ! -f ${NAME}/${NAME}.services.yml ]]; then
 fi
 
 # Generating info.yml default values
+cat <<EOT >> ${NAME}/${NAME}.info.yml
+name: ${NAME}
+type: module
+description: '${DESCRIPTION}.'
+core: 8.x
+EOT
 
-sed -i "1iname: ${NAME}" ${NAME}/${NAME}.info.yml
-sed -i "2itype: module" ${NAME}/${NAME}.info.yml
-sed -i "3idescription: '${DESCRIPTION}'" ${NAME}/${NAME}.info.yml
-sed -i "4ipackage: ${PACKAGE}" ${NAME}/${NAME}.info.yml
-sed -i "5icore: 8.x" ${NAME}/${NAME}.info.yml
+# Only add package if any was entered.
+if [[ ! -z ${PACKAGE} ]]; then
+	sed -i "4ipackage: ${PACKAGE}" ${NAME}/${NAME}.info.yml
+fi
 
-echo -e "${GREEN}Successfully generated module scaffolding!"
+echo -e "${GREEN}Successfully generated module scaffolding!${COLOR_ENDING}"

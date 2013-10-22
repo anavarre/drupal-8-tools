@@ -6,7 +6,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source ${DIR}/common
 
 # Make sure only root can execute the script
-if [ "$(whoami)" != "root" ]; then
+if [[ "$(whoami)" != "root" ]]; then
 	echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
 	exit 1
 fi
@@ -34,7 +34,7 @@ done
 # Drupal install #
 ##################
 SITENAME=$1
-if [ -z $1 ]; then
+if [[ -z $1 ]]; then
 	echo -n "What should be the name of the new Drupal docroot? "
 	read SITENAME
 fi

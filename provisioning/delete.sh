@@ -6,7 +6,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source ${DIR}/common
 
 # Make sure only root can execute the script
-if [ "$(whoami)" != "root" ]; then
+if [[ "$(whoami)" != "root" ]]; then
 	echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
 	exit 1
 fi
@@ -16,7 +16,7 @@ echo -e "${RED}# WARNING! You're about to delete a site and all its data! #${COL
 echo -e "${RED}############################################################${COLOR_ENDING}"
 
 SITENAME=$1
-if [ -z $1 ]; then
+if [[ -z $1 ]]; then
 	echo -n "Which Drupal docroot should we delete? "
 	read SITENAME
 fi
