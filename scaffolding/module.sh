@@ -47,16 +47,18 @@ fi
 # Convert module name to lowercase.
 NAME="${NAME,,}"
 
+# Create module directory.
+if [[ -d ${NAME} ]]; then
+	echo -e "${RED}${NAME} directory already exists! Aborting...${COLOR_ENDING}"
+	exit 1
+else
+	echo -e "\tCreating ${NAME} directory..."
+	mkdir ${NAME}
+fi
+
 # Offer to create a Controller.
 read -p "Create Controller scaffolding? [Y/N] "
 if [[ ${REPLY} =~ ^[Yy]$ ]]; then
-
-	if [[ -d ${NAME} ]]; then
-		echo -e "\t${BLUE}${NAME} directory already exists! Skipping...${COLOR_ENDING}"
-	else
-		echo -e "\tCreating ${NAME} directory..."
-		mkdir ${NAME}
-	fi
 
 	if [[ -d ${NAME}/lib ]]; then
 		echo -e "\t${BLUE}${NAME}/lib directory already exists! Skipping...${COLOR_ENDING}"
@@ -96,13 +98,6 @@ fi
 read -p "Create Form config scaffolding? [Y/N] "
 if [[ ${REPLY} =~ ^[Yy]$ ]]; then
 
-	if [[ -d ${NAME} ]]; then
-		echo -e "\t${BLUE}${NAME} directory already exists! Skipping...${COLOR_ENDING}"
-	else
-		echo -e "\tCreating ${NAME} directory..."
-		mkdir ${NAME}
-	fi
-
 	if [[ -d ${NAME}/lib ]]; then
 		echo -e "\t${BLUE}${NAME}/lib directory already exists! Skipping...${COLOR_ENDING}"
 	else
@@ -140,13 +135,6 @@ fi
 # Offer to create a Block.
 read -p "Create Block scaffolding? [Y/N] "
 if [[ ${REPLY} =~ ^[Yy]$ ]]; then
-
-	if [[ -d ${NAME} ]]; then
-		echo -e "\t${BLUE}${NAME} directory already exists! Skipping...${COLOR_ENDING}"
-	else
-		echo -e "\tCreating ${NAME} directory..."
-		mkdir ${NAME}
-	fi
 
 	if [[ -d ${NAME}/lib ]]; then
 		echo -e "\t${BLUE}${NAME}/lib directory already exists! Skipping...${COLOR_ENDING}"
@@ -192,13 +180,6 @@ fi
 # Offer to create Tests.
 read -p "Create Tests scaffolding? [Y/N] "
 if [[ ${REPLY} =~ ^[Yy]$ ]]; then
-
-	if [[ -d ${NAME} ]]; then
-		echo -e "\t${BLUE}${NAME} directory already exists! Skipping...${COLOR_ENDING}"
-	else
-		echo -e "\tCreating ${NAME} directory..."
-		mkdir ${NAME}
-	fi
 
 	if [[ -d ${NAME}/lib ]]; then
 		echo -e "\t${BLUE}${NAME}/lib directory already exists! Skipping...${COLOR_ENDING}"
@@ -265,6 +246,16 @@ EOT
 # Only add package if any was entered.
 if [[ ! -z ${PACKAGE} ]]; then
 	sed -i "4ipackage: ${PACKAGE}" ${NAME}/${NAME}.info.yml
+fi
+
+#######
+# CMI #
+#######
+if [[ -d ${NAME}/config ]]; then
+	echo -e "\t${BLUE}${NAME}/config directory already exists! Skipping...${COLOR_ENDING}"
+else
+	echo -e "\tCreating ${NAME}/config directory..."
+	mkdir ${NAME}/config
 fi
 
 echo -e "${GREEN}Successfully generated module scaffolding!${COLOR_ENDING}"
