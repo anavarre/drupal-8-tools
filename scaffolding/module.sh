@@ -27,9 +27,7 @@ if [[ -z $1 ]] && [[ -z $2 ]] && [[ -z $3 ]]; then
 	read PACKAGE
 fi
 
-########################
-# Dependency Injection #
-########################
+# Start scaffolding operations
 read -p "Module scaffolding will be generated under $(pwd). Should we proceed? [Y/N] "
 if [[ ${REPLY} =~ ^[Nn]$ ]]; then
 	echo -e "Understood. Where should we create this module, then? "
@@ -55,6 +53,35 @@ else
 	echo -e "\tCreating ${NAME_LOWER} directory..."
 	mkdir ${NAME_LOWER}
 fi
+
+#######
+# CMI #
+#######
+
+# Create the config directory
+if [[ -d ${NAME_LOWER}/config ]]; then
+	echo -e "\t${BLUE}${NAME_LOWER}/config directory already exists! Skipping...${COLOR_ENDING}"
+else
+	echo -e "\tCreating ${NAME_LOWER}/config directory..."
+	mkdir ${NAME_LOWER}/config
+fi
+
+# Offer to create a schema for the configuration files.
+read -p "Create Schema scaffolding for configuration files? [Y/N] "
+if [[ ${REPLY} =~ ^[Yy]$ ]]; then
+
+	if [[ -d ${NAME_LOWER}/config/schema ]]; then
+		echo -e "\t${BLUE}${NAME_LOWER}/config/schema directory already exists! Skipping...${COLOR_ENDING}"
+	else
+		echo -e "\tCreating ${NAME_LOWER}/config/schema directory..."
+		mkdir ${NAME_LOWER}/config/schema
+		echo -e "${GREEN}Successfully created Schema scaffolding!${COLOR_ENDING}"
+	fi
+fi
+
+########################
+# Dependency Injection #
+########################
 
 # Offer to create a Controller.
 read -p "Create Controller scaffolding? [Y/N] "
@@ -218,11 +245,25 @@ fi
 if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.info.yml ]]; then
 	echo -e "\tCreating ${NAME}.info.yml..."
 	touch ${NAME_LOWER}/${NAME_LOWER}.info.yml
+
+# Generating info.yml default values
+cat <<EOT >> ${NAME_LOWER}/${NAME_LOWER}.info.yml
+name: ${NAME}
+type: module
+description: '${DESCRIPTION}.'
+core: 8.x
+EOT
+
+	# Only add package if any was entered.
+	if [[ ! -z ${PACKAGE} ]]; then
+		sed -i "4ipackage: ${PACKAGE}" ${NAME_LOWER}/${NAME_LOWER}.info.yml
+	fi
 fi
 
 if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.module ]]; then
 	echo -e "\tCreating ${NAME_LOWER}.module..."
 	touch ${NAME_LOWER}/${NAME_LOWER}.module
+	echo "<?php" >> ${NAME_LOWER}/${NAME_LOWER}.module
 fi
 
 if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.routing.yml ]]; then
@@ -233,29 +274,6 @@ fi
 if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.services.yml ]]; then
 	echo -e "\tCreating ${NAME_LOWER}.services.yml..."
 	touch ${NAME_LOWER}/${NAME_LOWER}.services.yml
-fi
-
-# Generating info.yml default values
-cat <<EOT >> ${NAME_LOWER}/${NAME_LOWER}.info.yml
-name: ${NAME}
-type: module
-description: '${DESCRIPTION}.'
-core: 8.x
-EOT
-
-# Only add package if any was entered.
-if [[ ! -z ${PACKAGE} ]]; then
-	sed -i "4ipackage: ${PACKAGE}" ${NAME_LOWER}/${NAME_LOWER}.info.yml
-fi
-
-#######
-# CMI #
-#######
-if [[ -d ${NAME_LOWER}/config ]]; then
-	echo -e "\t${BLUE}${NAME_LOWER}/config directory already exists! Skipping...${COLOR_ENDING}"
-else
-	echo -e "\tCreating ${NAME_LOWER}/config directory..."
-	mkdir ${NAME_LOWER}/config
 fi
 
 echo -e "${GREEN}Successfully generated module scaffolding!${COLOR_ENDING}"
