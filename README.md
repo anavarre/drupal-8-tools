@@ -19,16 +19,21 @@ Add the following bash aliases in your **.bash_aliases** file:
 alias install='sudo /path/to/drupal-8-tools/provisioning/install.sh'
 alias delete='sudo /path/to/drupal-8-tools/provisioning/delete.sh'
 alias module='sudo /path/to/drupal-8-tools/scaffolding/module.sh'
+alias audit='sudo /path/to/drupal-8-tools/system_audit.sh'
 </pre>
 
 Apply changes without rebooting:
 
 <code>$ . ~/.bash_aliases</code>
 
-Invoke the _install.sh_ or _delete.sh_ script directly and give it a sitename:
+To provision a Drupal 8 site, invoke the _install.sh_ or _delete.sh_ script directly and give it a sitename:
 
 <code>$ install/remove {sitename}</code>
 
 If you want a module scaffolding, invoke the _module.sh_ script instead:
 
 <code>$ module</code>
+
+You might want to run a quick system audit to make sure your LAMP stack is compatible with Drupal 8's minimum requirements. Simply run:
+
+<code>$ audit</code>
