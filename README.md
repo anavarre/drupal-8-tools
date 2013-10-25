@@ -32,15 +32,3 @@ Invoke the _install.sh_ or _delete.sh_ script directly and give it a sitename:
 If you want a module scaffolding, invoke the _module.sh_ script instead:
 
 <code>$ module</code>
-
-scaffolding/module.sh
----------------------
-
-- Create a directory structure with Dependency Injection support (Controller, Form, Plugin)
-- Create required default files
-- Fill in *.info.yml with basic details
-
-scaffolding/common
-------------------
-
-Simple admin script to store common variables.
