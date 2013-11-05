@@ -62,7 +62,13 @@ echo -e "\tCopying settings.php file..."
 cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
 echo -e "\tSetting correct permissions..."
-# Allows to create the files and translations dirs automatically
+
+# Make sure the Drupal docroot has regular Apache permissions
+OWNER=$1
+	read -p "What Unix username should own the Drupal docroot? " OWNER
+chown -R www-data:${OWNER} ${WEBROOT}/${SITENAME}/
+
+# Allow the automatic creation of the files and translations dirs
 chmod a+w ${WEBROOT}/${SITENAME}/sites/default
 chmod a+w ${WEBROOT}/${SITENAME}/sites/default/settings.php  
 
