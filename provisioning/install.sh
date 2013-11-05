@@ -54,64 +54,67 @@ fi
 echo "Unpacking ${DRUPAL}..."
 tar -C ${WEBROOT} -xzf ${TMP}/${DRUPAL}
 
-mv ${WEBROOT}/${RELEASE} ${WEBROOT}/${SITENAME}
-chown -R $(whoami):$(whoami) ${WEBROOT}/${SITENAME}
-echo -e "${GREEN}Successfully created Drupal docroot under ${WEBROOT}/${SITENAME}${COLOR_ENDING}"
+# Convert sitename to lowercase if needed.
+SITENAME_LOWER="${SITENAME,,}"
+
+mv ${WEBROOT}/${RELEASE} ${WEBROOT}/${SITENAME_LOWER}
+chown -R $(whoami):$(whoami) ${WEBROOT}/${SITENAME_LOWER}
+echo -e "${GREEN}Successfully created Drupal docroot under ${WEBROOT}/${SITENAME_LOWER}${COLOR_ENDING}"
 
 echo -e "\tCopying settings.php file..."
-cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
+cp ${WEBROOT}/${SITENAME_LOWER}/sites/default/default.settings.php ${WEBROOT}/${SITENAME_LOWER}/sites/default/settings.php
 
 echo -e "\tSetting correct permissions..."
 
 # Make sure the Drupal docroot has regular Apache permissions
 OWNER=$1
-	read -p "What Unix username should own the Drupal docroot? " OWNER
-chown -R www-data:${OWNER} ${WEBROOT}/${SITENAME}/
+	read -p "Which Unix username should own the Drupal docroot? " OWNER
+chown -R www-data:${OWNER} ${WEBROOT}/${SITENAME_LOWER}/
 
 # Allow the automatic creation of the files and translations dirs
-chmod a+w ${WEBROOT}/${SITENAME}/sites/default
-chmod a+w ${WEBROOT}/${SITENAME}/sites/default/settings.php  
+chmod a+w ${WEBROOT}/${SITENAME_LOWER}/sites/default
+chmod a+w ${WEBROOT}/${SITENAME_LOWER}/sites/default/settings.php  
 
 # Apache setup
 echo -e "\tProvisionning Apache vhost..."
 
 # First, determine if we're running Apache 2.2 or 2.4
 if [[ -f ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ]]; then
-	cp ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}
+	cp ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ${SITES_AVAILABLE}/${SITENAME_LOWER}
 	# ServerName directive
-	sed -i "3i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
+	sed -i "3i\\\tServerName ${SITENAME_LOWER}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME_LOWER}
 	# Modifying directives
-	sed -i "s:/var/www:/var/www/html/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}
+	sed -i "s:/var/www:/var/www/html/${SITENAME_LOWER}:g" ${SITES_AVAILABLE}/${SITENAME_LOWER}
 	# Make sure that Drupal's .htaccess clean URLs will work fine
-	sed -i "s/AllowOverride None/AllowOverride All/g" ${SITES_AVAILABLE}/${SITENAME}
+	sed -i "s/AllowOverride None/AllowOverride All/g" ${SITES_AVAILABLE}/${SITENAME_LOWER}
 
 	echo -e "\tEnabling site..."
-	a2ensite ${SITENAME} > /dev/null 2>&1
+	a2ensite ${SITENAME_LOWER} > /dev/null 2>&1
 else
-	cp ${SITES_AVAILABLE}/${APACHE_24_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}.conf
+	cp ${SITES_AVAILABLE}/${APACHE_24_DEFAULT} ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
 	# ServerName directive
-	sed -i "11i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}.conf
+	sed -i "11i\\\tServerName ${SITENAME_LOWER}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
 	# ServerAlias directive
-	sed -i "12i\\\tServerAlias ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}.conf
+	sed -i "12i\\\tServerAlias ${SITENAME_LOWER}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
 	# vHost overrides
-	sed -i "16i\\\t<Directory /var/www/>" ${SITES_AVAILABLE}/${SITENAME}.conf
-    sed -i "17i\\\t\tOptions Indexes FollowSymLinks" ${SITES_AVAILABLE}/${SITENAME}.conf
-	sed -i "18i\\\t\tAllowOverride All" ${SITES_AVAILABLE}/${SITENAME}.conf
-	sed -i "19i\\\t\tRequire all granted" ${SITES_AVAILABLE}/${SITENAME}.conf
-	sed -i "20i\\\t</Directory>" ${SITES_AVAILABLE}/${SITENAME}.conf
+	sed -i "16i\\\t<Directory /var/www/>" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
+    sed -i "17i\\\t\tOptions Indexes FollowSymLinks" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
+	sed -i "18i\\\t\tAllowOverride All" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
+	sed -i "19i\\\t\tRequire all granted" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
+	sed -i "20i\\\t</Directory>" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
 
 	# Modifying directives
-	sed -i "s:/var/www:/var/www/html/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}.conf
+	sed -i "s:/var/www:/var/www/html/${SITENAME_LOWER}:g" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
 
 	echo -e "\tEnabling site..."
-	a2ensite ${SITENAME}.conf > /dev/null 2>&1
+	a2ensite ${SITENAME_LOWER}.conf > /dev/null 2>&1
 fi
 
 # Restart Apache to apply the new configuration
 service apache2 reload > /dev/null 2>&1
 
 echo -e "\tAdding hosts file entry..."
-	sed -i "1i127.0.0.1\t${SITENAME}.${SUFFIX}" /etc/hosts
+	sed -i "1i127.0.0.1\t${SITENAME_LOWER}.${SUFFIX}" /etc/hosts
 
 # MySQL queries
 DB_CREATE="CREATE DATABASE IF NOT EXISTS $SITENAME DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci"
@@ -121,7 +124,7 @@ SQL="${DB_CREATE};${DB_PERMS}"
 echo -e "\tCreating MySQL database..."
 	$MYSQL -uroot -proot -e "${SQL}"
 
-echo -e "${GREEN}Site is available at http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"
+echo -e "${GREEN}Site is available at http://${SITENAME_LOWER}.${SUFFIX}${COLOR_ENDING}"
 
 # echo -e "Reverting permissions for security reasons..."
 # chmod go-w sites/default
