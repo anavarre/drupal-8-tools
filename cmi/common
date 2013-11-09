@@ -1,0 +1,5 @@
+# Drupal variables
+WEBROOT="/var/www/html"
+
+# MySQL variables
+MYSQL=`which mysql`
