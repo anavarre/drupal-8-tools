@@ -76,7 +76,7 @@ ONDEMAND=BACKUP_${DB}_${NOW}
 mkdir ${WEBROOT}/${DOCROOT}/backup/${ONDEMAND}
 
 # Trigger MySQL site backup
-mysqldump -u root -proot ${DB} > ${WEBROOT}/${DOCROOT}/backup/${ONDEMAND}/${DB}.sql
+mysqldump -u root -proot ${DB} --add-drop-table > ${WEBROOT}/${DOCROOT}/backup/${ONDEMAND}/${DB}.sql
 
 # Determine CMI's config dir.
 cd ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/
