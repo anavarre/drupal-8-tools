@@ -3,8 +3,8 @@
 # Invoke the script from anywhere (e.g .bashrc alias).
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source common
-source ../colors
+source ${DIR}/common
+source ${DIR}/../colors
 
 # Make sure only root can execute the script.
 if [[ "$(whoami)" != "root" ]]; then
@@ -46,7 +46,42 @@ done
 
 echo -e "${GREEN}Site is: ${SITE}${COLOR_ENDING}"
 
-exit 0
+# Backup dir exists
+if [[ ! -d ${WEBROOT}/${DOCROOT}/backup ]]; then
+	echo -e "\t Creating backup directory..."
+	mkdir ${WEBROOT}/${DOCROOT}/backup
 
-ACTIVE="(${WEBROOT}/${DOCROOT}/sites/${DIR}/files/config_*/active)"
-echo -e "${GREEN}Active CMI directory is sites/${DIR}${ACTIVE}${COLOR_ENDING}"
+else
+	echo -e "Backup directory already exists. Ignoring..."
+fi
+
+echo -e "${BLUE}What database should we create a MySQL dump for?${COLOR_ENDING} "
+
+# Database selection
+PS3="Enter database number: "
+SQL=$(mysql -u root -proot -e "SHOW DATABASES;")
+DATABASES=( $( for DB in ${SQL} ; do echo ${DB} | egrep -v "(test|*_schema|Database)" ; done ) )
+select DB in "${DATABASES[@]}"; do
+	break;
+done
+
+# Creating on-demand backup dir
+ONDEMAND=BACKUP_${DB}_${NOW}
+mkdir ${WEBROOT}/${DOCROOT}/backup/${ONDEMAND}
+
+# MySQL site backup
+mysqldump -u root -proot ${DB} > ${WEBROOT}/${DOCROOT}/backup/${ONDEMAND}/${DB}.sql
+
+# Determine CMI's config dir.
+cd ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/
+CONFIG=`(find . -maxdepth 1 -type d -name "config_*" | sed 's/^.\{2\}//')`
+
+# CMI backup
+cp -R ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active/ ${WEBROOT}/${DOCROOT}/backup/${ONDEMAND}/
+
+# Compressing data
+cd ${WEBROOT}/${DOCROOT}/backup/
+tar -zcvf ${ONDEMAND}.tar.gz ${ONDEMAND}/
+rm -Rf ${ONDEMAND}/
+
+echo -e "${GREEN}Both the database and CMI files have been successfully backed up!${COLOR_ENDING}"

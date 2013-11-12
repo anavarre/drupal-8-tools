@@ -1,5 +1,3 @@
-# Drupal variables
 WEBROOT="/var/www/html"
 
-# MySQL variables
-MYSQL=`which mysql`
+NOW=`date +'%Y%m%d-%H%M%S'`
