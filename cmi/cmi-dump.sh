@@ -81,7 +81,7 @@ cp -R ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active/ ${WEBROOT}/${D
 
 # Compressing data
 cd ${WEBROOT}/${DOCROOT}/backup/
-tar -zcvf ${ONDEMAND}.tar.gz ${ONDEMAND}/
+tar -zcf ${ONDEMAND}.tar.gz ${ONDEMAND}/
 rm -Rf ${ONDEMAND}/
 
 echo -e "${GREEN}Both the database and CMI files have been successfully backed up!${COLOR_ENDING}"
