@@ -12,13 +12,14 @@ cmi/restore.sh
 - Offers to restore any available backup (database + CMI files).
 - Preserves permissions and does not add cruft in the backup folder.
 
-Notes:
-
-- Very much inspired by @yched in https://drupal.org/node/2130441.
-- This is a Proof Of Concept only. drush will always be preferred.
-- Do NOT use in production.
-
 cmi/common
 ------------------
 
 Simple admin script to store common variables.
+
+Notes
+-----
+
+- Very much inspired by @yched in https://drupal.org/node/2130441.
+- This is a Proof Of Concept only. drush will always be preferred.
+- Do NOT use in production.
