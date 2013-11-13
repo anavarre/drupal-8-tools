@@ -67,11 +67,18 @@ done
 
 echo -e "${GREEN}Database is: ${DB}${COLOR_ENDING}"
 
+# List all existing backups
+cd ${WEBROOT}/${DOCROOT}/backup/
+
+# Stop operations if there's no backup to restore
+if [ ! "$(find . -type f -name "*.tar.gz")" ]; then
+	echo -e "${RED}There is no available backup file. Aborting!${COLOR_ENDING}"
+    exit 0
+fi
+
 # Start restore operations
 echo -e "${BLUE}Starting restore...${COLOR_ENDING} "
 
-# List all existing backups
-cd ${WEBROOT}/${DOCROOT}/backup/
 PS3="Enter backup number: "
 BACKUP=(`ls *.tar.gz`)
 select BKP in "${BACKUP[@]}"; do
@@ -88,6 +95,9 @@ if [[ ${REPLY} =~ ^[Nn]$ ]]; then
 	exit 0
 fi
 
+# Store user and group data
+PERMS=`stat -c %U:%G ${WEBROOT}/${DOCROOT}/core`
+
 # Uncompress data
 tar -xzf ${BKP}
 
@@ -100,9 +110,6 @@ mysql -u root -proot -h localhost ${DB} < ${DB}.sql
 # Determine CMI's config dir.
 cd ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/
 CONFIG=`(find . -maxdepth 1 -type d -name "config_*" | sed 's/^.\{2\}//')`
-
-# Store user and group data
-PERMS=`stat -c %U:%G ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active/system.site.yml`
 
 # Delete current active config
 	echo -e "\tDeleting current CMI configuration..."
@@ -120,5 +127,9 @@ chmod 775 ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active
 # Set permissions for YAML files (644)
 	echo -e "\tSetting correct permissions for YAML files..."
 chmod 644 ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active/*.yml
+
+# Remove the cruft
+	echo -e "\tCleaning up the cruft..."
+rm -Rf ${WEBROOT}/${DOCROOT}/backup/${DUMP}/
 
 echo -e "${GREEN}Both the database and CMI files have been successfully restored!${COLOR_ENDING}"
