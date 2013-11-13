@@ -29,6 +29,9 @@ done
 
 echo -e "${GREEN}Docroot is: ${DOCROOT}${COLOR_ENDING}"
 
+# Store user and group data
+PERMS=`stat -c %U:%G ${WEBROOT}/${DOCROOT}/core`
+
 # (Multi)site selection
 echo -e "${BLUE}What site should we trigger a backup for?${COLOR_ENDING} "
 cd ${WEBROOT}/${DOCROOT}/sites/
@@ -50,6 +53,7 @@ echo -e "${GREEN}Site is: ${SITE}${COLOR_ENDING}"
 if [[ ! -d ${WEBROOT}/${DOCROOT}/backup ]]; then
 	echo -e "\t Creating backup directory..."
 	mkdir ${WEBROOT}/${DOCROOT}/backup
+	chown -R ${PERMS} ${WEBROOT}/${DOCROOT}/backup
 
 else
 	echo -e "Backup directory already exists. Ignoring..."
@@ -74,6 +78,7 @@ echo -e "${BLUE}Starting backup...${COLOR_ENDING} "
 # Create on-demand backup dir and add timestamp
 ONDEMAND=BACKUP_${DB}_${NOW}
 mkdir ${WEBROOT}/${DOCROOT}/backup/${ONDEMAND}
+chown -R ${PERMS} ${WEBROOT}/${DOCROOT}/backup/${ONDEMAND}/
 
 # Trigger MySQL site backup
 mysqldump -u root -proot ${DB} --add-drop-table > ${WEBROOT}/${DOCROOT}/backup/${ONDEMAND}/${DB}.sql
@@ -85,9 +90,13 @@ CONFIG=`(find . -maxdepth 1 -type d -name "config_*" | sed 's/^.\{2\}//')`
 # Trigger CMI files backup
 cp -R ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active/ ${WEBROOT}/${DOCROOT}/backup/${ONDEMAND}/
 
-# Compress data
+# Set permissions
 cd ${WEBROOT}/${DOCROOT}/backup/
+chown -R ${PERMS} ${ONDEMAND}/
+
+# Compress data
 tar -zcf ${ONDEMAND}.tar.gz ${ONDEMAND}/
 rm -Rf ${ONDEMAND}/
+chown -R ${PERMS} ${ONDEMAND}.tar.gz
 
 echo -e "${GREEN}Both the database and CMI files have been successfully backed up!${COLOR_ENDING}"

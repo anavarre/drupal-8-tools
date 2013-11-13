@@ -70,12 +70,6 @@ echo -e "${GREEN}Database is: ${DB}${COLOR_ENDING}"
 # Start restore operations
 echo -e "${BLUE}Starting restore...${COLOR_ENDING} "
 
-read -p "Are you sure? This will overwrite your database and CMI files. [Y/N] "
-if [[ ${REPLY} =~ ^[Nn]$ ]]; then
-	echo -e "${GREEN}Back to the comfort zone. Aborting.${COLOR_ENDING}"
-	exit 0
-fi
-
 # List all existing backups
 cd ${WEBROOT}/${DOCROOT}/backup/
 PS3="Enter backup number: "
@@ -87,6 +81,12 @@ select BKP in "${BACKUP[@]}"; do
 	fi
 	break;
 done
+
+read -p "Are you sure? This will overwrite your database and CMI files. [Y/N] "
+if [[ ${REPLY} =~ ^[Nn]$ ]]; then
+	echo -e "${GREEN}Back to the comfort zone. Aborting.${COLOR_ENDING}"
+	exit 0
+fi
 
 # Uncompress data
 tar -xzf ${BKP}
@@ -101,9 +101,8 @@ mysql -u root -proot -h localhost ${DB} < ${DB}.sql
 cd ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/
 CONFIG=`(find . -maxdepth 1 -type d -name "config_*" | sed 's/^.\{2\}//')`
 
-# Set permissions for active config
-	echo -e "\tSetting correct permissions for active directory..."
-chmod g+w ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active
+# Store user and group data
+PERMS=`stat -c %U:%G ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active/system.site.yml`
 
 # Delete current active config
 	echo -e "\tDeleting current CMI configuration..."
@@ -112,9 +111,14 @@ rm -Rf ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active/
 # CMI restore
 	echo -e "\tRestoring CMI backup files"
 cp -R ${WEBROOT}/${DOCROOT}/backup/${DUMP}/active ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/
+chown -R ${PERMS} ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/
 
-# Set permissions back
+# Set permissions for active config (775)
+	echo -e "\tSetting correct permissions for active directory..."
+chmod 775 ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active
+
+# Set permissions for YAML files (644)
 	echo -e "\tSetting correct permissions for YAML files..."
-chmod g+w ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active/*.yml
+chmod 644 ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active/*.yml
 
 echo -e "${GREEN}Both the database and CMI files have been successfully restored!${COLOR_ENDING}"
