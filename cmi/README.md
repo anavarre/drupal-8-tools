@@ -20,6 +20,6 @@ Simple admin script to store common variables.
 Notes
 -----
 
-- Very much inspired by @yched in https://drupal.org/node/2130441.
+- Very much inspired by @yched in https://gist.github.com/yched/7369557 (https://drupal.org/node/2130441).
 - This is a Proof Of Concept only. drush will always be preferred.
 - Do NOT use in production.
