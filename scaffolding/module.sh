@@ -135,6 +135,19 @@ while true; do
 			# Ensure module's first letter is uppercase.
 			NAME_1ST_UP=`sed 's/\(.\)/\U\1/' <<< "${NAME_LOWER}"`
 			touch ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Controller/${NAME_1ST_UP}Controller.php
+
+# Generating ModuleController.php default values
+cat <<EOT >> ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Controller/${NAME_1ST_UP}Controller.php
+<?php
+
+/**
+ * @file
+ * Contains \Drupal\\${NAME_LOWER}\Controller\\${NAME_1ST_UP}Controller.
+ */
+
+namespace Drupal\\${NAME_LOWER}\Controller;
+EOT
+
 			echo -e "${GREEN}Successfully created Controller scaffolding!${COLOR_ENDING}"
 			break;;
         * )
