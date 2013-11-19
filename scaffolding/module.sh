@@ -155,6 +155,73 @@ EOT
     esac
 done
 
+# Offer to create an Access check.
+while true; do
+    read -p "Create Access checking? [Y/N] " ANSWER
+    case ${ANSWER} in
+        [Nn] )
+			break;;
+        [Yy] )
+			if [[ -d ${NAME_LOWER}/lib ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/lib directory already exists! Skipping...${COLOR_ENDING}"
+			else
+				echo -e "\tCreating ${NAME_LOWER}/lib directory..."
+				mkdir ${NAME_LOWER}/lib
+			fi
+		
+			if [[ -d ${NAME_LOWER}/lib/Drupal ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal directory already exists! Skipping...${COLOR_ENDING}"
+			else
+				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal directory..."
+				mkdir ${NAME_LOWER}/lib/Drupal
+			fi
+		
+			if [[ -d ${NAME_LOWER}/lib/Drupal/${NAME_LOWER} ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal/${NAME_LOWER} directory already exists! Skipping...${COLOR_ENDING}"
+			else
+				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal/${NAME_LOWER} directory..."
+				mkdir ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}
+			fi
+		
+			if [[ -d ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Access ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Access directory already exists! Skipping...${COLOR_ENDING}"
+			else
+				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Access directory..."
+				mkdir ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Access
+			fi
+		
+			# Ensure module's first letter is uppercase.
+			NAME_1ST_UP=`sed 's/\(.\)/\U\1/' <<< "${NAME_LOWER}"`
+			touch ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Access/${NAME_1ST_UP}AccessCheck.php
+
+# Generating ModuleAccessCheck.php default values
+cat <<EOT >> ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Access/${NAME_1ST_UP}AccessCheck.php
+<?php
+
+/**
+ * @file
+ * Contains \Drupal\\${NAME_LOWER}\Access\\${NAME_1ST_UP}AccessCheck.
+ */
+
+namespace Drupal\\${NAME_LOWER}\Access;
+
+use Drupal\Core\Access\StaticAccessCheckInterface;
+
+/**
+ * Access check for ${NAME_LOWER} routes.
+ */
+class ${NAME_1ST_UP}AccessCheck implements StaticAccessCheckInterface {
+
+}
+EOT
+
+			echo -e "${GREEN}Successfully created Access checking!${COLOR_ENDING}"
+			break;;
+        * )
+			echo -e "${RED}Sorry, you need to answer by Y/y (yes) or N/n (no).${COLOR_ENDING}"
+    esac
+done
+
 # Offer to create Form config.
 while true; do
     read -p "Create Form config scaffolding? [Y/N] " ANSWER
