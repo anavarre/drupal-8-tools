@@ -29,12 +29,16 @@ Apply changes without rebooting:
 
 To provision a Drupal 8 site, invoke the _install.sh_ or _delete.sh_ script directly and give it a sitename:
 
-<code>$ install/remove {sitename}</code>
+<code>$ install/delete {sitename}</code>
 
-If you want a module scaffolding, invoke the _module.sh_ script instead:
+If you want a module scaffolding, invoke the _module.sh_ script:
 
 <code>$ module</code>
 
-You might want to run a quick system audit to make sure your LAMP stack is compatible with Drupal 8's minimum requirements. Simply run:
+Want to quickly dump your database and corresponding CMI files? Run:
+
+<code>$ dump</code>
+
+You might also want to run a quick system audit to make sure your LAMP stack is compatible with Drupal 8's minimum requirements. Simply run:
 
 <code>$ audit</code>
