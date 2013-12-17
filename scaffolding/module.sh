@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# @todo: https://drupal.org/node/2122201 (Route subscriber + service.yml file)
+# @todo: https://drupal.org/node/2122195 (Access check service.yml file)
+
 # Invoke the script from anywhere (e.g .bashrc alias).
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
