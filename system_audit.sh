@@ -14,11 +14,11 @@ fi
 PHP_MINIMUM="$(php -v | awk '{print $2}' | head -n1 | sed -r 's/.{9}$//')"
 DISABLE_FUNCTIONS="$(php -c /etc/php5/cli/php.ini -i | grep disable_functions | awk '{print $3$4}')"
 
-# Drupal 8 requires PHP 5.3.10 at a minimum.
-if [[ "${PHP_MINIMUM}" > "5.3.9" ]]; then
+# Drupal 8 requires PHP 5.4.2 at a minimum.
+if [[ "${PHP_MINIMUM}" > "5.4.2" ]]; then
 	echo -e "PHP version is ${PHP_MINIMUM} ${GREEN}[OK]${COLOR_ENDING}"
 else
-	echo -e "Your PHP version is too old (${PHP_MINIMUM}). Minimum requirement for Drupal 8 is PHP 5.3.10. ${RED}[ERROR]${COLOR_ENDING}"
+	echo -e "Your PHP version is too old (${PHP_MINIMUM}). Minimum requirement for Drupal 8 is PHP 5.4.2. ${RED}[ERROR]${COLOR_ENDING}"
 fi
 
 # Drush requires PHP's disable_functions to be empty.
