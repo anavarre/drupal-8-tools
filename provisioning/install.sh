@@ -58,7 +58,7 @@ tar -C ${WEBROOT} -xzf ${TMP}/${DRUPAL}
 SITENAME_LOWER="${SITENAME,,}"
 
 mv ${WEBROOT}/${RELEASE} ${WEBROOT}/${SITENAME_LOWER}
-chown -R $(whoami):$(whoami) ${WEBROOT}/${SITENAME_LOWER}
+chown -R ${PERMS} ${WEBROOT}/${SITENAME_LOWER}
 echo -e "${GREEN}Successfully created Drupal docroot under ${WEBROOT}/${SITENAME_LOWER}${COLOR_ENDING}"
 
 echo -e "\tCopying settings.php file..."
@@ -67,9 +67,9 @@ cp ${WEBROOT}/${SITENAME_LOWER}/sites/default/default.settings.php ${WEBROOT}/${
 echo -e "\tSetting correct permissions..."
 
 # Make sure the Drupal docroot has regular Apache permissions
-OWNER=$1
-	read -p "Which Unix username should own the Drupal docroot? " OWNER
-chown -R www-data:${OWNER} ${WEBROOT}/${SITENAME_LOWER}/
+# OWNER=$1
+# 	read -p "Which Unix username should own the Drupal docroot? " OWNER
+# chown -R www-data:${OWNER} ${WEBROOT}/${SITENAME_LOWER}/
 
 # Allow the automatic creation of the files and translations dirs
 chmod a+w ${WEBROOT}/${SITENAME_LOWER}/sites/default
@@ -84,7 +84,7 @@ if [[ -f ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ]]; then
 	# ServerName directive
 	sed -i "3i\\\tServerName ${SITENAME_LOWER}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME_LOWER}
 	# Modifying directives
-	sed -i "s:/var/www:/var/www/html/${SITENAME_LOWER}:g" ${SITES_AVAILABLE}/${SITENAME_LOWER}
+	sed -i "s:/var/www:/${WEBROOT}/${SITENAME_LOWER}:g" ${SITES_AVAILABLE}/${SITENAME_LOWER}
 	# Make sure that Drupal's .htaccess clean URLs will work fine
 	sed -i "s/AllowOverride None/AllowOverride All/g" ${SITES_AVAILABLE}/${SITENAME_LOWER}
 
@@ -104,7 +104,7 @@ else
 	sed -i "20i\\\t</Directory>" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
 
 	# Modifying directives
-	sed -i "s:/var/www:/var/www/html/${SITENAME_LOWER}:g" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
+	sed -i "s:/var/www:/${WEBROOT}/${SITENAME_LOWER}:g" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
 
 	echo -e "\tEnabling site..."
 	a2ensite ${SITENAME_LOWER}.conf > /dev/null 2>&1
