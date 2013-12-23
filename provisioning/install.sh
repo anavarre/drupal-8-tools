@@ -124,9 +124,6 @@ echo -e "\tCreating MySQL database..."
 
 echo -e "\tRunning Drupal installation..."
 	cd ${WEBROOT}/${SITENAME_LOWER}/sites/default/
-	drush site-install -qy --db-url=mysql://${CREDS}:${CREDS}@localhost:3306/${SITENAME_LOWER} --site-name=${SITENAME_LOWER} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME_LOWER}.${SUFFIX}
-echo -e "${GREEN}Site is available at http://${SITENAME_LOWER}.${SUFFIX}${COLOR_ENDING}"
+	drush site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@localhost:3306/${SITENAME_LOWER} --site-name=${SITENAME_LOWER} --site-mail=${CREDS}@${SITENAME_LOWER}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME_LOWER}.${SUFFIX}
 
-# echo -e "Reverting permissions for security reasons..."
-# chmod go-w sites/default
-# chmod go-w sites/default/settings.php
+echo -e "${GREEN}Site is available at http://${SITENAME_LOWER}.${SUFFIX}${COLOR_ENDING}"
