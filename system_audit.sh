@@ -27,3 +27,6 @@ if [[ "${DISABLE_FUNCTIONS}" == "novalue" ]]; then
 else
 	echo -e "PHP CLI's disable_functions are turned on and might cause issues with drush. ${RED}[ERROR]${COLOR_ENDING}"
 fi
+
+# @todo
+# php date.timezone shouldn't be empty for apache2's php.ini and CLI

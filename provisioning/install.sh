@@ -61,19 +61,17 @@ mv ${WEBROOT}/${RELEASE} ${WEBROOT}/${SITENAME_LOWER}
 chown -R ${PERMS} ${WEBROOT}/${SITENAME_LOWER}
 echo -e "${GREEN}Successfully created Drupal docroot under ${WEBROOT}/${SITENAME_LOWER}${COLOR_ENDING}"
 
-echo -e "\tCopying settings.php file..."
+echo -e "\tCreating settings.php file..."
 cp ${WEBROOT}/${SITENAME_LOWER}/sites/default/default.settings.php ${WEBROOT}/${SITENAME_LOWER}/sites/default/settings.php
 
+echo -e "\tCreating files directory..."
+mkdir ${WEBROOT}/${SITENAME_LOWER}/sites/default/files
+
 echo -e "\tSetting correct permissions..."
-
-# Make sure the Drupal docroot has regular Apache permissions
-# OWNER=$1
-# 	read -p "Which Unix username should own the Drupal docroot? " OWNER
-# chown -R www-data:${OWNER} ${WEBROOT}/${SITENAME_LOWER}/
-
-# Allow the automatic creation of the files and translations dirs
-chmod a+w ${WEBROOT}/${SITENAME_LOWER}/sites/default
-chmod a+w ${WEBROOT}/${SITENAME_LOWER}/sites/default/settings.php  
+# Also allows the automatic creation of the translations dir if needed
+chmod a+w ${WEBROOT}/${SITENAME_LOWER}/sites/default && chown -R ${PERMS} ${WEBROOT}/${SITENAME_LOWER}/sites/default
+chmod 775 ${WEBROOT}/${SITENAME_LOWER}/sites/default/files && chown -R ${PERMS} ${WEBROOT}/${SITENAME_LOWER}/sites/default/files
+chmod a+w ${WEBROOT}/${SITENAME_LOWER}/sites/default/settings.php && chown ${PERMS} ${WEBROOT}/${SITENAME_LOWER}/sites/default/settings.php
 
 # Apache setup
 echo -e "\tProvisionning Apache vhost..."
@@ -125,7 +123,3 @@ echo -e "\tCreating MySQL database..."
 	$MYSQL -uroot -proot -e "${SQL}"
 
 echo -e "${GREEN}Site is available at http://${SITENAME_LOWER}.${SUFFIX}${COLOR_ENDING}"
-
-# echo -e "Reverting permissions for security reasons..."
-# chmod go-w sites/default
-# chmod go-w sites/default/settings.php
