@@ -33,11 +33,14 @@ done
 ##################
 # Drupal install #
 ##################
-SITENAME=$1
+SITENAME_UPPER=$1
 if [[ -z $1 ]]; then
 	echo -n "What should be the name of the new Drupal docroot? "
-	read SITENAME
+	read SITENAME_UPPER
 fi
+
+# Convert sitename to lowercase if needed.
+SITENAME="${SITENAME_UPPER,,}"
 
 # Docroot exists
 if [[ -d ${WEBROOT}/${SITENAME} ]]; then
@@ -54,76 +57,73 @@ fi
 echo "Unpacking ${DRUPAL}..."
 tar -C ${WEBROOT} -xzf ${TMP}/${DRUPAL}
 
-# Convert sitename to lowercase if needed.
-SITENAME_LOWER="${SITENAME,,}"
-
-mv ${WEBROOT}/${RELEASE} ${WEBROOT}/${SITENAME_LOWER}
-chown -R ${PERMS} ${WEBROOT}/${SITENAME_LOWER}
-echo -e "${GREEN}Successfully created Drupal docroot under ${WEBROOT}/${SITENAME_LOWER}${COLOR_ENDING}"
+mv ${WEBROOT}/${RELEASE} ${WEBROOT}/${SITENAME}
+chown -R ${PERMS} ${WEBROOT}/${SITENAME}
+echo -e "${GREEN}Successfully created Drupal docroot under ${WEBROOT}/${SITENAME}${COLOR_ENDING}"
 
 echo -e "\tCreating settings.php file..."
-cp ${WEBROOT}/${SITENAME_LOWER}/sites/default/default.settings.php ${WEBROOT}/${SITENAME_LOWER}/sites/default/settings.php
+cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
 echo -e "\tCreating files directory..."
-mkdir ${WEBROOT}/${SITENAME_LOWER}/sites/default/files
+mkdir ${WEBROOT}/${SITENAME}/sites/default/files
 
 echo -e "\tSetting correct permissions..."
 # Also allows the automatic creation of the translations dir if needed
-chmod a+w ${WEBROOT}/${SITENAME_LOWER}/sites/default && chown -R ${PERMS} ${WEBROOT}/${SITENAME_LOWER}/sites/default
-chmod 775 ${WEBROOT}/${SITENAME_LOWER}/sites/default/files && chown -R ${PERMS} ${WEBROOT}/${SITENAME_LOWER}/sites/default/files
-chmod a+w ${WEBROOT}/${SITENAME_LOWER}/sites/default/settings.php && chown ${PERMS} ${WEBROOT}/${SITENAME_LOWER}/sites/default/settings.php
+chmod a+w ${WEBROOT}/${SITENAME}/sites/default && chown -R ${PERMS} ${WEBROOT}/${SITENAME}/sites/default
+chmod 775 ${WEBROOT}/${SITENAME}/sites/default/files && chown -R ${PERMS} ${WEBROOT}/${SITENAME}/sites/default/files
+chmod a+w ${WEBROOT}/${SITENAME}/sites/default/settings.php && chown ${PERMS} ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
 # Apache setup
 echo -e "\tProvisionning Apache vhost..."
 
 # First, determine if we're running Apache 2.2 or 2.4
 if [[ -f ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ]]; then
-	cp ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ${SITES_AVAILABLE}/${SITENAME_LOWER}
+	cp ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}
 	# ServerName directive
-	sed -i "3i\\\tServerName ${SITENAME_LOWER}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME_LOWER}
+	sed -i "3i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
 	# Modifying directives
-	sed -i "s:/var/www:/${WEBROOT}/${SITENAME_LOWER}:g" ${SITES_AVAILABLE}/${SITENAME_LOWER}
+	sed -i "s:/var/www:/${WEBROOT}/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}
 	# Make sure that Drupal's .htaccess clean URLs will work fine
-	sed -i "s/AllowOverride None/AllowOverride All/g" ${SITES_AVAILABLE}/${SITENAME_LOWER}
+	sed -i "s/AllowOverride None/AllowOverride All/g" ${SITES_AVAILABLE}/${SITENAME}
 
 	echo -e "\tEnabling site..."
-	a2ensite ${SITENAME_LOWER} > /dev/null 2>&1
+	a2ensite ${SITENAME} > /dev/null 2>&1
 else
-	cp ${SITES_AVAILABLE}/${APACHE_24_DEFAULT} ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
+	cp ${SITES_AVAILABLE}/${APACHE_24_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}.conf
 	# ServerName directive
-	sed -i "11i\\\tServerName ${SITENAME_LOWER}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
+	sed -i "11i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}.conf
 	# ServerAlias directive
-	sed -i "12i\\\tServerAlias ${SITENAME_LOWER}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
+	sed -i "12i\\\tServerAlias ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}.conf
 	# vHost overrides
-	sed -i "16i\\\t<Directory /var/www/>" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
-    sed -i "17i\\\t\tOptions Indexes FollowSymLinks" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
-	sed -i "18i\\\t\tAllowOverride All" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
-	sed -i "19i\\\t\tRequire all granted" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
-	sed -i "20i\\\t</Directory>" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
+	sed -i "16i\\\t<Directory /var/www/>" ${SITES_AVAILABLE}/${SITENAME}.conf
+    sed -i "17i\\\t\tOptions Indexes FollowSymLinks" ${SITES_AVAILABLE}/${SITENAME}.conf
+	sed -i "18i\\\t\tAllowOverride All" ${SITES_AVAILABLE}/${SITENAME}.conf
+	sed -i "19i\\\t\tRequire all granted" ${SITES_AVAILABLE}/${SITENAME}.conf
+	sed -i "20i\\\t</Directory>" ${SITES_AVAILABLE}/${SITENAME}.conf
 
 	# Modifying directives
-	sed -i "s:/var/www:/${WEBROOT}/${SITENAME_LOWER}:g" ${SITES_AVAILABLE}/${SITENAME_LOWER}.conf
+	sed -i "s:/var/www:/${WEBROOT}/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}.conf
 
 	echo -e "\tEnabling site..."
-	a2ensite ${SITENAME_LOWER}.conf > /dev/null 2>&1
+	a2ensite ${SITENAME}.conf > /dev/null 2>&1
 fi
 
 # Restart Apache to apply the new configuration
 service apache2 reload > /dev/null 2>&1
 
 echo -e "\tAdding hosts file entry..."
-	sed -i "1i127.0.0.1\t${SITENAME_LOWER}.${SUFFIX}" /etc/hosts
+	sed -i "1i127.0.0.1\t${SITENAME}.${SUFFIX}" /etc/hosts
 
 # MySQL queries
-DB_CREATE="CREATE DATABASE IF NOT EXISTS ${SITENAME_LOWER} DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci"
-DB_PERMS="GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES ON ${SITENAME_LOWER}.* TO '${CREDS}'@'${DB_HOST}' IDENTIFIED BY '${CREDS}'"
+DB_CREATE="CREATE DATABASE IF NOT EXISTS ${SITENAME} DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci"
+DB_PERMS="GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES ON ${SITENAME}.* TO '${CREDS}'@'${DB_HOST}' IDENTIFIED BY '${CREDS}'"
 SQL="${DB_CREATE};${DB_PERMS}"
 
 echo -e "\tCreating MySQL database..."
 	$MYSQL -u${CREDS} -p${CREDS} -e "${SQL}"
 
 echo -e "\tRunning Drupal installation..."
-	cd ${WEBROOT}/${SITENAME_LOWER}/sites/default/
-	drush site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@localhost:3306/${SITENAME_LOWER} --site-name=${SITENAME_LOWER} --site-mail=${CREDS}@${SITENAME_LOWER}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME_LOWER}.${SUFFIX}
+	cd ${WEBROOT}/${SITENAME}/sites/default/
+	drush site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@localhost:3306/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
 
-echo -e "${GREEN}Site is available at http://${SITENAME_LOWER}.${SUFFIX}${COLOR_ENDING}"
+echo -e "${GREEN}Site is available at http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"
