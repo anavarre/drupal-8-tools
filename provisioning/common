@@ -18,6 +18,10 @@ DRUPAL="${RELEASE}.${COMPRESSION}"
 
 # MySQL variables
 MYSQL=`which mysql`
+DB_HOST="localhost"
+
+# Misc variables
+CREDS="root"
 
 # Colors
 GREEN="\033[0;32m"

@@ -66,11 +66,6 @@ cp ${WEBROOT}/${SITENAME_LOWER}/sites/default/default.settings.php ${WEBROOT}/${
 
 echo -e "\tSetting correct permissions..."
 
-# Make sure the Drupal docroot has regular Apache permissions
-# OWNER=$1
-# 	read -p "Which Unix username should own the Drupal docroot? " OWNER
-# chown -R www-data:${OWNER} ${WEBROOT}/${SITENAME_LOWER}/
-
 # Allow the automatic creation of the files and translations dirs
 chmod a+w ${WEBROOT}/${SITENAME_LOWER}/sites/default
 chmod a+w ${WEBROOT}/${SITENAME_LOWER}/sites/default/settings.php  
@@ -117,15 +112,14 @@ echo -e "\tAdding hosts file entry..."
 	sed -i "1i127.0.0.1\t${SITENAME_LOWER}.${SUFFIX}" /etc/hosts
 
 # MySQL queries
-DB_CREATE="CREATE DATABASE IF NOT EXISTS $SITENAME DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci"
-DB_PERMS="GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES ON $SITENAME.* TO 'root'@'localhost' IDENTIFIED BY 'root'"
+DB_CREATE="CREATE DATABASE IF NOT EXISTS ${SITENAME_LOWER} DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci"
+DB_PERMS="GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES ON ${SITENAME_LOWER}.* TO '${CREDS}'@'${DB_HOST}' IDENTIFIED BY '${CREDS}'"
 SQL="${DB_CREATE};${DB_PERMS}"
 
 echo -e "\tCreating MySQL database..."
-	$MYSQL -uroot -proot -e "${SQL}"
+	$MYSQL -u${CREDS} -p${CREDS} -e "${SQL}"
 
+echo -e "\tRunning Drupal installation..."
+	cd ${WEBROOT}/${SITENAME_LOWER}/sites/default/
+	drush site-install -qy --db-url=mysql://${CREDS}:${CREDS}@localhost:3306/${SITENAME_LOWER} --site-name=${SITENAME_LOWER} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME_LOWER}.${SUFFIX}
 echo -e "${GREEN}Site is available at http://${SITENAME_LOWER}.${SUFFIX}${COLOR_ENDING}"
-
-# echo -e "Reverting permissions for security reasons..."
-# chmod go-w sites/default
-# chmod go-w sites/default/settings.php
