@@ -63,9 +63,6 @@ echo -e "${GREEN}Successfully created Drupal docroot under ${WEBROOT}/${SITENAME
 echo -e "\tCreating settings.php file..."
 cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
-#echo -e "\tCreating files directory..."
-#mkdir ${WEBROOT}/${SITENAME}/sites/default/files
-
 # Apache setup
 echo -e "\tProvisionning Apache vhost..."
 
