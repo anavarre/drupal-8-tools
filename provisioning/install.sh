@@ -58,20 +58,13 @@ echo "Unpacking ${DRUPAL}..."
 tar -C ${WEBROOT} -xzf ${TMP}/${DRUPAL}
 
 mv ${WEBROOT}/${RELEASE} ${WEBROOT}/${SITENAME}
-chown -R ${PERMS} ${WEBROOT}/${SITENAME}
 echo -e "${GREEN}Successfully created Drupal docroot under ${WEBROOT}/${SITENAME}${COLOR_ENDING}"
 
 echo -e "\tCreating settings.php file..."
 cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
-echo -e "\tCreating files directory..."
-mkdir ${WEBROOT}/${SITENAME}/sites/default/files
-
-echo -e "\tSetting correct permissions..."
-# Also allows the automatic creation of the translations dir if needed
-chmod a+w ${WEBROOT}/${SITENAME}/sites/default && chown -R ${PERMS} ${WEBROOT}/${SITENAME}/sites/default
-chmod 775 ${WEBROOT}/${SITENAME}/sites/default/files && chown -R ${PERMS} ${WEBROOT}/${SITENAME}/sites/default/files
-chmod a+w ${WEBROOT}/${SITENAME}/sites/default/settings.php && chown ${PERMS} ${WEBROOT}/${SITENAME}/sites/default/settings.php
+#echo -e "\tCreating files directory..."
+#mkdir ${WEBROOT}/${SITENAME}/sites/default/files
 
 # Apache setup
 echo -e "\tProvisionning Apache vhost..."
@@ -124,6 +117,12 @@ echo -e "\tCreating MySQL database..."
 
 echo -e "\tRunning Drupal installation..."
 	cd ${WEBROOT}/${SITENAME}/sites/default/
-	drush site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@localhost:3306/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
+	drush site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
+
+echo -e "\tSetting correct permissions..."
+chmod go-w ${WEBROOT}/${SITENAME}/sites/default
+chmod go-w ${WEBROOT}/${SITENAME}/sites/default/settings.php
+chmod 775 ${WEBROOT}/${SITENAME}/sites/default/files
+chown -R ${PERMS} ${WEBROOT}/${SITENAME}
 
 echo -e "${GREEN}Site is available at http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"

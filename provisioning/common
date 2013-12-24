@@ -19,6 +19,7 @@ DRUPAL="${RELEASE}.${COMPRESSION}"
 # MySQL variables
 MYSQL=`which mysql`
 DB_HOST="localhost"
+DB_PORT="3306"
 
 # Misc variables
 CREDS="root"
