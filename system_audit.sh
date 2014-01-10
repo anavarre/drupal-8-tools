@@ -21,7 +21,7 @@ else
 	echo -e "Your PHP version is too old (${PHP_MINIMUM}). Minimum requirement for Drupal 8 is PHP 5.4.2. ${RED}[ERROR]${COLOR_ENDING}"
 fi
 
-# Drush requires PHP's disable_functions to be empty.
+# Drush requires PHP's disable_functions to be empty, except for PHP 5.5 - See https://github.com/drush-ops/drush/pull/357
 if [[ "${DISABLE_FUNCTIONS}" == "novalue" ]]; then
 	echo -e "PHP CLI's disable_functions are turned off ${GREEN}[OK]${COLOR_ENDING}"
 else

@@ -53,4 +53,10 @@ echo -e "\tDeleting hosts file entry..."
 echo -e "\tDeleting database..."
 	${MYSQL} -uroot -proot -e "DROP DATABASE IF EXISTS $SITENAME"
 
+echo -e "\tDeleting drush aliases..."
+  rm $HOME/.drush/${SITENAME}.aliases.drushrc.php
+
+# Rebuild drush command file cache to purge the aliases
+drush -q cc drush
+
 echo -e "${GREEN}Successfully removed http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"

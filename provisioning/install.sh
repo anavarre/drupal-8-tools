@@ -116,10 +116,37 @@ echo -e "\tRunning Drupal installation..."
 	cd ${WEBROOT}/${SITENAME}/sites/default/
 	drush site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
 
+# Drush alias
+echo -e "\tCreating drush aliases..."
+
+cat <<EOT >> $HOME/.drush/${SITENAME}.aliases.drushrc.php
+<?php
+
+\$aliases['local'] = array(                                                                    
+ 'parent' => '@parent',
+ 'site' => '${SITENAME}',
+ 'env' => 'local',
+ 'root' => '/var/www/html/${SITENAME}',
+);
+EOT
+
 echo -e "\tSetting correct permissions..."
+# Drupal
 chmod go-w ${WEBROOT}/${SITENAME}/sites/default
 chmod go-w ${WEBROOT}/${SITENAME}/sites/default/settings.php
 chmod 775 ${WEBROOT}/${SITENAME}/sites/default/files
+chmod 776 ${WEBROOT}/${SITENAME}/sites/default/files/config_*/active
 chown -R ${PERMS} ${WEBROOT}/${SITENAME}
+# drush
+chown ${PERMS} $HOME/.drush/${SITENAME}.aliases.drushrc.php
+chmod 600 $HOME/.drush/${SITENAME}.aliases.drushrc.php
+
+# Rebuild drush commandfile cache to load the aliases
+drush -q cc drush
+
+# Rebuilding Drupal caches
+
+# @TODO cause the site to fail
+# drush -q @${SITENAME}.${SUFFIX} cache-rebuild
 
 echo -e "${GREEN}Site is available at http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"
