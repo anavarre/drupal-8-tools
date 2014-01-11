@@ -40,6 +40,10 @@ Want to quickly dump your database and corresponding CMI files? Run:
 
 <code>$ dump</code>
 
+To perform a restore, run:
+
+<code>$ restore</code>
+
 You might also want to run a quick system audit to make sure your LAMP stack is compatible with Drupal 8's minimum requirements. Simply run:
 
 <code>$ audit</code>
