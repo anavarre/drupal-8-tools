@@ -21,6 +21,7 @@ alias delete='sudo /path/to/drupal-8-tools/provisioning/delete.sh'
 alias module='sudo /path/to/drupal-8-tools/scaffolding/module.sh'
 alias audit='sudo /path/to/drupal-8-tools/system_audit.sh'
 alias dump='sudo /path/to/drupal-8-tools/cmi/dump.sh'
+alias restore='sudo /path/to/drupal-8-tools/cmi/restore.sh'
 </pre>
 
 Apply changes without rebooting:
