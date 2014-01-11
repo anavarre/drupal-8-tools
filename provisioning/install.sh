@@ -135,7 +135,7 @@ echo -e "\tSetting correct permissions..."
 chmod go-w ${WEBROOT}/${SITENAME}/sites/default
 chmod go-w ${WEBROOT}/${SITENAME}/sites/default/settings.php
 chmod 775 ${WEBROOT}/${SITENAME}/sites/default/files
-chmod 776 ${WEBROOT}/${SITENAME}/sites/default/files/config_*/active
+chmod 776 ${WEBROOT}/${SITENAME}/sites/default/files/config_*/active/*
 chown -R ${PERMS} ${WEBROOT}/${SITENAME}
 # drush
 chown ${PERMS} $HOME/.drush/${SITENAME}.aliases.drushrc.php
@@ -145,8 +145,6 @@ chmod 600 $HOME/.drush/${SITENAME}.aliases.drushrc.php
 drush -q cc drush
 
 # Rebuilding Drupal caches
-
-# @TODO cause the site to fail
-# drush -q @${SITENAME}.${SUFFIX} cache-rebuild
+drush -q @${SITENAME}.${SUFFIX} cache-rebuild
 
 echo -e "${GREEN}Site is available at http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"
