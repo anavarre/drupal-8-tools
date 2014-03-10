@@ -92,7 +92,8 @@ else
 	sed -i "20i\\\t</Directory>" ${SITES_AVAILABLE}/${SITENAME}.conf
 
 	# Modifying directives
-	sed -i "s:/var/www:/${WEBROOT}/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}.conf
+	sed -i "s:DocumentRoot /var/www/html:DocumentRoot ${WEBROOT}/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}.conf
+  sed -i "s:Directory /var/www/:Directory ${WEBROOT}/${SITENAME}/:g" ${SITES_AVAILABLE}/${SITENAME}.conf
 
 	echo -e "\tEnabling site..."
 	a2ensite ${SITENAME}.conf > /dev/null 2>&1
@@ -134,8 +135,9 @@ echo -e "\tSetting correct permissions..."
 # Drupal
 chmod go-w ${WEBROOT}/${SITENAME}/sites/default
 chmod go-w ${WEBROOT}/${SITENAME}/sites/default/settings.php
-chmod 775 ${WEBROOT}/${SITENAME}/sites/default/files
-chmod 776 ${WEBROOT}/${SITENAME}/sites/default/files/config_*/active/*
+chmod 777 ${WEBROOT}/${SITENAME}/sites/default/files/
+chmod -R 777 ${WEBROOT}/${SITENAME}/sites/default/files/config_*/active
+chmod -R 777 ${WEBROOT}/${SITENAME}/sites/default/files/config_*/staging
 chown -R ${PERMS} ${WEBROOT}/${SITENAME}
 # drush
 chown ${PERMS} $HOME/.drush/${SITENAME}.aliases.drushrc.php
@@ -147,4 +149,7 @@ drush -q cc drush
 # Rebuilding Drupal caches
 drush -q @${SITENAME}.${SUFFIX} cache-rebuild
 
-echo -e "${GREEN}Site is available at http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"
+if [[ $(curl -sL -w "%{http_code} %{url_effective}\\n" "http://${SITENAME}.${SUFFIX}" -o /dev/null) ]]; then
+  echo -e "${GREEN}Site is available at http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"
+fi
+
