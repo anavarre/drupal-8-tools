@@ -95,6 +95,10 @@ else
 	sed -i "s:DocumentRoot /var/www/html:DocumentRoot ${WEBROOT}/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}.conf
   sed -i "s:Directory /var/www/:Directory ${WEBROOT}/${SITENAME}/:g" ${SITES_AVAILABLE}/${SITENAME}.conf
 
+  # Custom logging
+  sed -i "s:error.log:${SITENAME}-error.log:g" ${SITES_AVAILABLE}/${SITENAME}.conf
+  sed -i "s:access.log:${SITENAME}-access.log:g" ${SITES_AVAILABLE}/${SITENAME}.conf
+
 	echo -e "\tEnabling site..."
 	a2ensite ${SITENAME}.conf > /dev/null 2>&1
 fi

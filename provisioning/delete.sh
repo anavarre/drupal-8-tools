@@ -45,6 +45,7 @@ if [[ -f ${SITES_AVAILABLE}/${SITENAME} ]]; then
 	rm -f ${SITES_AVAILABLE}/${SITENAME}
 else
 	rm -f ${SITES_AVAILABLE}/${SITENAME}.conf
+  rm /var/log/apache2/${SITENAME}-access.log && rm /var/log/apache2/${SITENAME}-error.log
 fi
 	
 echo -e "\tDeleting hosts file entry..."
