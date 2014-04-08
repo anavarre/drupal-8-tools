@@ -15,8 +15,12 @@ fi
 MODULE_PATH=$1
 if [[ -z $1 ]]; then
   echo -n "Enter the Unix path for the module to scan: "
-  # @todo: check that the path is valid.
-  read VALID_PATH 
+  read VALID_PATH
+fi
+
+if [[ ! -d ${VALID_PATH} ]]; then
+  echo -e "${RED}This is not a valid Unix path! Aborting...${COLOR_ENDING}"
+  exit 0
 fi
 
 # Functions array.
@@ -25,7 +29,7 @@ FUNCTIONS=(
   [drupal_build_form]="\Drupal::formBuilder()->buildForm()"
   [drupal_form_submit]="\Drupal::formBuilder()->submitForm()"
   [drupal_get_form]="\Drupal::formBuilder()->getForm()"
-  [drupal_goto]="$this->redirect($route_name);"
+  [drupal_goto]="\$this->redirect(\$route_name);"
   [drupal_prepare_form]="\Drupal::formBuilder()->prepareForm()"
   [drupal_process_form]="\Drupal::formBuilder()->processForm()"
   [drupal_rebuild_form]="\Drupal::formBuilder()->rebuildForm()"
@@ -47,6 +51,6 @@ echo -e "${BLUE}Auditing functions...${COLOR_ENDING}"
 
 for API_REF in ${!FUNCTIONS[@]}; do
   if [[ $(find ${VALID_PATH} -type f | xargs grep "${API_REF}") ]]; then
-    echo -e "\tUpdate ${RED}${API_REF}${COLOR_ENDING} with ${GREEN}${FUNCTIONS[@]}${COLOR_ENDING}"
+    echo -e "\tUpdate ${RED}${API_REF}${COLOR_ENDING} with ${GREEN}${FUNCTIONS[${API_REF}]}${COLOR_ENDING}"
   fi
 done
