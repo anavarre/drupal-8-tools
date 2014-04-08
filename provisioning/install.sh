@@ -22,7 +22,7 @@ if [[ ! -L /etc/apache2/mods-enabled/rewrite.load ]]; then
 	service apache2 restart
 fi
 
-# Guzzle support
+# Guzzle support - To be removed after https://drupal.org/node/2210637 is in
 for pkg in ${PHP}; do
 	if ! dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
 		echo -e "\tInstalling $pkg..."
