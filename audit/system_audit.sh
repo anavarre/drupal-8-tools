@@ -3,7 +3,7 @@
 # Invoke the script from anywhere (e.g .bashrc alias).
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source ${DIR}/colors
+source ${DIR}/common
 
 # Make sure only root can execute the script.
 if [[ "$(whoami)" != "root" ]]; then

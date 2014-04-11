@@ -3,12 +3,12 @@
 # Invoke the script from anywhere (e.g .bashrc alias).
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source ../colors
+source ${DIR}/common
 
 # Make sure only root can execute the script.
 if [[ "$(whoami)" != "root" ]]; then
-        echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
-        exit 1
+  echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
+  exit 1
 fi
 
 # Set path to scan
