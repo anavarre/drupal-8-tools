@@ -7,8 +7,8 @@ source ../colors
 
 # Make sure only root can execute the script.
 if [[ "$(whoami)" != "root" ]]; then
-	echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
-	exit 1
+        echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
+        exit 1
 fi
 
 # Set path to scan
@@ -50,8 +50,8 @@ FUNCTIONS=(
   [form_set_cache]="\Drupal::formBuilder()->setCache()"
   [form_set_error]="\Drupal::formBuilder()->setErrorByName()"
   [form_state_defaults]="\Drupal::formBuilder()->getFormStateDefaults()"
-  [get_t]="???"
-  [l(]="\$this->l('title', \$route_name);"
+  [get_t]="TODO"
+  [l]="\$this->l('title', \$route_name);"
   [language]="LanguageManagerInterface::getCurrentLanguage"
   [language_default]="LanguageManagerInterface::getDefaultLanguage"
   [language_list]="LanguageManagerInterface::getLanguages"
@@ -86,8 +86,8 @@ FUNCTIONS=(
   [language_switcher_url]="LanguageNegotiationFoo::getLanguageSwitchLinks"
   [language_url_rewrite_session]="LanguageNegotiationSession::processOutbound"
   [module_exists]="\$this->moduleHandler()->moduleExists(\$m);"
-  [st(]="???"
-  [t(]="\$this->t('some text');"
+  [st]="TODO"
+  [t]="\$this->t('some text');"
   [theme_link]="#type' => 'link'"
   [url]="\$this->url(\$route_name);"
   [user_access]="User::hasPermission()"
@@ -96,7 +96,7 @@ FUNCTIONS=(
 echo -e "${BLUE}Auditing functions...${COLOR_ENDING}"
 
 for API_REF in ${!FUNCTIONS[@]}; do
-  if [[ $(find ${VALID_PATH} -type f | xargs grep "${API_REF}") ]]; then
-    echo -e "\tUpdate ${RED}${API_REF}${COLOR_ENDING} with ${GREEN}${FUNCTIONS[${API_REF}]}${COLOR_ENDING}"
+  if [[ $(find ${VALID_PATH} -type f ! -name "*.css" ! -name "*.js" | xargs grep -s -E " ${API_REF}[(*]") ]]; then
+    echo -e "\tUpdate ${RED}${API_REF}()${COLOR_ENDING} with ${GREEN}${FUNCTIONS[${API_REF}]}${COLOR_ENDING}"
   fi
 done
