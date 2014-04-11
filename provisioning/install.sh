@@ -107,7 +107,7 @@ fi
 service apache2 reload > /dev/null 2>&1
 
 echo -e "\tAdding hosts file entry..."
-	sed -i "1i127.0.0.1\t${SITENAME}.${SUFFIX}" /etc/hosts
+sed -i "1i127.0.0.1\t${SITENAME}.${SUFFIX}" /etc/hosts
 
 # MySQL queries
 DB_CREATE="CREATE DATABASE IF NOT EXISTS ${SITENAME} DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci"
@@ -115,11 +115,7 @@ DB_PERMS="GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, LOCK
 SQL="${DB_CREATE};${DB_PERMS}"
 
 echo -e "\tCreating MySQL database..."
-	$MYSQL -u${CREDS} -p${CREDS} -e "${SQL}"
-
-echo -e "\tRunning Drupal installation..."
-	cd ${WEBROOT}/${SITENAME}/sites/default/
-	drush site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
+$MYSQL -u${CREDS} -p${CREDS} -e "${SQL}"
 
 # Drush alias
 echo -e "\tCreating drush aliases..."
@@ -134,6 +130,11 @@ cat <<EOT >> $HOME/.drush/${SITENAME}.aliases.drushrc.php
  'root' => '/var/www/html/${SITENAME}',
 );
 EOT
+
+echo -e "\tRunning Drupal installation..."
+
+cd ${WEBROOT}/${SITENAME}/sites/default/
+drush site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
 
 echo -e "\tSetting correct permissions..."
 # Drupal

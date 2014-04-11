@@ -396,6 +396,20 @@ if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.routing.yml ]]; then
 	touch ${NAME_LOWER}/${NAME_LOWER}.routing.yml
 fi
 
+if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.menu_links.yml ]]; then
+	echo -e "\tCreating ${NAME_LOWER}.menu_links.yml..."
+	touch ${NAME_LOWER}/${NAME_LOWER}.menu_links.yml
+fi
+if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.local_tasks.yml ]]; then
+	echo -e "\tCreating ${NAME_LOWER}.local_tasks.yml..."
+	touch ${NAME_LOWER}/${NAME_LOWER}.local_tasks.yml
+fi
+
+if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.local_actions.yml ]]; then
+	echo -e "\tCreating ${NAME_LOWER}.local_actions.yml..."
+	touch ${NAME_LOWER}/${NAME_LOWER}.local_actions.yml
+fi
+
 if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.services.yml ]]; then
 	echo -e "\tCreating ${NAME_LOWER}.services.yml..."
 	touch ${NAME_LOWER}/${NAME_LOWER}.services.yml
