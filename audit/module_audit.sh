@@ -51,6 +51,9 @@ FUNCTIONS=(
   [form_set_error]="\Drupal::formBuilder()->setErrorByName()"
   [form_state_defaults]="\Drupal::formBuilder()->getFormStateDefaults()"
   [get_t]="TODO"
+  [hook_date_formats]="system.date_format.{string}.yml"
+  [hook_date_formats_alter]="system.date_format.{string}.yml"
+  [hook_date_format_types]="system.date_format.{string}.yml"
   [l]="\$this->l('title', \$route_name);"
   [language]="LanguageManagerInterface::getCurrentLanguage"
   [language_default]="LanguageManagerInterface::getDefaultLanguage"
@@ -87,6 +90,9 @@ FUNCTIONS=(
   [language_url_rewrite_session]="LanguageNegotiationSession::processOutbound"
   [module_exists]="\$this->moduleHandler()->moduleExists(\$m);"
   [st]="TODO"
+  [system_get_date_format]="Drupal 8's Configuration API"
+  [system_get_date_formats]="Drupal 8's Configuration API"
+  [system_get_date_types]="Drupal 8's Configuration API"
   [t]="\$this->t('some text');"
   [theme_link]="#type' => 'link'"
   [url]="\$this->url(\$route_name);"
@@ -97,6 +103,6 @@ echo -e "${BLUE}Auditing functions...${COLOR_ENDING}"
 
 for API_REF in ${!FUNCTIONS[@]}; do
   if [[ $(find ${VALID_PATH} -type f ! -name "*.css" ! -name "*.js" | xargs grep -s -E " ${API_REF}[(*]") ]]; then
-    echo -e "\tUpdate ${RED}${API_REF}()${COLOR_ENDING} with ${GREEN}${FUNCTIONS[${API_REF}]}${COLOR_ENDING}"
+    echo -e "\tReplace ${RED}${API_REF}()${COLOR_ENDING} by ${GREEN}${FUNCTIONS[${API_REF}]}${COLOR_ENDING}"
   fi
 done
