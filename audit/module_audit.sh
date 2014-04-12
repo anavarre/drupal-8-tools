@@ -26,15 +26,21 @@ fi
 # Functions array.
 declare -A FUNCTIONS
 FUNCTIONS=(
+  [_external_url_is_local]="TODO"
   [cache_get]="\$this->cache()->get(\$key);"
   [check_plain]="String::checkPlain"
+  [check_url]="TODO"
   [drupal_add_css]="drupal_process_attached()"
   [drupal_add_js]="drupal_process_attached()"
   [drupal_add_library]="drupal_process_attached()"
   [drupal_build_form]="\Drupal::formBuilder()->buildForm()"
+  [drupal_encode_path]="TODO"
   [drupal_form_submit]="\Drupal::formBuilder()->submitForm()"
   [drupal_get_form]="\Drupal::formBuilder()->getForm()"
+  [drupal_get_query_parameters]="TODO"
   [drupal_goto]="\$this->redirect(\$route_name);"
+  [drupal_http_build_query]="TODO"
+  [drupal_parse_url]="TODO"
   [drupal_prepare_form]="\Drupal::formBuilder()->prepareForm()"
   [drupal_process_form]="\Drupal::formBuilder()->processForm()"
   [drupal_rebuild_form]="\Drupal::formBuilder()->rebuildForm()"
@@ -60,6 +66,7 @@ FUNCTIONS=(
   [hook_date_formats_alter]="system.date_format.{string}.yml"
   [hook_date_format_types]="system.date_format.{string}.yml"
   [hook_library_info]="{module}.libraries.yml"
+  [hook_url_outbound_alter]="Class implementing OutboundPathProcessorInterface and {module}.services.yml"
   [image_style_path]="buildUri()"
   [image_style_url]="buildUrl()"
   [image_style_flush]="flush()"
@@ -112,7 +119,9 @@ FUNCTIONS=(
   [theme_disable]="\$theme_handler->disable(\$theme_list);"
   [theme_link]="#type' => 'link'"
   [url]="\$this->url(\$route_name);"
+  [url_is_external]="TODO"
   [user_access]="User::hasPermission()"
+  [valid_url]="TODO"
 )
 
 echo -e "${BLUE}Auditing functions...${COLOR_ENDING}"
