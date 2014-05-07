@@ -156,8 +156,8 @@ drush -q @${SITENAME}.${SUFFIX} cache-rebuild
 
 if [[ $(curl -sL -w "%{http_code} %{url_effective}\\n" "http://${SITENAME}.${SUFFIX}" -o /dev/null) ]]; then
   echo -e "${GREEN}Site is available at http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"
-  drush -q @${SITENAME}.${SUFFIX} browse --uri=${SITENAME}.${SUFFIX}
+  drush -q @${SITENAME}.${SUFFIX} browse --uri=${SITENAME}.${SUFFIX} --browser=firefox
 else
-  echo -e "${RED}There has been a problem when accessing the site. Is Apache up?${COLOR_ENDING}"
+  echo -e "${RED}There has been a problem when accessing the site. Is Apache running?${COLOR_ENDING}"
 fi
 
