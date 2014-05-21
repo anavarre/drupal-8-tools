@@ -68,6 +68,7 @@ FUNCTIONS=(
   [form_get_cache]="\Drupal::formBuilder()->getCache()"
   [form_get_error]="\Drupal::formBuilder()->getError()"
   [form_get_errors]="\Drupal::formBuilder()->getErrors()"
+  [form_options_flatten]="use Drupal\Core\Form\OptGroup; / \$flattened_options = OptGroup::flattenOptions(\$options);"
   [form_set_cache]="\Drupal::formBuilder()->setCache()"
   [form_set_error]="\Drupal::formBuilder()->setErrorByName()"
   [form_state_defaults]="\Drupal::formBuilder()->getFormStateDefaults()"
