@@ -8,8 +8,8 @@ source ${DIR}/../colors
 
 # Make sure only root can execute the script.
 if [[ "$(whoami)" != "root" ]]; then
-	echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
-	exit 1
+  echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
+  exit 1
 fi
 
 # Docroot selection
@@ -20,11 +20,11 @@ cd ${WEBROOT}
 PS3="Enter docroot number: "
 CODEBASE=(`ls -d */ | sed s:/::g;`)
 select DOCROOT in "${CODEBASE[@]}"; do
-	if [[ ! -d ${DOCROOT}/core ]]; then
-		echo -e "${RED}There is no Drupal 8 core folder. Aborting!${COLOR_ENDING}"
-		exit 1
-	fi
-	break;
+  if [[ ! -d ${DOCROOT}/core ]]; then
+    echo -e "${RED}There is no Drupal 8 core folder. Aborting!${COLOR_ENDING}"
+    exit 1
+  fi
+  break;
 done
 
 echo -e "${GREEN}Docroot is: ${DOCROOT}${COLOR_ENDING}"
@@ -37,21 +37,21 @@ cd ${WEBROOT}/${DOCROOT}/sites/
 PS3="Enter site number: "
 DIR=(`ls -d */ | sed s:/::g;`)
 select SITE in "${DIR[@]}"; do
-	if [[ ! -f ${SITE}/settings.php ]]; then
-		echo -e "${RED}There is no settings.php file in this directory. Aborting!${COLOR_ENDING}"
-		exit 1
-	fi
-	break;
+  if [[ ! -f ${SITE}/settings.php ]]; then
+    echo -e "${RED}There is no settings.php file in this directory. Aborting!${COLOR_ENDING}"
+    exit 1
+  fi
+  break;
 done
 
 echo -e "${GREEN}Site is: ${SITE}${COLOR_ENDING}"
 
 # Check if backup dir exists
 if [[ ! -d ${WEBROOT}/${DOCROOT}/backup ]]; then
-	echo -e "${RED}There is no backup directory and we can't thus find your database and CMI backups! Aborting...${COLOR_ENDING}"
-	exit 1
+  echo -e "${RED}There is no backup directory and we can't thus find your database and CMI backups! Aborting...${COLOR_ENDING}"
+  exit 1
 else
-	echo -e "Backup directory exists. Proceeding..."
+  echo -e "Backup directory exists. Proceeding..."
 fi
 
 # Database selection
@@ -62,7 +62,7 @@ PS3="Enter database number: "
 SQL=$(mysql -u root -proot -e "SHOW DATABASES;")
 DATABASES=( $( for DB in ${SQL} ; do echo ${DB} | egrep -v "(test|*_schema|Database)" ; done ) )
 select DB in "${DATABASES[@]}"; do
-	break;
+  break;
 done
 
 echo -e "${GREEN}Database is: ${DB}${COLOR_ENDING}"
@@ -72,8 +72,8 @@ cd ${WEBROOT}/${DOCROOT}/backup/
 
 # Stop operations if there's no backup to restore
 if [ ! "$(find . -type f -name "*.tar.gz")" ]; then
-	echo -e "${RED}There is no available backup file. Aborting!${COLOR_ENDING}"
-    exit 0
+  echo -e "${RED}There is no available backup file. Aborting!${COLOR_ENDING}"
+  exit 0
 fi
 
 # Start restore operations
@@ -82,17 +82,17 @@ echo -e "${BLUE}Starting restore...${COLOR_ENDING} "
 PS3="Enter backup number: "
 BACKUP=(`ls *.tar.gz`)
 select BKP in "${BACKUP[@]}"; do
-	if [[ ! -f ${WEBROOT}/${DOCROOT}/sites/${SITE}/settings.php ]]; then
-		echo -e "${RED}There is no settings.php file in this directory. Aborting!${COLOR_ENDING}"
-		exit 1
-	fi
-	break;
+  if [[ ! -f ${WEBROOT}/${DOCROOT}/sites/${SITE}/settings.php ]]; then
+    echo -e "${RED}There is no settings.php file in this directory. Aborting!${COLOR_ENDING}"
+    exit 1
+  fi
+  break;
 done
 
 read -p "Are you sure? This will overwrite your database and CMI files. [Y/N] "
 if [[ ${REPLY} =~ ^[Nn]$ ]]; then
-	echo -e "${GREEN}Back to the comfort zone. Aborting.${COLOR_ENDING}"
-	exit 0
+  echo -e "${GREEN}Back to the comfort zone. Aborting.${COLOR_ENDING}"
+  exit 0
 fi
 
 # Store user and group data
@@ -104,7 +104,7 @@ tar -xzf ${BKP}
 # Trigger MySQL site restore
 DUMP=`ls ${BKP} | sed 's/.tar.gz//g'`
 cd ${DUMP}
-	echo -e "\tRestoring MySQL database..."
+  echo -e "\tRestoring MySQL database..."
 mysql -u root -proot -h localhost ${DB} < ${DB}.sql
 
 # Determine CMI's config dir.
@@ -112,24 +112,24 @@ cd ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/
 CONFIG=`(find . -maxdepth 1 -type d -name "config_*" | sed 's/^.\{2\}//')`
 
 # Delete current active config
-	echo -e "\tDeleting current CMI configuration..."
+echo -e "\tDeleting current CMI configuration..."
 rm -Rf ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active/
 
 # CMI restore
-	echo -e "\tRestoring CMI backup files"
+echo -e "\tRestoring CMI backup files"
 cp -R ${WEBROOT}/${DOCROOT}/backup/${DUMP}/active ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/
 chown -R ${PERMS} ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/
 
 # Set permissions for active config (775)
-	echo -e "\tSetting correct permissions for active directory..."
+echo -e "\tSetting correct permissions for active directory..."
 chmod 775 ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active
 
 # Set permissions for YAML files (644)
-	echo -e "\tSetting correct permissions for YAML files..."
+echo -e "\tSetting correct permissions for YAML files..."
 chmod 644 ${WEBROOT}/${DOCROOT}/sites/${SITE}/files/${CONFIG}/active/*.yml
 
 # Remove the cruft
-	echo -e "\tCleaning up the cruft..."
+echo -e "\tCleaning up the cruft..."
 rm -Rf ${WEBROOT}/${DOCROOT}/backup/${DUMP}/
 
 echo -e "${GREEN}Both the database and CMI files have been successfully restored!${COLOR_ENDING}"

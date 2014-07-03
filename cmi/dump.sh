@@ -8,8 +8,8 @@ source ${DIR}/../colors
 
 # Make sure only root can execute the script.
 if [[ "$(whoami)" != "root" ]]; then
-	echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
-	exit 1
+  echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
+  exit 1
 fi
 
 # Docroot selection
@@ -20,11 +20,11 @@ cd ${WEBROOT}
 PS3="Enter docroot number: "
 CODEBASE=(`ls -d */ | sed s:/::g;`)
 select DOCROOT in "${CODEBASE[@]}"; do
-	if [[ ! -d ${DOCROOT}/core ]]; then
-		echo -e "${RED}There is no Drupal 8 core folder. Aborting!${COLOR_ENDING}"
-		exit 1
-	fi
-	break;
+  if [[ ! -d ${DOCROOT}/core ]]; then
+    echo -e "${RED}There is no Drupal 8 core folder. Aborting!${COLOR_ENDING}"
+    exit 1
+  fi
+  break;
 done
 
 echo -e "${GREEN}Docroot is: ${DOCROOT}${COLOR_ENDING}"
@@ -40,23 +40,23 @@ cd ${WEBROOT}/${DOCROOT}/sites/
 PS3="Enter site number: "
 DIR=(`ls -d */ | sed s:/::g;`)
 select SITE in "${DIR[@]}"; do
-	if [[ ! -f ${SITE}/settings.php ]]; then
-		echo -e "${RED}There is no settings.php file in this directory. Aborting!${COLOR_ENDING}"
-		exit 1
-	fi
-	break;
+  if [[ ! -f ${SITE}/settings.php ]]; then
+    echo -e "${RED}There is no settings.php file in this directory. Aborting!${COLOR_ENDING}"
+    exit 1
+  fi
+  break;
 done
 
 echo -e "${GREEN}Site is: ${SITE}${COLOR_ENDING}"
 
 # Create backup dir if needed
 if [[ ! -d ${WEBROOT}/${DOCROOT}/backup ]]; then
-	echo -e "\t Creating backup directory..."
-	mkdir ${WEBROOT}/${DOCROOT}/backup
-	chown -R ${PERMS} ${WEBROOT}/${DOCROOT}/backup
+  echo -e "\t Creating backup directory..."
+  mkdir ${WEBROOT}/${DOCROOT}/backup
+  chown -R ${PERMS} ${WEBROOT}/${DOCROOT}/backup
 
 else
-	echo -e "Backup directory already exists. Ignoring..."
+  echo -e "Backup directory already exists. Ignoring..."
 fi
 
 # Database selection
@@ -67,7 +67,7 @@ PS3="Enter database number: "
 SQL=$(mysql -u root -proot -e "SHOW DATABASES;")
 DATABASES=( $( for DB in ${SQL} ; do echo ${DB} | egrep -v "(test|*_schema|Database)" ; done ) )
 select DB in "${DATABASES[@]}"; do
-	break;
+  break;
 done
 
 echo -e "${GREEN}Database is: ${DB}${COLOR_ENDING}"

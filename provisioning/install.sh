@@ -7,8 +7,8 @@ source ${DIR}/common
 
 # Make sure only root can execute the script
 if [[ "$(whoami)" != "root" ]]; then
-	echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
-	exit 1
+  echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
+  exit 1
 fi
 
 ################
@@ -17,9 +17,9 @@ fi
 
 # Enable mod_rewrite if needed
 if [[ ! -L /etc/apache2/mods-enabled/rewrite.load ]]; then
-	echo "Enabling mod_rewrite..."
-	a2enmod rewrite > /dev/null 2>&1
-	service apache2 restart
+  echo "Enabling mod_rewrite..."
+  a2enmod rewrite > /dev/null 2>&1
+  service apache2 restart
 fi
 
 ##################
@@ -27,8 +27,8 @@ fi
 ##################
 SITENAME_UPPER=$1
 if [[ -z $1 ]]; then
-	echo -n "What should be the name of the new Drupal docroot? "
-	read SITENAME_UPPER
+  echo -n "What should be the name of the new Drupal docroot? "
+  read SITENAME_UPPER
 fi
 
 # Convert sitename to lowercase if needed.
@@ -36,14 +36,14 @@ SITENAME="${SITENAME_UPPER,,}"
 
 # Docroot exists
 if [[ -d ${WEBROOT}/${SITENAME} ]]; then
-	echo -e "${RED}The ${SITENAME} docroot already exists! Aborting.${COLOR_ENDING}"
-	exit 0
+  echo -e "${RED}The ${SITENAME} docroot already exists! Aborting.${COLOR_ENDING}"
+  exit 0
 fi
 
 # Download archive only if needed
 if [[ ! -f ${TMP}/${DRUPAL} ]]; then
-	echo "Downloading ${DRUPAL}..."
-	wget -P ${TMP} -q http://ftp.drupal.org/files/projects/${DRUPAL}
+  echo "Downloading ${DRUPAL}..."
+  wget -P ${TMP} -q http://ftp.drupal.org/files/projects/${DRUPAL}
 fi
 
 echo "Unpacking ${DRUPAL}..."
@@ -60,39 +60,39 @@ echo -e "\tProvisionning Apache vhost..."
 
 # First, determine if we're running Apache 2.2 or 2.4
 if [[ -f ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ]]; then
-	cp ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}
-	# ServerName directive
-	sed -i "3i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
-	# Modifying directives
-	sed -i "s:/var/www:/${WEBROOT}/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}
-	# Make sure that Drupal's .htaccess clean URLs will work fine
-	sed -i "s/AllowOverride None/AllowOverride All/g" ${SITES_AVAILABLE}/${SITENAME}
-
-	echo -e "\tEnabling site..."
-	a2ensite ${SITENAME} > /dev/null 2>&1
+  cp ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}
+  # ServerName directive
+  sed -i "3i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
+  # Modifying directives
+  sed -i "s:/var/www:/${WEBROOT}/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}
+  # Make sure that Drupal's .htaccess clean URLs will work fine
+  sed -i "s/AllowOverride None/AllowOverride All/g" ${SITES_AVAILABLE}/${SITENAME}
+  
+  echo -e "\tEnabling site..."
+  a2ensite ${SITENAME} > /dev/null 2>&1
 else
-	cp ${SITES_AVAILABLE}/${APACHE_24_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}.conf
-	# ServerName directive
-	sed -i "11i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}.conf
-	# ServerAlias directive
-	sed -i "12i\\\tServerAlias ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}.conf
-	# vHost overrides
-	sed -i "16i\\\t<Directory /var/www/>" ${SITES_AVAILABLE}/${SITENAME}.conf
+  cp ${SITES_AVAILABLE}/${APACHE_24_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}.conf
+  # ServerName directive
+  sed -i "11i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}.conf
+  # ServerAlias directive
+  sed -i "12i\\\tServerAlias ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}.conf
+  # vHost overrides
+  sed -i "16i\\\t<Directory /var/www/>" ${SITES_AVAILABLE}/${SITENAME}.conf
     sed -i "17i\\\t\tOptions Indexes FollowSymLinks" ${SITES_AVAILABLE}/${SITENAME}.conf
-	sed -i "18i\\\t\tAllowOverride All" ${SITES_AVAILABLE}/${SITENAME}.conf
-	sed -i "19i\\\t\tRequire all granted" ${SITES_AVAILABLE}/${SITENAME}.conf
-	sed -i "20i\\\t</Directory>" ${SITES_AVAILABLE}/${SITENAME}.conf
-
-	# Modifying directives
-	sed -i "s:DocumentRoot /var/www/html:DocumentRoot ${WEBROOT}/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}.conf
+  sed -i "18i\\\t\tAllowOverride All" ${SITES_AVAILABLE}/${SITENAME}.conf
+  sed -i "19i\\\t\tRequire all granted" ${SITES_AVAILABLE}/${SITENAME}.conf
+  sed -i "20i\\\t</Directory>" ${SITES_AVAILABLE}/${SITENAME}.conf
+  
+  # Modifying directives
+  sed -i "s:DocumentRoot /var/www/html:DocumentRoot ${WEBROOT}/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}.conf
   sed -i "s:Directory /var/www/:Directory ${WEBROOT}/${SITENAME}/:g" ${SITES_AVAILABLE}/${SITENAME}.conf
-
+  
   # Custom logging
   sed -i "s:error.log:${SITENAME}-error.log:g" ${SITES_AVAILABLE}/${SITENAME}.conf
   sed -i "s:access.log:${SITENAME}-access.log:g" ${SITES_AVAILABLE}/${SITENAME}.conf
-
-	echo -e "\tEnabling site..."
-	a2ensite ${SITENAME}.conf > /dev/null 2>&1
+  
+  echo -e "\tEnabling site..."
+  a2ensite ${SITENAME}.conf > /dev/null 2>&1
 fi
 
 # Restart Apache to apply the new configuration
