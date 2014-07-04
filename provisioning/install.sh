@@ -140,6 +140,10 @@ echo -e "\tRunning Drupal installation..."
 cd ${WEBROOT}/${SITENAME}/sites/default/
 drush site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
 
+# Disable CSS and JS aggregation
+drush @${SITENAME}.${SUFFIX} cset -qy system.performance css.preprocess false --format=yaml
+drush @${SITENAME}.${SUFFIX} cset -qy system.performance js.preprocess false --format=yaml
+
 # Load the make file, if any. (-d = dev.make / -c = custom.make)
 while getopts ":dc" opt; do
   case $opt in
