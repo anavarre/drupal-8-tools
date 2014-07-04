@@ -25,10 +25,22 @@ fi
 ##################
 # Drupal install #
 ##################
+if [[ $1 == "-d" ]] || [[ $1 == "-c" ]]; then
+SITENAME_UPPER=$2
+  if [[ -z $2 ]]; then
+    echo -n "What should be the name of the new Drupal docroot? "
+    read SITENAME_UPPER
+  fi
+elif [[ $1 == *-* ]]; then
+  echo -e "${RED}Only -d (dev make file) or -c (custom make file) parameters are accepted! Aborting.${COLOR_ENDING}"
+  exit 0
+else
 SITENAME_UPPER=$1
-if [[ -z $1 ]]; then
-  echo -n "What should be the name of the new Drupal docroot? "
-  read SITENAME_UPPER
+echo ${SITENAME_UPPER}
+  if [[ -z $1 ]]; then
+    echo -n "What should be the name of the new Drupal docroot? "
+    read SITENAME_UPPER
+  fi
 fi
 
 # Convert sitename to lowercase if needed.
@@ -128,19 +140,22 @@ echo -e "\tRunning Drupal installation..."
 cd ${WEBROOT}/${SITENAME}/sites/default/
 drush site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
 
-# Make file
-MAKE=$2
-
-if [[ ${MAKE} == "--dev" || "dev" ]]; then
-  echo -e "\tLoading dev make file..."
-  # Drush doesn't place the modules at the right location so we're changing directory manually.
-  cd ${WEBROOT}/${SITENAME}
-  drush make --no-core -qy ${DIR}/dev.make --contrib-destination=.
-elif [[ ${MAKE} == "--custom" || "custom" ]]; then
-  echo -e "\tLoading custom make file..."
-  cd ${WEBROOT}/${SITENAME}
-  drush make --no-core -qy ${DIR}/custom.make --contrib-destination=.
-fi
+# Load the make file, if any. (-d = dev.make / -c = custom.make)
+while getopts ":dc" opt; do
+  case $opt in
+    d)
+      echo -e "\tLoading the dev make file..." >&2
+      # Drush doesn't place the modules at the right location so we're changing directory manually.
+      cd ${WEBROOT}/${SITENAME}
+      drush make --no-core -qy ${DIR}/dev.make --contrib-destination=.
+      ;;
+    c)
+      echo -e "\tLoading your custom make file..." >&2
+      cd ${WEBROOT}/${SITENAME}
+      drush make --no-core -qy ${DIR}/custom.make --contrib-destination=.
+      ;;
+  esac
+done
 
 echo -e "\tSetting correct permissions..."
 # Drupal
