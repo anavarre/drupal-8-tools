@@ -131,12 +131,15 @@ drush site-install standard install_configure_form.update_status_module='array(F
 # Make file
 MAKE=$2
 
-if [[ ${MAKE} == "--dev" ]]; then
+if [[ ${MAKE} == "--dev" || "dev" ]]; then
   echo -e "\tLoading dev make file..."
-  drush make --no-core -qy ${DIR}/dev.make
-elif [[ ${MAKE} == "--custom" ]]; then
+  # Drush doesn't place the modules at the right location so we're changing directory manually.
+  cd ${WEBROOT}/${SITENAME}
+  drush make --no-core -qy ${DIR}/dev.make --contrib-destination=.
+elif [[ ${MAKE} == "--custom" || "custom" ]]; then
   echo -e "\tLoading custom make file..."
-  drush make --no-core -qy ${DIR}/custom.make
+  cd ${WEBROOT}/${SITENAME}
+  drush make --no-core -qy ${DIR}/custom.make --contrib-destination=.
 fi
 
 echo -e "\tSetting correct permissions..."
