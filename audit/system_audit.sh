@@ -25,7 +25,7 @@ fi
 if [[ "${DISABLE_FUNCTIONS}" == "novalue" ]]; then
   echo -e "PHP CLI's disable_functions are turned off ${GREEN}[OK]${COLOR_ENDING}"
 else
-  echo -e "PHP CLI's disable_functions are turned on and might cause issues with drush. ${RED}[ERROR]${COLOR_ENDING}"
+  echo -e "PHP CLI's disable_functions are turned on and might cause issues with Drush. ${RED}[ERROR]${COLOR_ENDING}"
 fi
 
 # @todo

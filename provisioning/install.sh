@@ -36,7 +36,6 @@ elif [[ $1 == *-* ]]; then
   exit 0
 else
 SITENAME_UPPER=$1
-echo ${SITENAME_UPPER}
   if [[ -z $1 ]]; then
     echo -n "What should be the name of the new Drupal docroot? "
     read SITENAME_UPPER
@@ -122,7 +121,7 @@ echo -e "\tCreating MySQL database..."
 $MYSQL -u${CREDS} -p${CREDS} -e "${SQL}"
 
 # Drush alias
-echo -e "\tCreating drush aliases..."
+echo -e "\tCreating Drush aliases..."
 
 cat <<EOT >> $HOME/.drush/${SITENAME}.aliases.drushrc.php
 <?php
