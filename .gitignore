@@ -1,5 +1,8 @@
-# IDE
+# PhpStorm
 .idea
+
+# HEAD
+provisioning/8.x
 
 # Make file
 provisioning/custom.make

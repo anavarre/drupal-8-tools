@@ -5,16 +5,12 @@ SITES_AVAILABLE="/etc/apache2/sites-available"
 SITES_ENABLED="/etc/apache2/sites-enabled"
 APACHE_22_DEFAULT="default"
 APACHE_24_DEFAULT="000-default.conf"
-TMP="/tmp"
 SUFFIX="local"
+
+GIT="${DIR}/8.x"
 
 # PHP variables
 PHP="php5-curl"
-
-# Drupal variables
-RELEASE="drupal-8.x-dev"
-COMPRESSION="tar.gz"
-DRUPAL="${RELEASE}.${COMPRESSION}"
 
 # MySQL variables
 MYSQL=`which mysql`

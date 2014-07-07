@@ -45,29 +45,21 @@ fi
 # Convert sitename to lowercase if needed.
 SITENAME="${SITENAME_UPPER,,}"
 
-# Docroot exists
+# Abort if docroot exists. Else, copy from Git
 if [[ -d ${WEBROOT}/${SITENAME} ]]; then
   echo -e "${RED}The ${SITENAME} docroot already exists! Aborting.${COLOR_ENDING}"
   exit 0
+else
+  echo "Pulling changes from upstream 8.x repo..."
+  cd ${GIT} && git pull -q
+  cp -R ${GIT}/ ${WEBROOT}/${SITENAME}
 fi
 
-# Download archive only if needed
-if [[ ! -f ${TMP}/${DRUPAL} ]]; then
-  echo "Downloading ${DRUPAL}..."
-  wget -P ${TMP} -q http://ftp.drupal.org/files/projects/${DRUPAL}
-fi
-
-echo "Unpacking ${DRUPAL}..."
-tar -C ${WEBROOT} -xzf ${TMP}/${DRUPAL}
-
-mv ${WEBROOT}/${RELEASE} ${WEBROOT}/${SITENAME}
-echo -e "${GREEN}Successfully created Drupal docroot under ${WEBROOT}/${SITENAME}${COLOR_ENDING}"
-
-echo -e "\tCreating settings.php file..."
+echo "Creating settings.php file..."
 cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
 # Apache setup
-echo -e "\tProvisionning Apache vhost..."
+echo "Provisionning Apache vhost..."
 
 # First, determine if we're running Apache 2.2 or 2.4
 if [[ -f ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ]]; then
@@ -79,7 +71,7 @@ if [[ -f ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ]]; then
   # Make sure that Drupal's .htaccess clean URLs will work fine
   sed -i "s/AllowOverride None/AllowOverride All/g" ${SITES_AVAILABLE}/${SITENAME}
   
-  echo -e "\tEnabling site..."
+  echo "Enabling site..."
   a2ensite ${SITENAME} > /dev/null 2>&1
 else
   cp ${SITES_AVAILABLE}/${APACHE_24_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}.conf
@@ -102,14 +94,14 @@ else
   sed -i "s:error.log:${SITENAME}-error.log:g" ${SITES_AVAILABLE}/${SITENAME}.conf
   sed -i "s:access.log:${SITENAME}-access.log:g" ${SITES_AVAILABLE}/${SITENAME}.conf
   
-  echo -e "\tEnabling site..."
+  echo "Enabling site..."
   a2ensite ${SITENAME}.conf > /dev/null 2>&1
 fi
 
 # Restart Apache to apply the new configuration
 service apache2 reload > /dev/null 2>&1
 
-echo -e "\tAdding hosts file entry..."
+echo "Adding hosts file entry..."
 sed -i "1i127.0.0.1\t${SITENAME}.${SUFFIX}" /etc/hosts
 
 # MySQL queries
@@ -117,11 +109,11 @@ DB_CREATE="CREATE DATABASE IF NOT EXISTS ${SITENAME} DEFAULT CHARACTER SET utf8 
 DB_PERMS="GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES ON ${SITENAME}.* TO '${CREDS}'@'${DB_HOST}' IDENTIFIED BY '${CREDS}'"
 SQL="${DB_CREATE};${DB_PERMS}"
 
-echo -e "\tCreating MySQL database..."
+echo "Creating MySQL database..."
 $MYSQL -u${CREDS} -p${CREDS} -e "${SQL}"
 
 # Drush alias
-echo -e "\tCreating Drush aliases..."
+echo "Creating Drush aliases..."
 
 cat <<EOT >> $HOME/.drush/${SITENAME}.aliases.drushrc.php
 <?php
@@ -134,7 +126,7 @@ cat <<EOT >> $HOME/.drush/${SITENAME}.aliases.drushrc.php
 );
 EOT
 
-echo -e "\tRunning Drupal installation..."
+echo "Running Drupal installation..."
 
 cd ${WEBROOT}/${SITENAME}/sites/default/
 drush site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
@@ -147,20 +139,20 @@ drush @${SITENAME}.${SUFFIX} cset -qy system.performance js.preprocess false --f
 while getopts ":dc" opt; do
   case $opt in
     d)
-      echo -e "\tLoading the dev make file..." >&2
+      echo "\tLoading the dev make file..." >&2
       # Drush doesn't place the modules at the right location so we're changing directory manually.
       cd ${WEBROOT}/${SITENAME}
       drush make --no-core -qy ${DIR}/dev.make --contrib-destination=.
       ;;
     c)
-      echo -e "\tLoading your custom make file..." >&2
+      echo "\tLoading your custom make file..." >&2
       cd ${WEBROOT}/${SITENAME}
       drush make --no-core -qy ${DIR}/custom.make --contrib-destination=.
       ;;
   esac
 done
 
-echo -e "\tSetting correct permissions..."
+echo "Setting correct permissions..."
 # Drupal
 chmod go-w ${WEBROOT}/${SITENAME}/sites/default
 chmod go-w ${WEBROOT}/${SITENAME}/sites/default/settings.php
