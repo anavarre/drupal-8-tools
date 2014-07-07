@@ -4,10 +4,10 @@ Requirements
 - Git clone 8.x from drupal.org
 - Create a 8.x symbolic link in the *provisioning* directory so that the installer knows where to git pull changes from
 
-<code>
+<pre>
 $ git clone --branch 8.x http://git.drupal.org/project/drupal.git
 $ ln -s /path/to/d8/repo 8.x
-</code>
+</pre>
 
 Note: The *8.x* directory name has been added to the .gitignore file so that it won't be deleted ever.
 
