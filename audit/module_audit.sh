@@ -26,6 +26,7 @@ fi
 # Functions array.
 declare -A FUNCTIONS
 FUNCTIONS=(
+  [_field_sort_items_value_helper]="_field_multiple_value_form_sort_helper()"
   [_external_url_is_local]="TODO"
   [_module_build_dependencies]="\Drupal::moduleHandler()->buildModuleDependencies(\$modules);"
   [ajax_deliver]="TODO"
@@ -63,13 +64,15 @@ FUNCTIONS=(
   [drupal_session_regenerate]="SessionManager: \$session_manager = \Drupal::service('session_manager'); / \$session_manager->regenerate();"
   [drupal_session_start]="SessionManager: \$session_manager = \Drupal::service('session_manager'); / \$session_manager->start();"
   [drupal_session_started]="SessionManager: \$session_manager = \Drupal::service('session_manager'); / \$session_manager->isStarted();"
+  [drupal_validate_form]="\Drupal::formBuilder()->validateForm()"
   [element_child]="use Drupal\Core\Render\Element; / Element::child('foo');"
   [element_children]="use Drupal\Core\Render\Element; / Element::children(\$elements);"
   [element_get_visible_children]="use Drupal\Core\Render\Element; / Element::getVisibleChildren(\$elements);"
   [element_property]="use Drupal\Core\Render\Element; / Element::property('#markup');"
   [element_properties]="use Drupal\Core\Render\Element; / Element::properties(\$elements['foo']);"
   [element_set_attributes]="use Drupal\Core\Render\Element; / Element::setAttributes(\$elements['foo'], array('#title' => 'Custom title'));"
-  [drupal_validate_form]="\Drupal::formBuilder()->validateForm()"
+  [field_form_get_state]="\Drupal\Core\Field\WidgetBaseInterface::getWidgetState()"
+  [field_form_set_state]="\Drupal\Core\Field\WidgetBaseInterface::setWidgetState()"
   [field_info_field]="See https://www.drupal.org/node/2167167 and https://www.drupal.org/node/2260037"
   [field_info_field_by_id]="See https://www.drupal.org/node/2167167 and https://www.drupal.org/node/2260037"
   [field_info_field_by_ids]="See https://www.drupal.org/node/2167167 and https://www.drupal.org/node/2260037"
