@@ -1,12 +1,26 @@
+Requirements
+------------
+
+- Git clone 8.x from drupal.org
+- Create a 8.x symbolic link in the *provisioning* directory so that the installer knows where to git pull changes from
+
+<code>
+$ git clone --branch 8.x http://git.drupal.org/project/drupal.git
+$ ln -s /path/to/d8/repo 8.x
+</code>
+
+Note: The *8.x* directory name has been added to the .gitignore file so that it won't be deleted ever.
+
 provisioning/install.sh
 -----------------------
 
 - Enable Apache mod_rewrite if it is disabled
-- Check that the php5-curl package is installed, or it'll install it to support Guzzle support in D8
 - Allow you to customize the name of the new Drupal docroot
-- Download Drupal (if needed) and set up a new docroot for you, with correct permissions to start the installer
-- Create the required Apache vhost and tweak your hosts file accordingly
+- Git pull 8.x (HEAD) to make sure you're working with the latest dev release
+- Set up a new docroot for you, with the correct permissions and requirements (settings.php, files dir...)
+- Create the required Apache vhost and tweak the hosts file accordingly
 - Create a MySQL database
+- Run the Drupal installer automatically and spin up the site in seconds
 
 The script assumes that your MySQL credentials are root/root and that you're downloading the latest Drupal 8 dev release to set up a new docroot under _/var/www/html_. Feel free to modify the script according to your preferences.
 

@@ -33,10 +33,10 @@ if [[ ! -d ${WEBROOT}/${SITENAME} ]]; then
   exit 0
 fi
 
-echo -e "\tDeleting Drupal docroot..."
+echo "Deleting Drupal docroot..."
   rm -Rf ${WEBROOT}/${SITENAME}
 
-echo -e "\tDeleting Apache vHost..."
+echo "Deleting Apache vHost..."
   a2dissite ${SITENAME} > /dev/null 2>&1
   service apache2 reload > /dev/null 2>&1
 
@@ -48,13 +48,13 @@ else
   rm /var/log/apache2/${SITENAME}-access.log && rm /var/log/apache2/${SITENAME}-error.log
 fi
 	
-echo -e "\tDeleting hosts file entry..."
+echo "Deleting hosts file entry..."
   sed -i "/${SITENAME}.${SUFFIX}/d" /etc/hosts
 
-echo -e "\tDeleting database..."
+echo "Deleting database..."
   ${MYSQL} -uroot -proot -e "DROP DATABASE IF EXISTS $SITENAME"
 
-echo -e "\tDeleting Drush aliases..."
+echo "Deleting Drush aliases..."
   rm $HOME/.drush/${SITENAME}.aliases.drushrc.php
 
 # Rebuild Drush command file cache to purge the aliases
