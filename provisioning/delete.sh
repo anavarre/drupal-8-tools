@@ -52,7 +52,7 @@ echo "Deleting hosts file entry..."
   sed -i "/${SITENAME}.${SUFFIX}/d" /etc/hosts
 
 echo "Deleting database..."
-  ${MYSQL} -uroot -proot -e "DROP DATABASE IF EXISTS $SITENAME"
+  ${MYSQL} -uroot -proot -e "DROP DATABASE IF EXISTS \`$SITENAME\`"
 
 echo "Deleting Drush aliases..."
   rm $HOME/.drush/${SITENAME}.aliases.drushrc.php
