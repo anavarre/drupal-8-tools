@@ -23,6 +23,9 @@ projects[webprofiler][download][branch] = "8.x-1.x"
 projects[config_inspector][download][url] = "http://git.drupal.org/project/config_inspector.git"
 projects[config_inspector][download][branch] = "8.x-1.x"
 
+projects[config_devel][download][url] = "http://git.drupal.org/project/config_devel.git"
+projects[config_devel][download][branch] = "8.x-1.x"
+
 ; REST
 projects[restui][download][url] = "http://git.drupal.org/project/restui.git"
 projects[restui][download][branch] = "8.x-1.x"
