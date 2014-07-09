@@ -23,7 +23,11 @@ if [[ ! -d ${VALID_PATH} ]]; then
   exit 0
 fi
 
-# Functions array.
+#############
+# FUNCTIONS #
+#############
+echo -e "${BLUE}Auditing functions...${COLOR_ENDING}"
+
 declare -A FUNCTIONS
 FUNCTIONS=(
   [_field_sort_items_value_helper]="_field_multiple_value_form_sort_helper()"
@@ -180,17 +184,37 @@ FUNCTIONS=(
   [valid_url]="TODO"
 )
 
-echo -e "${BLUE}Auditing functions...${COLOR_ENDING}"
-
 for API_FUNCTIONS in ${!FUNCTIONS[@]}; do
   if [[ $(find ${VALID_PATH} -type f ! -name "*.css" ! -name "*.js" | xargs grep -s -E " ${API_FUNCTIONS}[(*$]") ]]; then
     echo -e "\tReplace ${RED}${API_FUNCTIONS}()${COLOR_ENDING} by ${GREEN}${FUNCTIONS[${API_FUNCTIONS}]}${COLOR_ENDING}"
+  else
+    echo -e "\t${GREEN}No deprecated function was found.${COLOR_ENDING}"
   fi
 done
 
+#############
+# CONSTANTS #
+#############
+echo -e "${BLUE}Auditing constants...${COLOR_ENDING}"
+
+declare -A CONSTANTS
+CONSTANTS=(
+  [COMMENT_MODE_FLAT]="CommentManagerInterface::COMMENT_MODE_FLAT"
+)
+
+for API_CONSTANTS in ${!CONSTANTS[@]}; do
+  if [[ $(find ${VALID_PATH} -type f ! -name "*.css" ! -name "*.js" | xargs grep "${API_CONSTANTS}") ]]; then
+    echo -e "\tReplace ${RED}${API_CONSTANTS}()${COLOR_ENDING} by ${GREEN}${CONSTANTS[${API_CONSTANTS}]}${COLOR_ENDING}"
+  else
+    echo -e "\t${GREEN}No deprecated constant was found.${COLOR_ENDING}"
+  fi
+done
+
+################
+# SUPERGLOBALS #
+################
 echo -e "${BLUE}Auditing superglobals...${COLOR_ENDING}"
 
-# Superglobals array.
 declare -A SUPERGLOBALS
 SUPERGLOBALS=(
   [\$_POST]="TODO"
@@ -205,5 +229,7 @@ fi
 for API_SGLOBALS in ${!SUPERGLOBALS[@]}; do
   if [[ $(find ${VALID_PATH} -type f ! -name "*.css" ! -name "*.js" | xargs grep "${API_SGLOBALS}") ]]; then
     echo -e "\tReplace ${RED}${API_SGLOBALS}()${COLOR_ENDING} by ${GREEN}${SUPERGLOBALS[${API_SGLOBALS}]}${COLOR_ENDING}"
+  else
+    echo -e "\t${GREEN}No deprecated superglobal was found.${COLOR_ENDING}"
   fi
 done 
