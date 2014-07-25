@@ -139,13 +139,13 @@ drush @${SITENAME}.${SUFFIX} cset -qy system.performance js.preprocess false --f
 while getopts ":dc" opt; do
   case $opt in
     d)
-      echo "\tLoading the dev make file..." >&2
+      echo "Loading the dev make file..." >&2
       # Drush doesn't place the modules at the right location so we're changing directory manually.
       cd ${WEBROOT}/${SITENAME}
       drush make --no-core -qy ${DIR}/dev.make --contrib-destination=.
       ;;
     c)
-      echo "\tLoading your custom make file..." >&2
+      echo "Loading custom make file..." >&2
       cd ${WEBROOT}/${SITENAME}
       drush make --no-core -qy ${DIR}/custom.make --contrib-destination=.
       ;;
@@ -176,4 +176,3 @@ if [[ $(curl -sL -w "%{http_code} %{url_effective}\\n" "http://${SITENAME}.${SUF
 else
   echo -e "${RED}There has been a problem when accessing the site. Is Apache running?${COLOR_ENDING}"
 fi
-

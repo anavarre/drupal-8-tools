@@ -37,7 +37,7 @@ FUNCTIONS=(
   [block_list]="entity_load_multiple_by_properties() - See https://www.drupal.org/node/2291171"
   [block_get_blocks_by_region]="entity_load_multiple_by_properties() - See https://www.drupal.org/node/2291171"
   [cache_get]="\$this->cache()->get(\$key)"
-  [check_plain]="String::checkPlain()"
+  [check_plain]="\Drupal\Component\Utility\String::checkPlain()﻿"
   [check_url]="TODO"
   [comment_count_unpublished]="CommentStorage::getUnapprovedCount()"
   [comment_get_display_page]="CommentStorage::getDisplayOrdinal()"
@@ -104,6 +104,7 @@ FUNCTIONS=(
   [form_options_flatten]="\$flattened_options = OptGroup::flattenOptions(\$options)"
   [form_set_cache]="\Drupal::formBuilder()->setCache()"
   [form_set_error]="\Drupal::formBuilder()->setErrorByName()"
+  [form_set_value]="\Drupal::formBuilder()->setValue(\$element, \$value, \$form_state);"
   [form_state_defaults]="\Drupal::formBuilder()->getFormStateDefaults()"
   [get_t]="TODO"
   [hook_comment_publish]="See https://www.drupal.org/node/2296867"
@@ -175,6 +176,7 @@ FUNCTIONS=(
   [module_list]="\$module_handler->setModuleList(array \$module_list = array())"
   [module_load_all]="\Drupal::moduleHandler()->loadAll(); / module_load_all(\$bootstrap = NULL)] => \$this->moduleHandler->loadAllIncludes();"
   [module_load_all_includes]="\Drupal::moduleHandler()->loadAllIncludes(\$type, \$name = NULL)"
+  [node_load]="Node::load()"
   [st]="TODO"
   [system_get_date_format]="Drupal 8's Configuration API"
   [system_get_date_formats]="Drupal 8's Configuration API"
@@ -187,6 +189,7 @@ FUNCTIONS=(
   [url]="\$this->url(\$route_name)"
   [url_is_external]="UrlHelper::isExternal('http://www.drupal.org')"
   [user_access]="User::hasPermission()"
+  [user_load_multiple]="\Drupal\user\Entity\User::loadMultiple()"
   [valid_url]="TODO"
 )
 
