@@ -8,6 +8,7 @@ APACHE_24_DEFAULT="000-default.conf"
 SUFFIX="local"
 
 GIT="${DIR}/8.x"
+DRUSH=`which drush`
 
 # PHP variables
 PHP="php5-curl"

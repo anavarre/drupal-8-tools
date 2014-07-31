@@ -129,11 +129,12 @@ EOT
 echo "Running Drupal installation..."
 
 cd ${WEBROOT}/${SITENAME}/sites/default/
-drush site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
+
+${DRUSH} site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
 
 # Disable CSS and JS aggregation
-drush @${SITENAME}.${SUFFIX} cset -qy system.performance css.preprocess false --format=yaml
-drush @${SITENAME}.${SUFFIX} cset -qy system.performance js.preprocess false --format=yaml
+${DRUSH} @${SITENAME}.${SUFFIX} cset -qy system.performance css.preprocess false --format=yaml
+${DRUSH} @${SITENAME}.${SUFFIX} cset -qy system.performance js.preprocess false --format=yaml
 
 # Load the make file, if any. (-d = dev.make / -c = custom.make)
 while getopts ":dc" opt; do
@@ -142,12 +143,12 @@ while getopts ":dc" opt; do
       echo "Loading the dev make file..." >&2
       # Drush doesn't place the modules at the right location so we're changing directory manually.
       cd ${WEBROOT}/${SITENAME}
-      drush make --no-core -qy ${DIR}/dev.make --contrib-destination=.
+      ${DRUSH} make --no-core -qy ${DIR}/dev.make --contrib-destination=.
       ;;
     c)
       echo "Loading custom make file..." >&2
       cd ${WEBROOT}/${SITENAME}
-      drush make --no-core -qy ${DIR}/custom.make --contrib-destination=.
+      ${DRUSH} make --no-core -qy ${DIR}/custom.make --contrib-destination=.
       ;;
   esac
 done
@@ -166,10 +167,10 @@ chmod 600 $HOME/.drush/${SITENAME}.aliases.drushrc.php
 chmod -R 777 $HOME/.drush/cache
 
 # Rebuild Drush commandfile cache to load the aliases
-drush -q cc drush
+${DRUSH} -q cc drush
 
 # Rebuilding Drupal caches
-drush -q @${SITENAME}.${SUFFIX} cache-rebuild
+${DRUSH} -q @${SITENAME}.${SUFFIX} cache-rebuild
 
 if [[ $(curl -sL -w "%{http_code} %{url_effective}\\n" "http://${SITENAME}.${SUFFIX}" -o /dev/null) ]]; then
   echo -e "${GREEN}Site is available at http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"
