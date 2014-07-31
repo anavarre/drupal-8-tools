@@ -50,7 +50,7 @@ if [[ -d ${WEBROOT}/${SITENAME} ]]; then
   echo -e "${RED}The ${SITENAME} docroot already exists! Aborting.${COLOR_ENDING}"
   exit 0
 else
-  echo "Pulling changes from upstream 8.x repo..."
+  echo "Pulling changes from upstream 8.0.x repo..."
   cd ${GIT} && git pull -q
   cp -R ${GIT}/ ${WEBROOT}/${SITENAME}
 fi
