@@ -119,6 +119,10 @@ FUNCTIONS=(
   [hook_init]="Register EventSubscriber in {module}.services.yml / use Symfony\Component\EventDispatcher\EventSubscriberInterface; / getSubscribedEvents()"
   [hook_library_info]="{module}.libraries.yml"
   [hook_menu]="{module}.local_actions.yml / {module}.local_tasks.yml / {module}.menu_links.yml"
+  [hook_menu_link_alter]="hook_menu_link_content_presave(\$entity)"
+  [hook_menu_link_insert]="hook_menu_link_content_insert(\$entity)"
+  [hook_menu_link_update]="hook_menu_link_content_update(\$entity)"
+  [hook_menu_link_delete]="hook_menu_link_content_delete(\$entity)"
   [hook_menu_site_status_alter]="Register an EventSubscriber"
   [hook_modules_enabled]="TODO"
   [hook_modules_disabled]="TODO"
@@ -208,7 +212,15 @@ echo -e "${BLUE}Auditing constants...${COLOR_ENDING}"
 declare -A CONSTANTS
 CONSTANTS=(
   [COMMENT_MODE_FLAT]="CommentManagerInterface::COMMENT_MODE_FLAT"
-)
+  [MENU_MAX_DEPTH]="MenuLinkTreeInterface::maxDepth() to retrieve the value or MenuTreeStorage::MAX_DEPTH for the default storage max depth"
+  [MENU_VISIBLE_IN_BREADCRUMB]="Breadcrumbs are no longer defined as menu links - See https://www.drupal.org/node/2098323"
+  [MENU_NORMAL_ITEM]="TODO"
+  [MENU_SUGGESTED_ITEM]="TODO"
+  [MENU_PREFERRED_LINK]="TODO"
+  [MENU_LINKS_TO_PARENT]="No replacement"
+  [MENU_VISIBLE_IN_TREE]="No replacement"
+  [MENU_IS_ROOT]="No replacement"
+  )
 
 for API_CONSTANTS in ${!CONSTANTS[@]}; do
   if [[ $(find ${VALID_PATH} -type f ! -name "*.css" ! -name "*.js" | xargs grep "${API_CONSTANTS}") ]]; then
