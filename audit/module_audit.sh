@@ -68,7 +68,7 @@ FUNCTIONS=(
   [drupal_is_cli]="if (PHP_SAPI === 'cli') { // Do stuff }"
   [drupal_json_decode]="use Drupal\Component\Serialization\Json; / \$data = Json::decode(\$json);"
   [drupal_json_encode]="use Drupal\Component\Serialization\Json; / \$json = Json::encode(\$data);"
-  [drupal_match_path]="PathMatcherInterface::matchPath()"
+  [drupal_match_path]="\Drupal\Core\Path\PathMatcherInterface::matchPath()"
   [drupal_page_header]="TODO"
   [drupal_parse_url]="TODO"
   [drupal_prepare_form]="\Drupal::formBuilder()->prepareForm()"
