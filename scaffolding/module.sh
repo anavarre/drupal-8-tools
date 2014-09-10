@@ -32,24 +32,24 @@ fi
 
 # Confirming path.
 while true; do
-    read -p "Module scaffolding will be generated under $(pwd). Should we proceed? [Y/N] " ANSWER
+  read -p "Module scaffolding will be generated under $(pwd). Should we proceed? [Y/N] " ANSWER
     case ${ANSWER} in
-        [Yy] )
-			break;;
-        [Nn] )
-			read -p "Enter the new path: " NEW_PATH
-			break;;
-        * )
-			echo -e "${RED}Sorry, you need to answer by Y/y (yes) or N/n (no).${COLOR_ENDING}"
-    esac
+      [Yy] )
+    break;;
+      [Nn] )
+  read -p "Enter the new path: " NEW_PATH
+    break;;
+      * )
+      echo -e "${RED}Sorry, you need to answer by Y/y (yes) or N/n (no).${COLOR_ENDING}"
+  esac
 done
 
 # Change directory if needed.
 if [[ ! -z ${NEW_PATH} ]]; then
-	cd ${NEW_PATH}
-	echo -e "${GREEN}New scaffolding path is ${NEW_PATH}${COLOR_ENDING}"
+  cd ${NEW_PATH}
+  echo -e "${GREEN}New scaffolding path is ${NEW_PATH}${COLOR_ENDING}"
 else
-	echo -e "${GREEN}Generating scaffolding under $(pwd)${COLOR_ENDING}" 
+  echo -e "${GREEN}Generating scaffolding under $(pwd)${COLOR_ENDING}"
 fi
 
 # Convert module name to lowercase.
@@ -74,26 +74,28 @@ if [[ -d ${NAME_LOWER}/config ]]; then
 else
 	echo -e "\tCreating ${NAME_LOWER}/config directory..."
 	mkdir ${NAME_LOWER}/config
+	mkdir ${NAME_LOWER}/config/install
 fi
 
 # Offer to create a schema for the configuration files.
 while true; do
-    read -p "Create Schema scaffolding for configuration files? [Y/N] " ANSWER
+  read -p "Create Schema scaffolding for configuration files? [Y/N] " ANSWER
     case ${ANSWER} in
-        [Nn] )
-			break;;
-        [Yy] )
-			if [[ -d ${NAME_LOWER}/config/schema ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/config/schema directory already exists! Skipping...${COLOR_ENDING}"
-			else
-				echo -e "\tCreating ${NAME_LOWER}/config/schema directory..."
-				mkdir ${NAME_LOWER}/config/schema
-				echo -e "${GREEN}Successfully created Schema scaffolding!${COLOR_ENDING}"
-			fi
-			break;;
-        * )
-			echo -e "${RED}Sorry, you need to answer by Y/y (yes) or N/n (no).${COLOR_ENDING}"
-    esac
+      [Nn] )
+    break;;
+      [Yy] )
+
+      if [[ -d ${NAME_LOWER}/config/schema ]]; then
+        echo -e "\t${BLUE}${NAME_LOWER}/config/schema directory already exists! Skipping...${COLOR_ENDING}"
+      else
+        echo -e "\tCreating ${NAME_LOWER}/config/schema directory..."
+        mkdir ${NAME_LOWER}/config/schema
+        echo -e "${GREEN}Successfully created Schema scaffolding!${COLOR_ENDING}"
+      fi
+    break;;
+      * )
+      echo -e "${RED}Sorry, you need to answer by Y/y (yes) or N/n (no).${COLOR_ENDING}"
+  esac
 done
 
 ########################
@@ -107,40 +109,26 @@ while true; do
         [Nn] )
 			break;;
         [Yy] )
-			if [[ -d ${NAME_LOWER}/lib ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib directory already exists! Skipping...${COLOR_ENDING}"
+			if [[ -d ${NAME_LOWER}/src ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/src directory already exists! Skipping...${COLOR_ENDING}"
 			else
-				echo -e "\tCreating ${NAME_LOWER}/lib directory..."
-				mkdir ${NAME_LOWER}/lib
+				echo -e "\tCreating ${NAME_LOWER}/src directory..."
+				mkdir ${NAME_LOWER}/src
 			fi
 		
-			if [[ -d ${NAME_LOWER}/lib/Drupal ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal directory already exists! Skipping...${COLOR_ENDING}"
+			if [[ -d ${NAME_LOWER}/src/Controller ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/src/Controller directory already exists! Skipping...${COLOR_ENDING}"
 			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal
-			fi
-		
-			if [[ -d ${NAME_LOWER}/lib/Drupal/${NAME_LOWER} ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal/${NAME_LOWER} directory already exists! Skipping...${COLOR_ENDING}"
-			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal/${NAME_LOWER} directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}
-			fi
-		
-			if [[ -d ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Controller ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Controller directory already exists! Skipping...${COLOR_ENDING}"
-			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Controller directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Controller
+				echo -e "\tCreating ${NAME_LOWER}/src/Controller directory..."
+				mkdir ${NAME_LOWER}/src/Controller
 			fi
 		
 			# Ensure module's first letter is uppercase.
 			NAME_1ST_UP=`sed 's/\(.\)/\U\1/' <<< "${NAME_LOWER}"`
-			touch ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Controller/${NAME_1ST_UP}Controller.php
+			touch ${NAME_LOWER}/src/Controller/${NAME_1ST_UP}Controller.php
 
 # Generating ModuleController.php default values
-cat <<EOT >> ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Controller/${NAME_1ST_UP}Controller.php
+cat <<EOT >> ${NAME_LOWER}/src/Controller/${NAME_1ST_UP}Controller.php
 <?php
 
 /**
@@ -165,40 +153,26 @@ while true; do
         [Nn] )
 			break;;
         [Yy] )
-			if [[ -d ${NAME_LOWER}/lib ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib directory already exists! Skipping...${COLOR_ENDING}"
+			if [[ -d ${NAME_LOWER}/src ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/src directory already exists! Skipping...${COLOR_ENDING}"
 			else
-				echo -e "\tCreating ${NAME_LOWER}/lib directory..."
-				mkdir ${NAME_LOWER}/lib
+				echo -e "\tCreating ${NAME_LOWER}/src directory..."
+				mkdir ${NAME_LOWER}/src
 			fi
 		
-			if [[ -d ${NAME_LOWER}/lib/Drupal ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal directory already exists! Skipping...${COLOR_ENDING}"
+			if [[ -d ${NAME_LOWER}/src/Access ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/src/Access directory already exists! Skipping...${COLOR_ENDING}"
 			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal
-			fi
-		
-			if [[ -d ${NAME_LOWER}/lib/Drupal/${NAME_LOWER} ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal/${NAME_LOWER} directory already exists! Skipping...${COLOR_ENDING}"
-			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal/${NAME_LOWER} directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}
-			fi
-		
-			if [[ -d ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Access ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Access directory already exists! Skipping...${COLOR_ENDING}"
-			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Access directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Access
+				echo -e "\tCreating ${NAME_LOWER}/src/Access directory..."
+				mkdir ${NAME_LOWER}/src/Access
 			fi
 		
 			# Ensure module's first letter is uppercase.
 			NAME_1ST_UP=`sed 's/\(.\)/\U\1/' <<< "${NAME_LOWER}"`
-			touch ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Access/${NAME_1ST_UP}AccessCheck.php
+			touch ${NAME_LOWER}/src/Access/${NAME_1ST_UP}AccessCheck.php
 
 # Generating ModuleAccessCheck.php default values
-cat <<EOT >> ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Access/${NAME_1ST_UP}AccessCheck.php
+cat <<EOT >> ${NAME_LOWER}/src/Access/${NAME_1ST_UP}AccessCheck.php
 <?php
 
 /**
@@ -232,37 +206,23 @@ while true; do
         [Nn] )
 			break;;
         [Yy] )
-			if [[ -d ${NAME_LOWER}/lib ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib directory already exists! Skipping...${COLOR_ENDING}"
+			if [[ -d ${NAME_LOWER}/src ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/src directory already exists! Skipping...${COLOR_ENDING}"
 			else
-				echo -e "\tCreating ${NAME_LOWER}/lib directory..."
-				mkdir ${NAME_LOWER}/lib
+				echo -e "\tCreating ${NAME_LOWER}/src directory..."
+				mkdir ${NAME_LOWER}/src
 			fi
 
-			if [[ -d ${NAME_LOWER}/lib/Drupal ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal directory already exists! Skipping...${COLOR_ENDING}"
+			if [[ -d ${NAME_LOWER}/src/Form ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/src/Form directory already exists! Skipping...${COLOR_ENDING}"
 			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal
-			fi
-
-			if [[ -d ${NAME_LOWER}/lib/Drupal/${NAME_LOWER} ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal/${NAME_LOWER} directory already exists! Skipping...${COLOR_ENDING}"
-			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal/${NAME_LOWER} directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}
-			fi
-
-			if [[ -d ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Form ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Form directory already exists! Skipping...${COLOR_ENDING}"
-			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Form directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Form
+				echo -e "\tCreating ${NAME_LOWER}/src/Form directory..."
+				mkdir ${NAME_LOWER}/src/Form
 			fi
 
 			# Ensure module's first letter is uppercase.
 			NAME_1ST_UP=`sed 's/\(.\)/\U\1/' <<< "${NAME_LOWER}"`
-			touch ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Form/${NAME_1ST_UP}ConfigForm.php
+			touch ${NAME_LOWER}/src/Form/${NAME_1ST_UP}ConfigForm.php
 			echo -e "${GREEN}Successfully created Form config scaffolding!${COLOR_ENDING}"
 			break;;
         * )
@@ -277,44 +237,30 @@ while true; do
         [Nn] )
 			break;;
         [Yy] )
-			if [[ -d ${NAME_LOWER}/lib ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib directory already exists! Skipping...${COLOR_ENDING}"
+			if [[ -d ${NAME_LOWER}/src ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/src directory already exists! Skipping...${COLOR_ENDING}"
 			else
-				echo -e "\tCreating ${NAME_LOWER}/lib directory..."
-				mkdir ${NAME_LOWER}/lib
+				echo -e "\tCreating ${NAME_LOWER}/src directory..."
+				mkdir ${NAME_LOWER}/src
 			fi
 
-			if [[ -d ${NAME_LOWER}/lib/Drupal ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal directory already exists! Skipping...${COLOR_ENDING}"
+			if [[ -d ${NAME_LOWER}/src/Plugin ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/src/Plugin directory already exists! Skipping...${COLOR_ENDING}"
 			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal
+				echo -e "\tCreating ${NAME_LOWER}/src/Plugin directory..."
+				mkdir ${NAME_LOWER}/src/Plugin
 			fi
 
-			if [[ -d ${NAME_LOWER}/lib/Drupal/${NAME_LOWER} ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal/${NAME_LOWER} directory already exists! Skipping...${COLOR_ENDING}"
+			if [[ -d ${NAME_LOWER}/src/Plugin/Block ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/src/Plugin/Block directory already exists! Skipping...${COLOR_ENDING}"
 			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal/${NAME_LOWER} directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}
-			fi
-
-			if [[ -d ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Plugin ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Plugin directory already exists! Skipping...${COLOR_ENDING}"
-			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Plugin directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Plugin
-			fi
-
-			if [[ -d ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Plugin/Block ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Plugin/Block directory already exists! Skipping...${COLOR_ENDING}"
-			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Plugin/Block directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Plugin/Block
+				echo -e "\tCreating ${NAME_LOWER}/src/Plugin/Block directory..."
+				mkdir ${NAME_LOWER}/src/Plugin/Block
 			fi
 
 			# Ensure module's first letter is uppercase.
 			NAME_1ST_UP=`sed 's/\(.\)/\U\1/' <<< "${NAME_LOWER}"`
-			touch ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Plugin/Block/${NAME_1ST_UP}Block.php
+			touch ${NAME_LOWER}/src/Plugin/Block/${NAME_1ST_UP}Block.php
 			echo -e "${GREEN}Successfully created Block scaffolding!${COLOR_ENDING}"
 			break;;
         * )
@@ -322,39 +268,25 @@ while true; do
     esac
 done
 
-# Offer to create Tests.
+# Offer to create SimpleTest.
 while true; do
-    read -p "Create Tests scaffolding? [Y/N] " ANSWER
+    read -p "Create SimpleTest scaffolding? [Y/N] " ANSWER
     case ${ANSWER} in
         [Nn] )
 			break;;
         [Yy] )
-			if [[ -d ${NAME_LOWER}/lib ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib directory already exists! Skipping...${COLOR_ENDING}"
+			if [[ -d ${NAME_LOWER}/src ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/src directory already exists! Skipping...${COLOR_ENDING}"
 			else
-				echo -e "\tCreating ${NAME_LOWER}/lib directory..."
-				mkdir ${NAME_LOWER}/lib
+				echo -e "\tCreating ${NAME_LOWER}/src directory..."
+				mkdir ${NAME_LOWER}/src
 			fi
 
-			if [[ -d ${NAME_LOWER}/lib/Drupal ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal directory already exists! Skipping...${COLOR_ENDING}"
+			if [[ -d ${NAME_LOWER}/src/Tests ]]; then
+				echo -e "\t${BLUE}${NAME_LOWER}/src/Tests directory already exists! Skipping...${COLOR_ENDING}"
 			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal
-			fi
-
-			if [[ -d ${NAME_LOWER}/lib/Drupal/${NAME_LOWER} ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal/${NAME_LOWER} directory already exists! Skipping...${COLOR_ENDING}"
-			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal/${NAME_LOWER} directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}
-			fi
-
-			if [[ -d ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Tests ]]; then
-				echo -e "\t${BLUE}${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Tests directory already exists! Skipping...${COLOR_ENDING}"
-			else
-				echo -e "\tCreating ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Tests directory..."
-				mkdir ${NAME_LOWER}/lib/Drupal/${NAME_LOWER}/Tests
+				echo -e "\tCreating ${NAME_LOWER}/src/Tests directory..."
+				mkdir ${NAME_LOWER}/src/Tests
 			fi
 
 			echo -e "${GREEN}Successfully created Tests scaffolding!${COLOR_ENDING}"
@@ -396,18 +328,18 @@ if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.routing.yml ]]; then
 	touch ${NAME_LOWER}/${NAME_LOWER}.routing.yml
 fi
 
-if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.menu_links.yml ]]; then
-	echo -e "\tCreating ${NAME_LOWER}.menu_links.yml..."
-	touch ${NAME_LOWER}/${NAME_LOWER}.menu_links.yml
+if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.links.menu.yml ]]; then
+	echo -e "\tCreating ${NAME_LOWER}.links.menu.yml..."
+	touch ${NAME_LOWER}/${NAME_LOWER}.links.menu.yml
 fi
-if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.local_tasks.yml ]]; then
-	echo -e "\tCreating ${NAME_LOWER}.local_tasks.yml..."
-	touch ${NAME_LOWER}/${NAME_LOWER}.local_tasks.yml
+if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.links.task.yml ]]; then
+	echo -e "\tCreating ${NAME_LOWER}.links.task.yml..."
+	touch ${NAME_LOWER}/${NAME_LOWER}.links.task.yml
 fi
 
-if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.local_actions.yml ]]; then
-	echo -e "\tCreating ${NAME_LOWER}.local_actions.yml..."
-	touch ${NAME_LOWER}/${NAME_LOWER}.local_actions.yml
+if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.links.action.yml ]]; then
+	echo -e "\tCreating ${NAME_LOWER}.links.action.yml..."
+	touch ${NAME_LOWER}/${NAME_LOWER}.links.action.yml
 fi
 
 if [[ ! -f ${NAME_LOWER}/${NAME_LOWER}.services.yml ]]; then
