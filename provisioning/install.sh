@@ -58,6 +58,9 @@ fi
 echo "Creating settings.php file..."
 cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
+echo "Creating services.yml file..."
+cp ${WEBROOT}/${SITENAME}/sites/default/default.services.yml ${WEBROOT}/${SITENAME}/sites/default/services.yml
+
 # Apache setup
 echo "Provisionning Apache vhost..."
 
@@ -157,6 +160,7 @@ echo "Setting correct permissions..."
 # Drupal
 chmod go-w ${WEBROOT}/${SITENAME}/sites/default
 chmod go-w ${WEBROOT}/${SITENAME}/sites/default/settings.php
+chmod go-w ${WEBROOT}/${SITENAME}/sites/default/services.yml
 chmod 777 ${WEBROOT}/${SITENAME}/sites/default/files/
 chmod -R 777 ${WEBROOT}/${SITENAME}/sites/default/files/config_*/active
 chmod -R 777 ${WEBROOT}/${SITENAME}/sites/default/files/config_*/staging
