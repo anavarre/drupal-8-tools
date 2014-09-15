@@ -1,3 +1,0 @@
-WEBROOT="/var/www/html"
-
-NOW=`date +'%Y%m%d-%H%M%S'`
