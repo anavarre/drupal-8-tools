@@ -7,7 +7,7 @@ APACHE_22_DEFAULT="default"
 APACHE_24_DEFAULT="000-default.conf"
 SUFFIX="local"
 
-GIT="${DIR}/8.x"
+GIT="${DIR}/8.0.x"
 DRUSH=`which drush`
 
 # PHP variables

@@ -1,22 +1,26 @@
 Requirements
 ------------
 
-- Git clone 8.x from drupal.org
-- Create a 8.x symbolic link in the *provisioning* directory so that the installer knows where to git pull changes from
+- Git clone 8.0.x from drupal.org
 
 <pre>
 $ git clone --branch 8.x http://git.drupal.org/project/drupal.git
-$ ln -s /path/to/d8/repo 8.x
 </pre>
 
-Note: The *8.x* directory name has been added to the .gitignore file so that it won't be deleted ever.
+- Create a 8.0.x symbolic link in the *provisioning* directory so that the installer knows where to git pull changes from
+
+<pre>
+$ cd /path/to/provisioning/dir ; ln -s /path/to/d8/repo 8.O.x
+</pre>
+
+Note: The *8.0.x* directory name has been added to the .gitignore file so that it won't be deleted ever.
 
 provisioning/install.sh
 -----------------------
 
 - Enable Apache mod_rewrite if it is disabled
 - Allow you to customize the name of the new Drupal docroot
-- Git pull 8.x (HEAD) to make sure you're working with the latest dev release
+- Git pull 8.0.x (HEAD) to make sure you're working with the latest dev release
 - Set up a new docroot for you, with the correct permissions and requirements (settings.php, files dir...)
 - Create the required Apache vhost and tweak the hosts file accordingly
 - Create a MySQL database
