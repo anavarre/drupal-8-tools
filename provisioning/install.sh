@@ -109,11 +109,23 @@ sed -i "1i127.0.0.1\t${SITENAME}.${SUFFIX}" /etc/hosts
 
 # MySQL queries
 DB_CREATE="CREATE DATABASE IF NOT EXISTS \`${SITENAME}\` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci"
-DB_PERMS="GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES ON \`${SITENAME}\`.* TO '${CREDS}'@'${DB_HOST}' IDENTIFIED BY '${CREDS}'"
-SQL="${DB_CREATE};${DB_PERMS}"
 
-echo "Creating MySQL database..."
-$MYSQL -u${CREDS} -p${CREDS} -e "${SQL}"
+# Custom DB queries if we're using Linux
+if [[ $(uname -s) == 'Linux' ]]; then
+  DB_PERMS="GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES ON \`${SITENAME}\`.* TO '${CREDS}'@'${DB_HOST}' IDENTIFIED BY '${CREDS}'"
+  SQL="${DB_CREATE};${DB_PERMS}"
+
+  echo "Creating MySQL database..."
+  $MYSQL -u${CREDS} -p${CREDS} -e "${SQL}"
+
+# Custom DB queries if we're using a Mac
+elif [[ $(uname -s) == 'Darwin' ]]; then
+  DB_PERMS="GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES ON \`${SITENAME}\`.* TO '${DD_CREDS}'@'${DB_HOST}' IDENTIFIED BY '${DD_CREDS}'"
+  SQL="${DB_CREATE};${DB_PERMS}"
+
+  echo "Creating MySQL database..."
+  $MYSQL -u${DD_CREDS} -e "${SQL}"
+fi
 
 # Drush alias
 echo "Creating Drush aliases..."
@@ -124,8 +136,8 @@ cat <<EOT >> $HOME/.drush/${SITENAME}.aliases.drushrc.php
 \$aliases['local'] = array(                                                                    
  'parent' => '@parent',
  'site' => '${SITENAME}',
- 'env' => 'local',
- 'root' => '/var/www/html/${SITENAME}',
+ 'env' => '${SUFFIX}',
+ 'root' => '${WEBROOT}/${SITENAME}',
 );
 EOT
 
@@ -133,7 +145,14 @@ echo "Running Drupal installation..."
 
 cd ${WEBROOT}/${SITENAME}/sites/default/
 
-${DRUSH} site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
+# Custom installation if we're using Linux
+if [[ $(uname -s) == 'Linux' ]]; then
+  ${DRUSH} site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
+
+# Custom installation if we're using a Mac
+elif [[ $(uname -s) == 'Darwin' ]]; then
+  ${DRUSH} site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${DD_CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}  
+fi
 
 # Disable CSS and JS aggregation
 ${DRUSH} @${SITENAME}.${SUFFIX} cset -qy system.performance css.preprocess false --format=yaml
