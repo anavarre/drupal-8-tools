@@ -21,7 +21,7 @@ DB_PORT="3306"
 # Misc variables
 CREDS="root"
 
-# Compatibility with Acquia Dev Desktop 2
+# Compatibility with Acquia Dev Desktop
 DD_CREDS="drupaluser"
 
 # Colors

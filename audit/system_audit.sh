@@ -13,6 +13,8 @@ fi
 
 PHP_MINIMUM="$(php -v | awk '{print $2}' | head -n1 | sed -r 's/.{9}$//')"
 DISABLE_FUNCTIONS="$(php -c /etc/php5/cli/php.ini -i | grep disable_functions | awk '{print $3$4}')"
+DATE_TIMEZONE="$(php -c /etc/php5/apache2/php.ini -i | grep date.timezone | awk '{print $3$4}')"
+DATE_TIMEZONE_CLI="$(php -c /etc/php5/cli/php.ini -i | grep date.timezone | awk '{print $3$4}')"
 
 # Drupal 8 requires PHP 5.4.2 at a minimum.
 if [[ "${PHP_MINIMUM}" > "5.4.2" ]]; then
@@ -28,5 +30,9 @@ else
   echo -e "PHP CLI's disable_functions are turned on and might cause issues with Drush. ${RED}[ERROR]${COLOR_ENDING}"
 fi
 
-# @todo
-# php date.timezone shouldn't be empty for apache2's php.ini and CLI
+# date.timezone needs to be set.
+if [[ "${DATE_TIMEZONE}" == "novalue" ]] || [[ "${DATE_TIMEZONE_CLI}" == "novalue" ]]; then
+  echo -e "PHP's date.timezone is not set. You should check your apache2 and CLI php.ini file settings. ${RED}[ERROR]${COLOR_ENDING}"
+else
+  echo -e "PHP's date.timezone is set ${GREEN}[OK]${COLOR_ENDING}"
+fi
