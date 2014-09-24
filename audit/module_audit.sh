@@ -188,6 +188,7 @@ FUNCTIONS=(
   [module_load_all]="\Drupal::moduleHandler()->loadAll(); / module_load_all(\$bootstrap = NULL)] => \$this->moduleHandler->loadAllIncludes();"
   [module_load_all_includes]="\Drupal::moduleHandler()->loadAllIncludes(\$type, \$name = NULL)"
   [node_load]="\Drupal\node\Entity\Node::load()"
+  [node_type_get_types]="\Drupal\node\Entity\NodeType::loadMultiple()"
   [st]="TODO"
   [system_get_date_format]="Drupal 8's Configuration API"
   [system_get_date_formats]="Drupal 8's Configuration API"
