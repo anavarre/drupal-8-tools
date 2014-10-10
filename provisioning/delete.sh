@@ -25,6 +25,9 @@ read -p "Are you sure? [Y/N] "
 if [[ ${REPLY} =~ ^[Nn]$ ]]; then
   echo -e "${GREEN}Back to the comfort zone. Aborting.${COLOR_ENDING}"
   exit 0
+elif [[ ! ${REPLY} =~ ^[Yy]$ ]]; then
+  echo "Sorry, the only accepted input characters are [Yy/Nn]. Aborting..."
+  exit 0
 fi
 
 # Docroot exists
