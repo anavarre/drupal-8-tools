@@ -21,3 +21,4 @@ misc/core-update.sh
 - Checks if the current working directory contains a bootstrap.inc file
 - Preserves common files you might have modified (.htaccess, robots.txt, settings.php, services.yml)
 - Updates Drupal Core by leveraging advanced rsync options (e.g. --checksum)
+- Logs rsync output under /tmp/core-update-YYYY-MM-DD.log
