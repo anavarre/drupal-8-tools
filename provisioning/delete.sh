@@ -58,6 +58,6 @@ echo "Deleting Drush aliases..."
   rm $HOME/.drush/${SITENAME}.aliases.drushrc.php
 
 # Rebuild Drush command file cache to purge the aliases
-drush -q cc drush
+${DRUSH} -q cc drush
 
 echo -e "${GREEN}Successfully removed http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"

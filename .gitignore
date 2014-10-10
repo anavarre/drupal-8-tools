@@ -2,7 +2,8 @@
 .idea
 
 # HEAD
-provisioning/8.0.x
+provisioning/HEAD
+misc/HEAD
 
 # Make file
 provisioning/custom.make
