@@ -78,6 +78,11 @@ echo -e "\n#############################" >> ${LOG} 2>&1
     done
   fi
   
+  # Ephemeral PHP dir cleanup
+  if [[ -d ${DEST}/sites/default/files/php ]]; then
+    rm -Rf ${DEST}/sites/default/files/php
+  fi
+  
   echo -e "\n*\n**\n***\nDrupal Core update completed: $(date)\n***\n**\n*\n" >> ${LOG}
 fi
 
