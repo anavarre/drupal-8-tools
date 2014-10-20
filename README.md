@@ -18,10 +18,9 @@ Add the following bash aliases in your **.bash_aliases** file:
 <pre>
 alias saudit='sudo /path/to/drupal-8-tools/audit/system_audit.sh'
 alias maudit='sudo /path/to/drupal-8-tools/audit/module_audit.sh'
-alias dump='sudo /path/to/drupal-8-tools/cmi/dump.sh'
-alias restore='sudo /path/to/drupal-8-tools/cmi/restore.sh'
 alias install='sudo /path/to/drupal-8-tools/provisioning/install.sh'
 alias delete='sudo /path/to/drupal-8-tools/provisioning/delete.sh'
+alias update='sudo /path/to/drupal-8-tools/misc/core-update.sh'
 alias module='sudo /path/to/drupal-8-tools/scaffolding/module.sh'
 </pre>
 
@@ -37,13 +36,9 @@ If you want a module scaffolding, invoke the _module.sh_ script:
 
 <code>$ module</code>
 
-Want to quickly dump your database and corresponding CMI files? Run:
+Want to quickly try and update Drupal (there be dragons!)? Run:
 
-<code>$ dump</code>
-
-To perform a restore, run:
-
-<code>$ restore</code>
+<code>$ update</code>
 
 To audit your system against Drupal 8 requirements, run:
 
