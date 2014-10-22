@@ -64,6 +64,13 @@ cp ${WEBROOT}/${SITENAME}/sites/example.settings.local.php ${WEBROOT}/${SITENAME
 echo "Creating services.yml file..."
 cp ${WEBROOT}/${SITENAME}/sites/default/default.services.yml ${WEBROOT}/${SITENAME}/sites/default/services.yml
 
+echo "Turning on Twig debugging mode..."
+sed -i "s/debug: false/debug: true/g" ${WEBROOT}/${SITENAME}/sites/default/services.yml
+sed -i "s/auto_reload: null/auto_reload: true/g" ${WEBROOT}/${SITENAME}/sites/default/services.yml
+sed -i "s/cache: true/cache: false/g" ${WEBROOT}/${SITENAME}/sites/default/services.yml
+
+exit 0
+
 # Apache setup
 echo "Provisionning Apache vhost..."
 
