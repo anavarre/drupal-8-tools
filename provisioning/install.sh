@@ -58,6 +58,9 @@ fi
 echo "Creating settings.php file..."
 cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
+echo "Creating settings.local.php file..."
+cp ${WEBROOT}/${SITENAME}/sites/example.settings.local.php ${WEBROOT}/${SITENAME}/sites/default/settings.local.php
+
 echo "Creating services.yml file..."
 cp ${WEBROOT}/${SITENAME}/sites/default/default.services.yml ${WEBROOT}/${SITENAME}/sites/default/services.yml
 
