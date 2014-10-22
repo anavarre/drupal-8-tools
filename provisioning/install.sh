@@ -57,6 +57,7 @@ fi
 
 echo "Creating settings.php file..."
 cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
+sed -i'' '639,641 s/# //' ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
 echo "Creating settings.local.php file..."
 cp ${WEBROOT}/${SITENAME}/sites/example.settings.local.php ${WEBROOT}/${SITENAME}/sites/default/settings.local.php
@@ -68,8 +69,6 @@ echo "Turning on Twig debugging mode..."
 sed -i "s/debug: false/debug: true/g" ${WEBROOT}/${SITENAME}/sites/default/services.yml
 sed -i "s/auto_reload: null/auto_reload: true/g" ${WEBROOT}/${SITENAME}/sites/default/services.yml
 sed -i "s/cache: true/cache: false/g" ${WEBROOT}/${SITENAME}/sites/default/services.yml
-
-exit 0
 
 # Apache setup
 echo "Provisionning Apache vhost..."
