@@ -46,12 +46,14 @@ FUNCTIONS=(
   [comment_get_thread]="CommentStorage::loadThread()"
   [comment_new_page_count]="CommentStorage::getNewCommentPageNumber()"
   [comment_num_new]="CommentManager::getCountNewComments(\$entity, \$field_name, \$timestamp)"
+  [current_path]="Replaced by the <current> route - See https://www.drupal.org/node/2382211"
   [drupal_add_css]="drupal_process_attached()"
   [drupal_add_http_header]="\$response->headers->set(\$name, \$value)"
   [drupal_add_js]="drupal_process_attached()"
   [drupal_add_library]="drupal_process_attached()"
   [drupal_alter]="\$module_handler->alter(\$type, &\$data, &\$context1 = NULL, &\$context2 = NULL)"
   [drupal_build_form]="\Drupal::formBuilder()->buildForm()"
+  [drupal_clean_css_identifier]="use Drupal\Component\Utility\Html; / Html::cleanCssIdentifier($foo);"
   [drupal_deliver_html_page]="TODO"
   [drupal_deliver_page]="TODO"
   [drupal_encode_path]="UrlHelper::encodePath('drupal')"
@@ -63,6 +65,8 @@ FUNCTIONS=(
   [drupal_get_query_parameters]="UrlHelper::filterQueryParameters('foo=bar&bar=baz')"
   [drupal_get_title]="Titles (static or dynamic) are now defined on routes - See https://www.drupal.org/node/2067859"
   [drupal_goto]="\$this->redirect(\$route_name)"
+  [drupal_html_class]="use Drupal\Component\Utility\Html; / Html::getClass($foo);"
+  [drupal_html_id]="use Drupal\Component\Utility\Html; / Html::getId($foo);"
   [drupal_http_build_query]="use Drupal\Component\Utility\UrlHelper; / UrlHelper::buildQuery"
   [drupal_http_request]="Use the Guzzle HTTP client library"
   [drupal_is_cli]="if (PHP_SAPI === 'cli') { // Do stuff }"
@@ -92,6 +96,9 @@ FUNCTIONS=(
   [element_property]="Element::property('#markup')"
   [element_properties]="Element::properties(\$elements['foo'])"
   [element_set_attributes]="Element::setAttributes(\$elements['foo'], array('#title' => 'Custom title'))"
+  [field_attach_extract_form_values]="Use the Entity API instead: https://drupal.org/developing/api/entity"
+  [field_attach_form]="Use the Entity API instead: https://drupal.org/developing/api/entity"
+  [field_attach_form_validate]="Use the Entity API instead: https://drupal.org/developing/api/entity"
   [field_form_get_state]="WidgetBaseInterface::getWidgetState()"
   [field_form_set_state]="WidgetBaseInterface::setWidgetState()"
   [field_info_field]="See https://www.drupal.org/node/2167167 and https://www.drupal.org/node/2260037"
@@ -124,6 +131,8 @@ FUNCTIONS=(
   [hook_disable]="TODO"
   [hook_drupal_goto_alter]="Event Listener on kernel.response"
   [hook_enable]="TODO"
+  [hook_field_attach_form]="Use the Entity API instead: https://drupal.org/developing/api/entity"
+  [hook_field_attach_form_values]="Use the Entity API instead: https://drupal.org/developing/api/entity"
   [hook_file_download_access]="FileAccessController"
   [hook_init]="Register EventSubscriber in {module}.services.yml / use Symfony\Component\EventDispatcher\EventSubscriberInterface; / getSubscribedEvents()"
   [hook_library_info]="{module}.libraries.yml"
@@ -253,7 +262,7 @@ SUPERGLOBALS=(
 
 # Searching for $GET_['q'] doesn't work well as an array key. Hardcoding it for now.
 if [[ $(find ${VALID_PATH} -type f ! -name "*.css" ! -name "*.js" | xargs grep "\$_GET\['q']") ]]; then
-  echo -e "\tReplace ${RED}\$_GET['q']${COLOR_ENDING} by ${GREEN}current_path()${COLOR_ENDING}"
+  echo -e "\tReplace ${RED}\$_GET['q']${COLOR_ENDING} by the ${GREEN}<current> route - See https://www.drupal.org/node/2382211${COLOR_ENDING}"
 fi
 
 for API_SGLOBALS in ${!SUPERGLOBALS[@]}; do
