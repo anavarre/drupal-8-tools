@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Invoke the script from anywhere (e.g .bashrc alias).
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # @todo: https://drupal.org/node/2122201 (Route subscriber + service.yml file)
 # @todo: https://drupal.org/node/2122195 (Access check service.yml file)
