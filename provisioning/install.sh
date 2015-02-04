@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Invoke the script from anywhere (e.g .bashrc alias)
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -142,7 +142,7 @@ echo "Creating Drush aliases..."
 cat <<EOT >> $HOME/.drush/${SITENAME}.aliases.drushrc.php
 <?php
 
-\$aliases['local'] = array(                                                                    
+\$aliases['local'] = array(
  'parent' => '@parent',
  'site' => '${SITENAME}',
  'env' => '${SUFFIX}',
@@ -160,7 +160,7 @@ if [[ $(uname -s) == 'Linux' ]]; then
 
 # Custom installation if we're using a Mac
 elif [[ $(uname -s) == 'Darwin' ]]; then
-  ${DRUSH} site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${DD_CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}  
+  ${DRUSH} site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${DD_CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
 fi
 
 # Disable CSS and JS aggregation
@@ -196,7 +196,7 @@ chown -R ${PERMS} ${WEBROOT}/${SITENAME}
 # Drush
 chown ${PERMS} $HOME/.drush/${SITENAME}.aliases.drushrc.php
 chmod 600 $HOME/.drush/${SITENAME}.aliases.drushrc.php
-chmod -R 777 $HOME/.drush/cache
+chmod -R 777 $HOME/.drush/cache/
 
 # Rebuild Drush commandfile cache to load the aliases
 ${DRUSH} -q cc drush
