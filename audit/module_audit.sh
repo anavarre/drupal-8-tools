@@ -33,6 +33,8 @@ FUNCTIONS=(
   [_field_sort_items_value_helper]="_field_multiple_value_form_sort_helper()"
   [_external_url_is_local]="TODO"
   [_module_build_dependencies]="\Drupal::moduleHandler()->buildModuleDependencies(\$modules)"
+  [_update_fetch_data]="UpdateProcessor::fetchData() / \Drupal::service('update.processor')->fetchData();"
+  [_update_refresh]="UpdateManager::refreshUpdateData() / \Drupal::service('update.manager')->refreshUpdateData();"
   [ajax_deliver]="TODO"
   [block_list]="entity_load_multiple_by_properties() - See https://www.drupal.org/node/2291171"
   [block_get_blocks_by_region]="entity_load_multiple_by_properties() - See https://www.drupal.org/node/2291171"
@@ -149,6 +151,7 @@ FUNCTIONS=(
   [form_state_values_clean]="$form_state->cleanValues()"
   [format_plural]="\Drupal::translation()->formatPlural() or \Drupal::service('date.formatter')->formatInterval() - See https://www.drupal.org/node/2173787"
   [get_t]="TODO"
+  [hook_boot]="Create a mymodule.services.yml file and register an Event Subscriber. All details at https://www.drupal.org/node/1909596"
   [hook_comment_publish]="See https://www.drupal.org/node/2296867"
   [hook_comment_unpublish]="See https://www.drupal.org/node/2296867"
   [hook_date_formats]="system.date_format.{string}.yml"
@@ -332,4 +335,4 @@ for API_SGLOBALS in ${!SUPERGLOBALS[@]}; do
   if [[ $(find ${VALID_PATH} -type f ! -name "*.css" ! -name "*.js" | xargs grep "${API_SGLOBALS}") ]]; then
     echo -e "\tReplace ${RED}${API_SGLOBALS}()${COLOR_ENDING} by ${GREEN}${SUPERGLOBALS[${API_SGLOBALS}]}${COLOR_ENDING}"
   fi
-done 
+done
