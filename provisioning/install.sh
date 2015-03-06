@@ -82,7 +82,7 @@ if [[ -f ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ]]; then
   sed -i "s:/var/www:/${WEBROOT}/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}
   # Make sure that Drupal's .htaccess clean URLs will work fine
   sed -i "s/AllowOverride None/AllowOverride All/g" ${SITES_AVAILABLE}/${SITENAME}
-  
+
   echo "Enabling site..."
   a2ensite ${SITENAME} > /dev/null 2>&1
 else
@@ -97,15 +97,15 @@ else
   sed -i "18i\\\t\tAllowOverride All" ${SITES_AVAILABLE}/${SITENAME}.conf
   sed -i "19i\\\t\tRequire all granted" ${SITES_AVAILABLE}/${SITENAME}.conf
   sed -i "20i\\\t</Directory>" ${SITES_AVAILABLE}/${SITENAME}.conf
-  
+
   # Modifying directives
   sed -i "s:DocumentRoot /var/www/html:DocumentRoot ${WEBROOT}/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}.conf
   sed -i "s:Directory /var/www/:Directory ${WEBROOT}/${SITENAME}/:g" ${SITES_AVAILABLE}/${SITENAME}.conf
-  
+
   # Custom logging
   sed -i "s:error.log:${SITENAME}-error.log:g" ${SITES_AVAILABLE}/${SITENAME}.conf
   sed -i "s:access.log:${SITENAME}-access.log:g" ${SITES_AVAILABLE}/${SITENAME}.conf
-  
+
   echo "Enabling site..."
   a2ensite ${SITENAME}.conf > /dev/null 2>&1
 fi
