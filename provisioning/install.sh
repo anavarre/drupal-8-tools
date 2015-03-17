@@ -59,6 +59,15 @@ echo "Creating settings.php file..."
 cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
 sed -i'' '639,641 s/# //' ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
+echo "Adding configuration for trusted hostnames..."
+cat <<EOT >> ${WEBROOT}/${SITENAME}/sites/default/settings.php
+
+\$settings['trusted_host_patterns'] = array(
+  '^${SITENAME}\\.${SUFFIX}$',
+);
+
+EOT
+
 echo "Creating settings.local.php file..."
 cp ${WEBROOT}/${SITENAME}/sites/example.settings.local.php ${WEBROOT}/${SITENAME}/sites/default/settings.local.php
 
