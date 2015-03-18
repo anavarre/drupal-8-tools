@@ -56,6 +56,7 @@ FUNCTIONS=(
   [drupal_add_library]="drupal_process_attached()"
   [drupal_alter]="\$module_handler->alter(\$type, &\$data, &\$context1 = NULL, &\$context2 = NULL)"
   [drupal_basename]="FileSystem::basename()"
+  [drupal_bootstrap]="See https://www.drupal.org/node/2275139"
   [drupal_build_form]="\Drupal::formBuilder()->buildForm()"
   [drupal_chmod]="FileSystem::chmod()"
   [drupal_clean_css_identifier]="use Drupal\Component\Utility\Html; / Html::cleanCssIdentifier($foo);"
@@ -66,6 +67,7 @@ FUNCTIONS=(
   [drupal_encode_path]="UrlHelper::encodePath('drupal')"
   [drupal_exit]="throw new ServiceUnavailableHttpException(3, t('Custom message goes here.'));"
   [drupal_form_submit]="\Drupal::formBuilder()->submitForm()"
+  [drupal_get_bootstrap_phase]="See https://www.drupal.org/node/2275139"
   [drupal_get_form]="\Drupal::formBuilder()->getForm()"
   [drupal_get_library]="\Drupal::service('library.discovery')->getLibrariesByExtension('module_name') / \Drupal::service('library.discovery')->getLibraryByName('module_name', 'library_name')"
   [drupal_get_query_array]="use \Drupal\Component\Utility\UrlHelper; / parse_str('foo=bar&bar=baz', \$query_array)"
@@ -107,6 +109,7 @@ FUNCTIONS=(
   [drupal_strtoupper]="Unicode::strtoupper()"
   [drupal_substr]="Unicode::substr()"
   [drupal_tempnam]="FileSystem::tempnam()"
+  [drupal_theme_access]="TODO"
   [drupal_truncate_bytes]="Unicode::truncateBytes()"
   [drupal_ucfirst]="Unicode::ucfirst()"
   [drupal_unlink]="FileSystem::unlink()"
@@ -239,7 +242,9 @@ FUNCTIONS=(
   [module_load_all]="\Drupal::moduleHandler()->loadAll(); / module_load_all(\$bootstrap = NULL)] => \$this->moduleHandler->loadAllIncludes();"
   [module_load_all_includes]="\Drupal::moduleHandler()->loadAllIncludes(\$type, \$name = NULL)"
   [node_load]="\Drupal\node\Entity\Node::load()"
+  [node_type_get_type]="See https://www.drupal.org/node/1574670"
   [node_type_get_types]="\Drupal\node\Entity\NodeType::loadMultiple()"
+  [node_type_load]="TODO"
   [request_path] = "\Drupal\Core\Url::fromRoute('<current>');"
   [st]="TODO"
   [system_get_date_format]="Drupal 8's Configuration API"
@@ -309,6 +314,7 @@ declare -A GLOBALS
 GLOBALS=(
   [\$user]="\Drupal::currentUser"
   [\$multibyte]="Unicode::getStatus() / Unicode::setStatus($status)"
+  [\$script_path]="$request->getBaseUrl() . '/test'; - See also https://www.drupal.org/node/2450019"
 )
 
 for API_GLOBALS in ${!GLOBALS[@]}; do
