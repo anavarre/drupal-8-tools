@@ -252,7 +252,7 @@ FUNCTIONS=(
   [node_type_get_type]="See https://www.drupal.org/node/1574670"
   [node_type_get_types]="\Drupal\node\Entity\NodeType::loadMultiple()"
   [node_type_load]="TODO"
-  [request_path] = "\Drupal\Core\Url::fromRoute('<current>');"
+  [request_path]="\Drupal\Core\Url::fromRoute('<current>');"
   [request_uri]="$uri = \Drupal::request()->getRequestUri(); / $uri_without_query_string = \Drupal::request()->getPathInfo();"
   [st]="TODO"
   [system_get_date_format]="Drupal 8's Configuration API"
