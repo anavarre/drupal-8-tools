@@ -70,6 +70,7 @@ FUNCTIONS=(
   [drupal_form_submit]="\Drupal::formBuilder()->submitForm()"
   [drupal_get_bootstrap_phase]="See https://www.drupal.org/node/2275139"
   [drupal_get_complete_schema]="In .install: \$schema = drupal_get_schema_unprocessed(\$module, \$table); / There's no API for getting the schema of an entity table."
+  [drupal_get_destination]="Url::fromRoute('route_name', [], ['query' => \Drupal::service('redirect.destination')->getAsArray()]); / Or / Url::fromRoute('route_name', [], ['query' => \Drupal::destination()->getAsArray()]);"
   [drupal_get_form]="\Drupal::formBuilder()->getForm()"
   [drupal_get_library]="\Drupal::service('library.discovery')->getLibrariesByExtension('module_name') / \Drupal::service('library.discovery')->getLibraryByName('module_name', 'library_name')"
   [drupal_get_query_array]="use \Drupal\Component\Utility\UrlHelper; / parse_str('foo=bar&bar=baz', \$query_array)"
