@@ -5,5 +5,5 @@
 provisioning/HEAD
 misc/HEAD
 
-# Make file
-provisioning/custom.make
+# Make files
+provisioning/*.make
