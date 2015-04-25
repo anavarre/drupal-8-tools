@@ -59,6 +59,15 @@ echo "Creating settings.php file..."
 cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
 sed -i'' '639,641 s/# //' ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
+echo "Adding configuration for trusted hostnames..."
+cat <<EOT >> ${WEBROOT}/${SITENAME}/sites/default/settings.php
+
+\$settings['trusted_host_patterns'] = array(
+  '^${SITENAME}\\.${SUFFIX}$',
+);
+
+EOT
+
 echo "Creating settings.local.php file..."
 cp ${WEBROOT}/${SITENAME}/sites/example.settings.local.php ${WEBROOT}/${SITENAME}/sites/default/settings.local.php
 
@@ -162,6 +171,10 @@ if [[ $(uname -s) == 'Linux' ]]; then
 elif [[ $(uname -s) == 'Darwin' ]]; then
   ${DRUSH} site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${DD_CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
 fi
+
+# Enable Simpletest
+cd ../ ; mkdir simpletest ; chmod -R 777 simpletest
+${DRUSH} @${SITENAME}.${SUFFIX} en -qy simpletest
 
 # Disable CSS and JS aggregation
 ${DRUSH} @${SITENAME}.${SUFFIX} cset -qy system.performance css.preprocess false --format=yaml
