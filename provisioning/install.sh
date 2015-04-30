@@ -22,6 +22,12 @@ if [[ ! -L /etc/apache2/mods-enabled/rewrite.load ]]; then
   service apache2 restart
 fi
 
+# Make sure the HEAD symbolic link exists
+if [[ ! -L ${DIR}/HEAD ]]; then
+  echo "You need to create a HEAD symbolic link from your Drupal checkout in the provisioning directory..."
+  exit 1
+fi
+
 ##################
 # Drupal install #
 ##################
