@@ -58,7 +58,7 @@ echo "Deleting database..."
   ${MYSQL} -uroot -proot -e "DROP DATABASE IF EXISTS \`$SITENAME\`"
 
 echo "Deleting Drush aliases..."
-  rm $HOME/.drush/${SITENAME}.aliases.drushrc.php
+  rm ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
 
 # Rebuild Drush command file cache to purge the aliases
 ${DRUSH} -q cc drush

@@ -154,7 +154,7 @@ fi
 # Drush alias
 echo "Creating Drush aliases..."
 
-cat <<EOT >> $HOME/.drush/${SITENAME}.aliases.drushrc.php
+cat <<EOT >> ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
 <?php
 
 \$aliases['local'] = array(
@@ -177,6 +177,9 @@ if [[ $(uname -s) == 'Linux' ]]; then
 elif [[ $(uname -s) == 'Darwin' ]]; then
   ${DRUSH} site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${DD_CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
 fi
+
+# Rebuild Drush commandfile cache to load the aliases
+${DRUSH} -q cc drush
 
 # Enable Simpletest
 cd ../ ; mkdir simpletest ; chmod -R 777 simpletest
@@ -215,12 +218,9 @@ chmod -R 777 ${WEBROOT}/${SITENAME}/sites/default/files/config_*/staging
 chmod 777 ${WEBROOT}/${SITENAME}/sites/default/files/styles
 chown -R ${PERMS} ${WEBROOT}/${SITENAME}
 # Drush
-chown ${PERMS} $HOME/.drush/${SITENAME}.aliases.drushrc.php
-chmod 600 $HOME/.drush/${SITENAME}.aliases.drushrc.php
-chmod -R 777 $HOME/.drush/cache/
-
-# Rebuild Drush commandfile cache to load the aliases
-${DRUSH} -q cc drush
+chown ${PERMS} ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
+chmod 600 ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
+chmod -R 777 ${HOMEDIR}/.drush/cache/
 
 # Rebuilding Drupal caches
 ${DRUSH} -q @${SITENAME}.${SUFFIX} cache-rebuild
