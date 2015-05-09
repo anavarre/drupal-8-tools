@@ -11,15 +11,15 @@ if [[ "$(whoami)" != "root" ]]; then
   exit 1
 fi
 
-MYSQL_MINIMUM="$(mysql -V | awk '{print $5}' | head -c 3)"
-PHP_MINIMUM="$(php -v | awk '{print $2}' | head -c 3)"
+MYSQL_MINIMUM="$(mysql -V | awk '{print $5}' | head -c 5)"
+PHP_MINIMUM="$(php -v | awk '{print $2}' | head -c 5)"
 DISABLE_FUNCTIONS="$(php -c /etc/php5/cli/php.ini -i | grep disable_functions | awk '{print $3$4}')"
 DATE_TIMEZONE="$(php -c /etc/php5/apache2/php.ini -i | grep date.timezone | awk '{print $3$4}')"
 DATE_TIMEZONE_CLI="$(php -c /etc/php5/cli/php.ini -i | grep date.timezone | awk '{print $3$4}')"
 
 # Minimum required MySQL version.
-if [[ "${MYSQL_MINIMUM}" < "5.5" ]]; then
-  echo -e "Your MySQL version is too old (${MYSQL_MINIMUM}). Minimum requirement for Drupal 8 is PHP 5.5. ${RED}[ERROR]${COLOR_ENDING}"
+if [[ "${MYSQL_MINIMUM}" < "5.5.3" ]]; then
+  echo -e "Your MySQL version is too old (${MYSQL_MINIMUM}). Minimum requirement for Drupal 8 is PHP 5.5.3 ${RED}[ERROR]${COLOR_ENDING}"
 else
   echo -e "MySQL version is ${MYSQL_MINIMUM} ${GREEN}[OK]${COLOR_ENDING}"
 fi
@@ -28,7 +28,7 @@ fi
 if [[ "${PHP_MINIMUM}" > "5.4.2" ]]; then
   echo -e "PHP version is ${PHP_MINIMUM} ${GREEN}[OK]${COLOR_ENDING}"
 else
-  echo -e "Your PHP version is too old (${PHP_MINIMUM}). Minimum requirement for Drupal 8 is PHP 5.4.2. ${RED}[ERROR]${COLOR_ENDING}"
+  echo -e "Your PHP version is too old (${PHP_MINIMUM}). Minimum requirement for Drupal 8 is PHP 5.4.2 ${RED}[ERROR]${COLOR_ENDING}"
 fi
 
 # Drush requires PHP's disable_functions to be empty, except for PHP 5.5 - See https://github.com/drush-ops/drush/pull/357
