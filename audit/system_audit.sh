@@ -11,12 +11,20 @@ if [[ "$(whoami)" != "root" ]]; then
   exit 1
 fi
 
-PHP_MINIMUM="$(php -v | awk '{print $2}' | head -n1 | sed -r 's/.{9}$//')"
+MYSQL_MINIMUM="$(mysql -V | awk '{print $5}' | head -c 3)"
+PHP_MINIMUM="$(php -v | awk '{print $2}' | head -c 3)"
 DISABLE_FUNCTIONS="$(php -c /etc/php5/cli/php.ini -i | grep disable_functions | awk '{print $3$4}')"
 DATE_TIMEZONE="$(php -c /etc/php5/apache2/php.ini -i | grep date.timezone | awk '{print $3$4}')"
 DATE_TIMEZONE_CLI="$(php -c /etc/php5/cli/php.ini -i | grep date.timezone | awk '{print $3$4}')"
 
-# Drupal 8 requires PHP 5.4.2 at a minimum.
+# Minimum required MySQL version.
+if [[ "${MYSQL_MINIMUM}" < "5.5" ]]; then
+  echo -e "Your MySQL version is too old (${MYSQL_MINIMUM}). Minimum requirement for Drupal 8 is PHP 5.5. ${RED}[ERROR]${COLOR_ENDING}"
+else
+  echo -e "MySQL version is ${MYSQL_MINIMUM} ${GREEN}[OK]${COLOR_ENDING}"
+fi
+
+# Minimum required PHP version.
 if [[ "${PHP_MINIMUM}" > "5.4.2" ]]; then
   echo -e "PHP version is ${PHP_MINIMUM} ${GREEN}[OK]${COLOR_ENDING}"
 else
