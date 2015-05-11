@@ -131,8 +131,8 @@ service apache2 reload > /dev/null 2>&1
 echo "Adding hosts file entry..."
 sed -i "1i127.0.0.1\t${SITENAME}.${SUFFIX}" /etc/hosts
 
-# MySQL queries
-DB_CREATE="CREATE DATABASE IF NOT EXISTS \`${SITENAME}\` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci"
+# MySQL queries - See https://www.drupal.org/node/1314214
+DB_CREATE="CREATE DATABASE IF NOT EXISTS \`${SITENAME}\` DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci"
 
 # Custom DB queries if we're using Linux
 if [[ $(uname -s) == 'Linux' ]]; then
