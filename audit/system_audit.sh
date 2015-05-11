@@ -11,15 +11,20 @@ if [[ "$(whoami)" != "root" ]]; then
   exit 1
 fi
 
+PHP_APACHE="/etc/php5/apache2/php.ini"
+PHP_CLI="/etc/php5/cli/php.ini"
+
 MYSQL_MINIMUM="$(mysql -V | awk '{print $5}' | head -c 5)"
 PHP_MINIMUM="$(php -v | awk '{print $2}' | head -c 5)"
-DISABLE_FUNCTIONS="$(php -c /etc/php5/cli/php.ini -i | grep disable_functions | awk '{print $3$4}')"
-DATE_TIMEZONE="$(grep "date.timezone" /etc/php5/apache2/php.ini | awk '{print $3}' | tail -1)"
-DATE_TIMEZONE_CLI="$(grep "date.timezone" /etc/php5/cli/php.ini | awk '{print $3}' | tail -1)"
-TWIG_EXTENSION="$(grep "extension=twig.so" /etc/php5/apache2/php.ini)"
-TWIG_EXTENSION_CLI="$(grep "extension=twig.so" /etc/php5/cli/php.ini)"
-XDEBUG_NESTING="$(grep "xdebug.max_nesting_level" /etc/php5/apache2/php.ini | awk '{print $3}')"
-XDEBUG_NESTING_CLI="$(grep "xdebug.max_nesting_level" /etc/php5/cli/php.ini | awk '{print $3}')"
+
+DISABLE_FUNCTIONS="$(php -c ${PHP_CLI} -i | grep disable_functions | awk '{print $3$4}')"
+DATE_TIMEZONE="$(grep "date.timezone" ${PHP_APACHE} | awk '{print $3}' | tail -1)"
+DATE_TIMEZONE_CLI="$(grep "date.timezone" ${PHP_CLI} | awk '{print $3}' | tail -1)"
+TWIG_EXTENSION="$(grep "extension=twig.so" ${PHP_APACHE})"
+TWIG_EXTENSION_CLI="$(grep "extension=twig.so" ${PHP_CLI})"
+XDEBUG_NESTING="$(grep "xdebug.max_nesting_level" ${PHP_APACHE} | awk '{print $3}')"
+XDEBUG_NESTING_CLI="$(grep "xdebug.max_nesting_level" ${PHP_CLI} | awk '{print $3}')"
+APC_UPLOAD_PROGRESS="$(php -c ${PHP_CLI} -i | grep apc.rfc1867_name | awk '{print $3}')"
 
 # Minimum required MySQL version.
 if [[ "${MYSQL_MINIMUM}" < "5.5.3" ]]; then
@@ -60,5 +65,12 @@ fi
 if [[ "${XDEBUG_NESTING}" < 256 ]] || [[ "${XDEBUG_NESTING_CLI}" < 256 ]]; then
   echo -e "PHP's xdebug.max_nesting_level should be set to 256 at a minimum. ${RED}[ERROR]${COLOR_ENDING}"
 else
-  echo -e "PHP's xdebug.max_nesting_level is correctly set. ${GREEN}[OK]${COLOR_ENDING}"
+  echo -e "PHP's xdebug.max_nesting_level is correctly set ${GREEN}[OK]${COLOR_ENDING}"
+fi
+
+# APC upload progress is recommended.
+if [[ -z "${APC_UPLOAD_PROGRESS}" ]]; then
+  echo -e "APC upload progress is not correctly set. Please follow http://php.net/manual/apc.configuration.php#ini.apc.rfc1867 for instructions. ${RED}[ERROR]${COLOR_ENDING}"
+else
+  echo -e "APC upload progress is correctly set ${GREEN}[OK]${COLOR_ENDING}"
 fi
