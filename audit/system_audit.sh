@@ -18,6 +18,8 @@ DATE_TIMEZONE="$(php -c /etc/php5/apache2/php.ini -i | grep date.timezone | awk 
 DATE_TIMEZONE_CLI="$(php -c /etc/php5/cli/php.ini -i | grep date.timezone | awk '{print $3$4}')"
 TWIG_EXTENSION="$(grep "extension=twig.so" /etc/php5/apache2/php.ini)"
 TWIG_EXTENSION_CLI="$(grep "extension=twig.so" /etc/php5/cli/php.ini)"
+XDEBUG_NESTING="$(grep "xdebug.max_nesting_level" /etc/php5/apache2/php.ini | awk '{print $3}')"
+XDEBUG_NESTING_CLI="$(grep "xdebug.max_nesting_level" /etc/php5/cli/php.ini | awk '{print $3}')"
 
 # Minimum required MySQL version.
 if [[ "${MYSQL_MINIMUM}" < "5.5.3" ]]; then
@@ -52,4 +54,11 @@ if [[ -z "${TWIG_EXTENSION}" ]] || [[ -z "${TWIG_EXTENSION_CLI}" ]]; then
   echo -e "The Twig C extension is not set. You should check your apache2 and CLI php.ini file settings or install the extension. See http://twig.sensiolabs.org/doc/installation.html#installing-the-c-extension. ${RED}[ERROR]${COLOR_ENDING}"
 else
   echo -e "The Twig C extension is set ${GREEN}[OK]${COLOR_ENDING}"
+fi
+
+# If XDebug is enabled, then check max_nesting_level.
+if [[ "${XDEBUG_NESTING}" < 256 ]] || [[ "${XDEBUG_NESTING_CLI}" < 256 ]]; then
+  echo -e "PHP's xdebug.max_nesting_level should be set to 256 at a minimum. ${RED}[ERROR]${COLOR_ENDING}"
+else
+  echo -e "PHP's xdebug.max_nesting_level is correctly set. ${GREEN}[OK]${COLOR_ENDING}"
 fi
