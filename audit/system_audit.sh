@@ -16,6 +16,8 @@ PHP_MINIMUM="$(php -v | awk '{print $2}' | head -c 5)"
 DISABLE_FUNCTIONS="$(php -c /etc/php5/cli/php.ini -i | grep disable_functions | awk '{print $3$4}')"
 DATE_TIMEZONE="$(php -c /etc/php5/apache2/php.ini -i | grep date.timezone | awk '{print $3$4}')"
 DATE_TIMEZONE_CLI="$(php -c /etc/php5/cli/php.ini -i | grep date.timezone | awk '{print $3$4}')"
+TWIG_EXTENSION="$(grep "extension=twig.so" /etc/php5/apache2/php.ini)"
+TWIG_EXTENSION_CLI="$(grep "extension=twig.so" /etc/php5/cli/php.ini)"
 
 # Minimum required MySQL version.
 if [[ "${MYSQL_MINIMUM}" < "5.5.3" ]]; then
@@ -43,4 +45,11 @@ if [[ "${DATE_TIMEZONE}" == "novalue" ]] || [[ "${DATE_TIMEZONE_CLI}" == "novalu
   echo -e "PHP's date.timezone is not set. You should check your apache2 and CLI php.ini file settings. ${RED}[ERROR]${COLOR_ENDING}"
 else
   echo -e "PHP's date.timezone is set ${GREEN}[OK]${COLOR_ENDING}"
+fi
+
+# The Twig C extension should ideally be enabled.
+if [[ -z "${TWIG_EXTENSION}" ]] || [[ -z "${TWIG_EXTENSION_CLI}" ]]; then
+  echo -e "The Twig C extension is not set. You should check your apache2 and CLI php.ini file settings or install the extension. See http://twig.sensiolabs.org/doc/installation.html#installing-the-c-extension. ${RED}[ERROR]${COLOR_ENDING}"
+else
+  echo -e "The Twig C extension is set ${GREEN}[OK]${COLOR_ENDING}"
 fi
