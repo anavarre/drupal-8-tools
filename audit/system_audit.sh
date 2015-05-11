@@ -14,8 +14,8 @@ fi
 MYSQL_MINIMUM="$(mysql -V | awk '{print $5}' | head -c 5)"
 PHP_MINIMUM="$(php -v | awk '{print $2}' | head -c 5)"
 DISABLE_FUNCTIONS="$(php -c /etc/php5/cli/php.ini -i | grep disable_functions | awk '{print $3$4}')"
-DATE_TIMEZONE="$(php -c /etc/php5/apache2/php.ini -i | grep date.timezone | awk '{print $3$4}')"
-DATE_TIMEZONE_CLI="$(php -c /etc/php5/cli/php.ini -i | grep date.timezone | awk '{print $3$4}')"
+DATE_TIMEZONE="$(grep "date.timezone" /etc/php5/apache2/php.ini | awk '{print $3}' | tail -1)"
+DATE_TIMEZONE_CLI="$(grep "date.timezone" /etc/php5/cli/php.ini | awk '{print $3}' | tail -1)"
 TWIG_EXTENSION="$(grep "extension=twig.so" /etc/php5/apache2/php.ini)"
 TWIG_EXTENSION_CLI="$(grep "extension=twig.so" /etc/php5/cli/php.ini)"
 XDEBUG_NESTING="$(grep "xdebug.max_nesting_level" /etc/php5/apache2/php.ini | awk '{print $3}')"
@@ -29,10 +29,10 @@ else
 fi
 
 # Minimum required PHP version.
-if [[ "${PHP_MINIMUM}" > "5.4.2" ]]; then
-  echo -e "PHP version is ${PHP_MINIMUM} ${GREEN}[OK]${COLOR_ENDING}"
-else
+if [[ "${PHP_MINIMUM}" < "5.4.2" ]]; then
   echo -e "Your PHP version is too old (${PHP_MINIMUM}). Minimum requirement for Drupal 8 is PHP 5.4.2 ${RED}[ERROR]${COLOR_ENDING}"
+else
+  echo -e "PHP version is ${PHP_MINIMUM} ${GREEN}[OK]${COLOR_ENDING}"
 fi
 
 # Drush requires PHP's disable_functions to be empty, except for PHP 5.5 - See https://github.com/drush-ops/drush/pull/357
@@ -43,7 +43,7 @@ else
 fi
 
 # date.timezone needs to be set.
-if [[ "${DATE_TIMEZONE}" == "novalue" ]] || [[ "${DATE_TIMEZONE_CLI}" == "novalue" ]]; then
+if [[ -z "${DATE_TIMEZONE}" ]] || [[ -z "${DATE_TIMEZONE_CLI}" ]]; then
   echo -e "PHP's date.timezone is not set. You should check your apache2 and CLI php.ini file settings. ${RED}[ERROR]${COLOR_ENDING}"
 else
   echo -e "PHP's date.timezone is set ${GREEN}[OK]${COLOR_ENDING}"
