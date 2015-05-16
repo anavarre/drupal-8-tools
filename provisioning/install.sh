@@ -140,7 +140,7 @@ if [[ $(uname -s) == 'Linux' ]]; then
   SQL="${DB_CREATE};${DB_PERMS}"
 
   echo "Creating MySQL database..."
-  $MYSQL -u${CREDS} -p${CREDS} -e "${SQL}"
+  $MYSQL --defaults-file=${DIR}/.my.conf -e "${SQL}"
 
 # Custom DB queries if we're using a Mac
 elif [[ $(uname -s) == 'Darwin' ]]; then
@@ -148,7 +148,7 @@ elif [[ $(uname -s) == 'Darwin' ]]; then
   SQL="${DB_CREATE};${DB_PERMS}"
 
   echo "Creating MySQL database..."
-  $MYSQL -u${DD_CREDS} -e "${SQL}"
+  $MYSQL --defaults-file=${DIR}/.mydevdesktop.conf -e "${SQL}"
 fi
 
 # Drush alias
