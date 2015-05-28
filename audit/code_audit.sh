@@ -27,6 +27,10 @@ MODULE=`basename $(pwd)`
 BLOCK_FILES="$(pwd)/src/Plugin/Block/*"
 BLOCKBASE="BlockBase"
 FORMSTATEINTERFACE="FormStateInterface"
+BLOCK_ANNOTATION="@Block"
+BLOCK_ID="id = "
+BLOCK_LABEL="admin_label = "
+BLOCK_CATEGORY="category = "
 BLOCKFORM="blockForm"
 BLOCKSUBMIT="blockSubmit"
 BUILD="build"
@@ -55,6 +59,38 @@ if [[ -z $(grep -w --color=auto "use Drupal\\\Core\\\Form\\\\${FORMSTATEINTERFAC
   echo "The correct use statement to invoke is: Drupal\\Core\\Block\\${FORMSTATEINTERFACE};"
 else
   echo "The use statement for ${FORMSTATEINTERFACE} is correct."
+fi
+
+# @Block annotation
+if [[ -z $(grep -w --color=auto "${BLOCK_ANNOTATION}(" ${BLOCK_FILES}) ]]; then
+  echo -e "${RED}The ${BLOCK_ANNOTATION} annotation is missing or not correctly set!${COLOR_ENDING}"
+  echo "The correct annotation to use is: ${BLOCK_ANNOTATION}"
+else
+  echo "The ${BLOCK_ANNOTATION} annotation exists."
+fi
+
+# @Block id annotation
+if [[ -z $(grep -w --color=auto "${BLOCK_ID}" ${BLOCK_FILES}) ]]; then
+  echo -e "${RED}The ${BLOCK_ANNOTATION} id annotation is missing or not correctly set!${COLOR_ENDING}"
+  echo "The correct id annotation to use is: ${BLOCK_ID}"
+else
+  echo "The ${BLOCK_ANNOTATION} id annotation exists."
+fi
+
+# @Block admin_label annotation
+if [[ -z $(grep -w --color=auto "${BLOCK_LABEL}" ${BLOCK_FILES}) ]]; then
+  echo -e "${RED}The ${BLOCK_ANNOTATION} label annotation is missing or not correctly set!${COLOR_ENDING}"
+  echo "The correct label annotation to use is: ${BLOCK_LABEL}"
+else
+  echo "The ${BLOCK_ANNOTATION} label annotation exists."
+fi
+
+# @Block category annotation
+if [[ -z $(grep -w --color=auto "${BLOCK_CATEGORY}" ${BLOCK_FILES}) ]]; then
+  echo -e "${RED}The ${BLOCK_ANNOTATION} category annotation is missing or not correctly set!${COLOR_ENDING}"
+  echo "The correct category annotation to use is: ${BLOCK_ID}"
+else
+  echo "The ${BLOCK_ANNOTATION} category annotation exists."
 fi
 
 # Block methods
