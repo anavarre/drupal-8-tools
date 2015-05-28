@@ -88,7 +88,7 @@ fi
 # @Block category annotation
 if [[ -z $(grep -w --color=auto "${BLOCK_CATEGORY}" ${BLOCK_FILES}) ]]; then
   echo -e "${RED}The ${BLOCK_ANNOTATION} category annotation is missing or not correctly set!${COLOR_ENDING}"
-  echo "The correct category annotation to use is: ${BLOCK_ID}"
+  echo "The correct category annotation to use is: ${BLOCK_CATEGORY}"
 else
   echo "The ${BLOCK_ANNOTATION} category annotation exists."
 fi
