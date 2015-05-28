@@ -49,6 +49,7 @@ FUNCTIONS=(
   [comment_load]="See https://www.drupal.org/node/2321599"
   [comment_new_page_count]="CommentStorage::getNewCommentPageNumber()"
   [comment_num_new]="CommentManager::getCountNewComments(\$entity, \$field_name, \$timestamp)"
+  [comment_prepare_thread]="\Drupal\comment\CommentViewBuilder::buildComponents()"
   [current_path]="Replaced by the <current> route - See https://www.drupal.org/node/2382211"
   [decode_entities]="String::decodeEntities()"
   [drupal_add_css]="drupal_process_attached()"
