@@ -63,6 +63,7 @@ FUNCTIONS=(
   [drupal_build_form]="\Drupal::formBuilder()->buildForm()"
   [drupal_chmod]="FileSystem::chmod()"
   [drupal_clean_css_identifier]="use Drupal\Component\Utility\Html; / Html::cleanCssIdentifier($foo);"
+  [drupal_cron_run]="\Drupal::service('cron')->run();"
   [drupal_convert_to_utf8]="Unicode::convertToUtf8()"
   [drupal_deliver_html_page]="TODO"
   [drupal_deliver_page]="TODO"
