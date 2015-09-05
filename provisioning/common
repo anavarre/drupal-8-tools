@@ -20,7 +20,7 @@ DB_HOST="localhost"
 DB_PORT="3306"
 
 # Misc variables
-HOMEDIR="/home/`stat -c %G ${WEBROOT}`/"
+HOMEDIR="/home/`stat -c %G ${WEBROOT}`"
 CREDS="root"
 
 # Compatibility with Acquia Dev Desktop
