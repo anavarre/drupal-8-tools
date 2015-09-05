@@ -155,18 +155,22 @@ elif [[ $(uname -s) == 'Darwin' ]]; then
 fi
 
 # Drush alias
-echo "Creating Drush aliases..."
+echo "Creating Drush alias..."
 
-cat <<EOT >> ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
+cat <<EOT >> ${HOMEDIR}/.drush/${SITENAME}.alias.drushrc.php
 <?php
 
-\$aliases['local'] = array(
- 'parent' => '@parent',
- 'site' => '${SITENAME}',
- 'env' => '${SUFFIX}',
- 'root' => '${WEBROOT}/${SITENAME}',
+\$aliases['${SITENAME}.${SUFFIX}'] = array(
+  'root' => '${WEBROOT}/${SITENAME}',
+  'uri' => '${SITENAME}.${SUFFIX}',
 );
 EOT
+
+echo "Setting Drush permissions..."
+# Drush
+chown ${PERMS} ${HOMEDIR}/.drush/${SITENAME}.alias.drushrc.php
+chmod 600 ${HOMEDIR}/.drush/${SITENAME}.alias.drushrc.php
+chmod -R 777 ${HOMEDIR}/.drush/cache/
 
 echo "Running Drupal installation..."
 
@@ -181,16 +185,17 @@ elif [[ $(uname -s) == 'Darwin' ]]; then
   ${DRUSH} site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${DD_CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
 fi
 
-# Rebuild Drush commandfile cache to load the aliases
+# Now that Drupal is installed, rebuild Drush commandfile cache to load the aliases.
 ${DRUSH} -q cc drush
 
+echo "Setting up development mode..."
 # Enable Simpletest
 cd ../ ; mkdir simpletest ; chmod -R 777 simpletest
-${DRUSH} @${SITENAME}.${SUFFIX} en -qy simpletest
+${DRUSH} --root=${WEBROOT}/${SITENAME} en -qy simpletest
 
 # Disable CSS and JS aggregation
-${DRUSH} @${SITENAME}.${SUFFIX} cset -qy system.performance css.preprocess false --format=yaml
-${DRUSH} @${SITENAME}.${SUFFIX} cset -qy system.performance js.preprocess false --format=yaml
+${DRUSH} --root=${WEBROOT}/${SITENAME} cset -qy system.performance css.preprocess false --format=yaml
+${DRUSH} --root=${WEBROOT}/${SITENAME} cset -qy system.performance js.preprocess false --format=yaml
 
 # Load the make file, if any. (-d = dev.make / -c = custom.make)
 while getopts ":dc" opt; do
@@ -217,16 +222,12 @@ chmod go-w ${WEBROOT}/${SITENAME}/sites/default/services.yml
 chmod 777 ${WEBROOT}/${SITENAME}/sites/default/files/
 chmod -R 777 ${WEBROOT}/${SITENAME}/sites/default/files/config_*/active
 chmod -R 777 ${WEBROOT}/${SITENAME}/sites/default/files/config_*/staging
-# Supposedly, the below perm is too open, but it's the only way I found to fix broken image styles.
+# Supposedly, the below perms are too open, but it's the only way I found to fix broken image styles.
 chmod 777 ${WEBROOT}/${SITENAME}/sites/default/files/styles
 chown -R ${PERMS} ${WEBROOT}/${SITENAME}
-# Drush
-chown ${PERMS} ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
-chmod 600 ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
-chmod -R 777 ${HOMEDIR}/.drush/cache/
 
 # Rebuilding Drupal caches
-${DRUSH} -q @${SITENAME}.${SUFFIX} cache-rebuild
+${DRUSH} --root=${WEBROOT}/${SITENAME} cache-rebuild -q
 
 if [[ $(curl -sL -w "%{http_code} %{url_effective}\\n" "http://${SITENAME}.${SUFFIX}" -o /dev/null) ]]; then
   echo -e "${GREEN}Site is available at http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"

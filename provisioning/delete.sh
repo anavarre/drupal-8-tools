@@ -50,7 +50,7 @@ else
   rm -f ${SITES_AVAILABLE}/${SITENAME}.conf
   rm /var/log/apache2/${SITENAME}-access.log && rm /var/log/apache2/${SITENAME}-error.log
 fi
-	
+
 echo "Deleting hosts file entry..."
   sed -i "/${SITENAME}.${SUFFIX}/d" /etc/hosts
 
@@ -58,7 +58,7 @@ echo "Deleting database..."
   ${MYSQL} --defaults-file=${DIR}/.my.conf -e "DROP DATABASE IF EXISTS \`$SITENAME\`"
 
 echo "Deleting Drush aliases..."
-  rm ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
+  rm ${HOMEDIR}/.drush/${SITENAME}.alias.drushrc.php
 
 # Rebuild Drush command file cache to purge the aliases
 ${DRUSH} -q cc drush
