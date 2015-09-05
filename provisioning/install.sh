@@ -157,10 +157,12 @@ fi
 # Drush alias
 echo "Creating Drush alias..."
 
-cat <<EOT >> ${HOMEDIR}/.drush/${SITENAME}.alias.drushrc.php
+cat <<EOT >> ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
 <?php
 
 \$aliases['${SITENAME}.${SUFFIX}'] = array(
+  'site' => '${SITENAME}',
+  'env' => '${SUFFIX}',
   'root' => '${WEBROOT}/${SITENAME}',
   'uri' => '${SITENAME}.${SUFFIX}',
 );
@@ -168,8 +170,8 @@ EOT
 
 echo "Setting Drush permissions..."
 # Drush
-chown ${PERMS} ${HOMEDIR}/.drush/${SITENAME}.alias.drushrc.php
-chmod 600 ${HOMEDIR}/.drush/${SITENAME}.alias.drushrc.php
+chown ${PERMS} ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
+chmod 600 ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
 chmod -R 777 ${HOMEDIR}/.drush/cache/
 
 echo "Running Drupal installation..."
@@ -185,7 +187,7 @@ elif [[ $(uname -s) == 'Darwin' ]]; then
   ${DRUSH} site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${DD_CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
 fi
 
-# Now that Drupal is installed, rebuild Drush commandfile cache to load the aliases.
+# Now that Drupal is installed, rebuild Drush commandfile cache to load the alias.
 ${DRUSH} -q cc drush
 
 echo "Setting up development mode..."

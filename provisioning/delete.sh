@@ -57,10 +57,10 @@ echo "Deleting hosts file entry..."
 echo "Deleting database..."
   ${MYSQL} --defaults-file=${DIR}/.my.conf -e "DROP DATABASE IF EXISTS \`$SITENAME\`"
 
-echo "Deleting Drush aliases..."
-  rm ${HOMEDIR}/.drush/${SITENAME}.alias.drushrc.php
+echo "Deleting Drush alias..."
+  rm ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
 
-# Rebuild Drush command file cache to purge the aliases
+# Rebuild Drush command file cache to purge the alias
 ${DRUSH} -q cc drush
 
 echo -e "${GREEN}Successfully removed http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"
