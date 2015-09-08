@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 
-# Invoke the script from anywhere (e.g .bashrc alias).
+# Invoke the script from anywhere (e.g .bashrc alias)
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Required source files
 source ${DIR}/common
+source ${DIR}/functions.sh
 
-# Make sure only root can execute the script.
-if [[ "$(whoami)" != "root" ]]; then
-  echo -e "${RED}You are required to run this script as root or with sudo! Aborting...${COLOR_ENDING}"
-  exit 1
-fi
+is_root
 
 # Set path to scan
 MODULE_PATH=$1
