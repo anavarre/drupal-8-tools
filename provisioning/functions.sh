@@ -7,8 +7,10 @@ is_root() {
   fi
 }
 
-# Enable mod_rewrite if needed
+# Deployment functions
+
 mod_rewrite() {
+  # Enable mod_rewrite if needed
   if [[ ! -L /etc/apache2/mods-enabled/rewrite.load ]]; then
     echo "Enabling mod_rewrite..."
     a2enmod rewrite > /dev/null 2>&1
@@ -16,8 +18,8 @@ mod_rewrite() {
   fi
 }
 
-# Make sure the HEAD symbolic link exists
 head_symlink() {
+  # Make sure the HEAD symbolic link exists
   if [[ ! -L ${DIR}/HEAD ]]; then
     echo "You need to create a HEAD symbolic link from your Drupal checkout in the provisioning directory..."
     exit 1
@@ -25,19 +27,20 @@ head_symlink() {
 }
 
 installer() {
-  if [[ $1 == "-d" ]] || [[ $1 == "-c" ]]; then
-  SITENAME_UPPER=$2
-    if [[ -z $2 ]]; then
+  # @todo: implement --minimal parameter in the installer.
+  if [[ ${OPTION} == "-d" ]] || [[ ${OPTION} == "-c" ]]; then
+  SITENAME_UPPER=${OPTION}
+    if [[ -z ${OPTION} ]]; then
       echo -n "What should be the name of the new Drupal docroot? "
       read SITENAME_UPPER
     fi
-  elif [[ $1 == *-* ]]; then
+  elif [[ ${OPTION} == *-* ]]; then
     echo -e "${RED}Only -d (dev make file) or -c (custom make file) parameters are accepted! Aborting.${COLOR_ENDING}"
     exit 0
   else
 
-  SITENAME_UPPER=$1
-    if [[ -z $1 ]]; then
+  SITENAME_UPPER=${DOCROOT}
+    if [[ -z ${DOCROOT} ]]; then
       echo -n "What should be the name of the new Drupal docroot? "
       read SITENAME_UPPER
     fi
@@ -59,9 +62,6 @@ checkout() {
   fi
 }
 
-##############
-# DEPLOYMENT #
-##############
 settings_php() {
   echo "Creating settings.php file..."
   cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
@@ -94,10 +94,6 @@ twig_debugging() {
   sed -i "s/auto_reload: null/auto_reload: true/g" ${WEBROOT}/${SITENAME}/sites/default/services.yml
   sed -i "s/cache: true/cache: false/g" ${WEBROOT}/${SITENAME}/sites/default/services.yml
 }
-
-#########
-# STACK #
-#########
 
 apache() {
   # Apache setup
@@ -149,8 +145,8 @@ hosts_file() {
   sed -i "1i127.0.0.1\t${SITENAME}.${SUFFIX}" /etc/hosts
 }
 
-# MySQL queries - See https://www.drupal.org/node/1314214
 mysql() {
+  # MySQL queries - See https://www.drupal.org/node/1314214
   DB_CREATE="CREATE DATABASE IF NOT EXISTS \`${SITENAME}\` DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci"
 
   # Custom DB queries if we're using Linux
@@ -193,10 +189,6 @@ EOT
   chmod -R 777 ${HOMEDIR}/.drush/cache/
 }
 
-##################
-# DRUPAL INSTALL #
-##################
-
 drupal_install() {
   echo "Running Drupal installation..."
 
@@ -226,8 +218,8 @@ dev_mode() {
   ${DRUSH} --root=${WEBROOT}/${SITENAME} cset -qy system.performance js.preprocess false --format=yaml
 }
 
-  # Load the make file, if any. (-d = dev.make / -c = custom.make)
 make_file() {
+  # Load the make file, if any. (-d = dev.make / -c = custom.make)
   while getopts ":dc" opt; do
     case $opt in
       d)

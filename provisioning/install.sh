@@ -7,8 +7,10 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source ${DIR}/common
 source ${DIR}/functions.sh
 
-# Deployment functions
 is_root
+
+DOCROOT=$1
+OPTION=$2
 
 # Requirements
 mod_rewrite
