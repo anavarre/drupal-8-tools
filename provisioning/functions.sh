@@ -244,7 +244,6 @@ set_permissions() {
   chmod go-w ${WEBROOT}/${SITENAME}/sites/default/settings.php
   chmod go-w ${WEBROOT}/${SITENAME}/sites/default/services.yml
   chmod 777 ${WEBROOT}/${SITENAME}/sites/default/files/
-  chmod -R 777 ${WEBROOT}/${SITENAME}/sites/default/files/config_*/active
   chmod -R 777 ${WEBROOT}/${SITENAME}/sites/default/files/config_*/staging
   # Supposedly, the below perms are too open, but it's the only way I found to fix broken image styles.
   chmod 777 ${WEBROOT}/${SITENAME}/sites/default/files/styles
