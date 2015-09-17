@@ -21,7 +21,7 @@ DB_PORT="3306"
 
 # Misc variables
 HOMEDIR="/home/`stat -c %G ${WEBROOT}`"
-CREDS="root"
+CREDS="admin"
 
 # Compatibility with Acquia Dev Desktop
 DD_CREDS="drupaluser"
