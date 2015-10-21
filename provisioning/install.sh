@@ -21,8 +21,8 @@ installer
 checkout
 
 # Prepare Drupal files
-settings_php
 settings_files
+settings_php
 twig_debugging
 
 # Stack configuration

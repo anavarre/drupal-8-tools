@@ -62,6 +62,14 @@ checkout() {
   fi
 }
 
+settings_files() {
+  echo "Creating settings.local.php file..."
+  cp ${WEBROOT}/${SITENAME}/sites/example.settings.local.php ${WEBROOT}/${SITENAME}/sites/default/settings.local.php
+
+  echo "Creating settings.testing.php file..." # See https://www.drupal.org/node/2230005
+  touch ${WEBROOT}/${SITENAME}/sites/default/settings.testing.php
+}
+
 settings_php() {
   echo "Creating settings.php file..."
   cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
@@ -75,14 +83,6 @@ settings_php() {
   );
 
 EOT
-}
-
-settings_files() {
-  echo "Creating settings.local.php file..."
-  cp ${WEBROOT}/${SITENAME}/sites/example.settings.local.php ${WEBROOT}/${SITENAME}/sites/default/settings.local.php
-
-  echo "Creating settings.testing.php file..." # See https://www.drupal.org/node/2230005
-  touch ${WEBROOT}/${SITENAME}/sites/default/settings.testing.php
 }
 
 twig_debugging() {
