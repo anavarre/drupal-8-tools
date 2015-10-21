@@ -73,7 +73,10 @@ settings_files() {
 settings_php() {
   echo "Creating settings.php file..."
   cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
-  sed -i'' '639,641 s/# //' ${WEBROOT}/${SITENAME}/sites/default/settings.php
+
+  # Enable settings.local.php
+  # @todo This is very fragile. Improve the detection even if lines change.
+  sed -i '706,708 s/# //' ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
   echo "Adding configuration for trusted hostnames..."
   cat <<EOT >> ${WEBROOT}/${SITENAME}/sites/default/settings.php
@@ -209,10 +212,6 @@ dev_mode() {
   # Enable Simpletest
   cd ../ ; mkdir simpletest ; chmod -R 777 simpletest
   ${DRUSH} --root=${WEBROOT}/${SITENAME} en -qy simpletest
-
-  # Disable CSS and JS aggregation
-  ${DRUSH} --root=${WEBROOT}/${SITENAME} cset -qy system.performance css.preprocess false --format=yaml
-  ${DRUSH} --root=${WEBROOT}/${SITENAME} cset -qy system.performance js.preprocess false --format=yaml
 }
 
 make_file() {
