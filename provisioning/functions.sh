@@ -83,9 +83,6 @@ settings_files() {
 
   echo "Creating settings.testing.php file..." # See https://www.drupal.org/node/2230005
   touch ${WEBROOT}/${SITENAME}/sites/default/settings.testing.php
-
-  echo "Creating services.yml file..."
-  cp ${WEBROOT}/${SITENAME}/sites/default/default.services.yml ${WEBROOT}/${SITENAME}/sites/default/services.yml
 }
 
 twig_debugging() {
