@@ -89,6 +89,9 @@ settings_php() {
 );
 
 EOT
+
+  # Enable on-screen error reporting
+  echo "\$config['system.logging']['error_level'] = 'verbose';" >> ${WEBROOT}/${SITENAME}/sites/default/settings.php
 }
 
 twig_debugging() {
