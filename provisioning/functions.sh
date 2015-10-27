@@ -84,9 +84,9 @@ settings_php() {
   echo "Adding configuration for trusted hostnames..."
   cat <<EOT >> ${WEBROOT}/${SITENAME}/sites/default/settings.php
 
-  \$settings['trusted_host_patterns'] = array(
+\$settings['trusted_host_patterns'] = array(
   '^${SITENAME}\\.${SUFFIX}$',
-  );
+);
 
 EOT
 }
