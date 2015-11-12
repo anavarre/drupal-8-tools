@@ -18,6 +18,13 @@ mod_rewrite() {
   fi
 }
 
+curl() {
+  # Install cURL if needed
+  if [[ ! $(dpkg -s curl | head -n1 | awk '{print $2}') == 'curl' ]]; then
+    echo 'Installing cURL...'
+  fi
+}
+
 head_symlink() {
   # Make sure the HEAD symbolic link exists
   if [[ ! -L ${DIR}/HEAD ]]; then

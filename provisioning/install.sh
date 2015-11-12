@@ -14,6 +14,7 @@ OPTION=$2
 
 # Requirements
 mod_rewrite
+curl
 head_symlink
 
 # Prepare deployment
