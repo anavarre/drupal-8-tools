@@ -26,7 +26,9 @@ curl() {
   fi
 }
 
+
 head_symlink() {
+  # @todo: allow to install from checkout or archive.
   # Make sure the HEAD symbolic link exists
   if [[ ! -L ${DIR}/HEAD ]]; then
     echo "You need to create a HEAD symbolic link from your Drupal checkout in the provisioning directory..."
@@ -69,11 +71,6 @@ checkout() {
     cp -R ${GIT}/ ${WEBROOT}/${SITENAME}
   fi
 }
-
-settings_files() {
-  echo "Creating settings.local.php file..."
-  cp ${WEBROOT}/${SITENAME}/sites/example.settings.local.php ${WEBROOT}/${SITENAME}/sites/default/settings.local.php
-
   echo "Creating settings.testing.php file..." # See https://www.drupal.org/node/2230005
   touch ${WEBROOT}/${SITENAME}/sites/default/settings.testing.php
 
