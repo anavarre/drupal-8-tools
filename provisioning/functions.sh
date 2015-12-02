@@ -22,6 +22,7 @@ curl() {
   # Install cURL if needed
   if [[ ! $(dpkg -s curl | head -n1 | awk '{print $2}') == 'curl' ]]; then
     echo 'Installing cURL...'
+    apt-get install -qy curl
   fi
 }
 
