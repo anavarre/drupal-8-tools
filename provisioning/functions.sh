@@ -186,7 +186,7 @@ drush_alias() {
   cat <<EOT >> ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
   <?php
 
-  \$aliases['${SITENAME}.${SUFFIX}'] = array(
+  \$aliases['${SUFFIX}'] = array(
     'site' => '${SITENAME}',
     'env' => '${SUFFIX}',
     'root' => '${WEBROOT}/${SITENAME}',
