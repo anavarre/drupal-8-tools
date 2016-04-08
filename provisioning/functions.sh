@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Shared functions
 is_root() {
   # Make sure only root can execute the script
@@ -67,26 +69,26 @@ checkout() {
     exit 0
   else
     echo "Pulling changes from upstream repo..."
-    cd ${GIT} && git pull -q
-    cp -R ${GIT}/ ${WEBROOT}/${SITENAME}
+    cd "${GIT}" && git pull -q
+    cp -R "${GIT}"/ "${WEBROOT}"/"${SITENAME}"
   fi
 }
 
 settings_files() {
   echo "Creating settings.testing.php file..." # See https://www.drupal.org/node/2230005
-  touch ${WEBROOT}/${SITENAME}/sites/default/settings.testing.php
+  touch "${WEBROOT}"/"${SITENAME}"/sites/default/settings.testing.php
 
   echo "Creating services.yml file..."
-  cp ${WEBROOT}/${SITENAME}/sites/default/default.services.yml ${WEBROOT}/${SITENAME}/sites/default/services.yml
+  cp "${WEBROOT}"/"${SITENAME}"/sites/default/default.services.yml "${WEBROOT}"/"${SITENAME}"/sites/default/services.yml
 }
 
 settings_php() {
   echo "Creating settings.php file..."
-  cp ${WEBROOT}/${SITENAME}/sites/default/default.settings.php ${WEBROOT}/${SITENAME}/sites/default/settings.php
+  cp "${WEBROOT}"/"${SITENAME}"/sites/default/default.settings.php "${WEBROOT}"/"${SITENAME}"/sites/default/settings.php
 
   # Enable settings.local.php
   # @todo This is very fragile. Improve the detection even if lines change.
-  sed -i '706,708 s/# //' ${WEBROOT}/${SITENAME}/sites/default/settings.php
+  sed -i '706,708 s/# //' "${WEBROOT}"/"${SITENAME}"/sites/default/settings.php
 
   echo "Adding configuration for trusted hostnames..."
   cat <<EOT >> ${WEBROOT}/${SITENAME}/sites/default/settings.php
@@ -98,14 +100,14 @@ settings_php() {
 EOT
 
   # Enable on-screen error reporting
-  echo "\$config['system.logging']['error_level'] = 'verbose';" >> ${WEBROOT}/${SITENAME}/sites/default/settings.php
+  echo "\$config['system.logging']['error_level'] = 'verbose';" >> "${WEBROOT}"/"${SITENAME}"/sites/default/settings.php
 }
 
 twig_debugging() {
   echo "Turning on Twig debugging mode..."
-  sed -i "s/debug: false/debug: true/g" ${WEBROOT}/${SITENAME}/sites/default/services.yml
-  sed -i "s/auto_reload: null/auto_reload: true/g" ${WEBROOT}/${SITENAME}/sites/default/services.yml
-  sed -i "s/cache: true/cache: false/g" ${WEBROOT}/${SITENAME}/sites/default/services.yml
+  sed -i "s/debug: false/debug: true/g" "${WEBROOT}"/"${SITENAME}"/sites/default/services.yml
+  sed -i "s/auto_reload: null/auto_reload: true/g" "${WEBROOT}"/"${SITENAME}"/sites/default/services.yml
+  sed -i "s/cache: true/cache: false/g" "${WEBROOT}"/"${SITENAME}"/sites/default/services.yml
 }
 
 apache() {
@@ -114,39 +116,39 @@ apache() {
 
   # First, determine if we're running Apache 2.2 or 2.4
   if [[ -f ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ]]; then
-    cp ${SITES_AVAILABLE}/${APACHE_22_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}
+    cp "${SITES_AVAILABLE}"/"${APACHE_22_DEFAULT}" "${SITES_AVAILABLE}"/"${SITENAME}"
     # ServerName directive
-    sed -i "3i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}
+    sed -i "3i\\\tServerName ${SITENAME}.${SUFFIX}" "${SITES_AVAILABLE}"/"${SITENAME}"
     # Modifying directives
-    sed -i "s:/var/www:/${WEBROOT}/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}
+    sed -i "s:/var/www:/${WEBROOT}/${SITENAME}:g" "${SITES_AVAILABLE}"/"${SITENAME}"
     # Make sure that Drupal's .htaccess clean URLs will work fine
-    sed -i "s/AllowOverride None/AllowOverride All/g" ${SITES_AVAILABLE}/${SITENAME}
+    sed -i "s/AllowOverride None/AllowOverride All/g" "${SITES_AVAILABLE}"/"${SITENAME}"
 
     echo "Enabling site..."
-    a2ensite ${SITENAME} > /dev/null 2>&1
+    a2ensite "${SITENAME}" > /dev/null 2>&1
   else
-    cp ${SITES_AVAILABLE}/${APACHE_24_DEFAULT} ${SITES_AVAILABLE}/${SITENAME}.conf
+    cp "${SITES_AVAILABLE}"/"${APACHE_24_DEFAULT}" "${SITES_AVAILABLE}"/"${SITENAME}".conf
     # ServerName directive
-    sed -i "11i\\\tServerName ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}.conf
+    sed -i "11i\\\tServerName ${SITENAME}.${SUFFIX}" "${SITES_AVAILABLE}"/"${SITENAME}".conf
     # ServerAlias directive
-    sed -i "12i\\\tServerAlias ${SITENAME}.${SUFFIX}" ${SITES_AVAILABLE}/${SITENAME}.conf
+    sed -i "12i\\\tServerAlias ${SITENAME}.${SUFFIX}" "${SITES_AVAILABLE}"/"${SITENAME}".conf
     # vHost overrides
-    sed -i "16i\\\t<Directory /var/www/>" ${SITES_AVAILABLE}/${SITENAME}.conf
-      sed -i "17i\\\t\tOptions Indexes FollowSymLinks" ${SITES_AVAILABLE}/${SITENAME}.conf
-    sed -i "18i\\\t\tAllowOverride All" ${SITES_AVAILABLE}/${SITENAME}.conf
-    sed -i "19i\\\t\tRequire all granted" ${SITES_AVAILABLE}/${SITENAME}.conf
-    sed -i "20i\\\t</Directory>" ${SITES_AVAILABLE}/${SITENAME}.conf
+    sed -i "16i\\\t<Directory /var/www/>" "${SITES_AVAILABLE}"/"${SITENAME}".conf
+      sed -i "17i\\\t\tOptions Indexes FollowSymLinks" "${SITES_AVAILABLE}"/"${SITENAME}".conf
+    sed -i "18i\\\t\tAllowOverride All" "${SITES_AVAILABLE}"/"${SITENAME}".conf
+    sed -i "19i\\\t\tRequire all granted" "${SITES_AVAILABLE}"/"${SITENAME}".conf
+    sed -i "20i\\\t</Directory>" "${SITES_AVAILABLE}"/"${SITENAME}".conf
 
     # Modifying directives
-    sed -i "s:DocumentRoot /var/www/html:DocumentRoot ${WEBROOT}/${SITENAME}:g" ${SITES_AVAILABLE}/${SITENAME}.conf
-    sed -i "s:Directory /var/www/:Directory ${WEBROOT}/${SITENAME}/:g" ${SITES_AVAILABLE}/${SITENAME}.conf
+    sed -i "s:DocumentRoot /var/www/html:DocumentRoot ${WEBROOT}/${SITENAME}:g" "${SITES_AVAILABLE}"/"${SITENAME}".conf
+    sed -i "s:Directory /var/www/:Directory ${WEBROOT}/${SITENAME}/:g" "${SITES_AVAILABLE}"/"${SITENAME}".conf
 
     # Custom logging
-    sed -i "s:error.log:${SITENAME}-error.log:g" ${SITES_AVAILABLE}/${SITENAME}.conf
-    sed -i "s:access.log:${SITENAME}-access.log:g" ${SITES_AVAILABLE}/${SITENAME}.conf
+    sed -i "s:error.log:${SITENAME}-error.log:g" "${SITES_AVAILABLE}"/"${SITENAME}".conf
+    sed -i "s:access.log:${SITENAME}-access.log:g" "${SITES_AVAILABLE}"/"${SITENAME}".conf
 
     echo "Enabling site..."
-    a2ensite ${SITENAME}.conf > /dev/null 2>&1
+    a2ensite "${SITENAME}".conf > /dev/null 2>&1
   fi
 
   # Restart Apache to apply the new configuration
@@ -168,7 +170,7 @@ mysql() {
     SQL="${DB_CREATE};${DB_PERMS}"
 
     echo "Creating MySQL database..."
-    $MYSQL --defaults-file=${DIR}/.my.conf -e "${SQL}"
+    $MYSQL --defaults-file="${DIR}"/.my.conf -e "${SQL}"
 
   # Custom DB queries if we're using a Mac
   elif [[ $(uname -s) == 'Darwin' ]]; then
@@ -176,7 +178,7 @@ mysql() {
     SQL="${DB_CREATE};${DB_PERMS}"
 
     echo "Creating MySQL database..."
-    $MYSQL --defaults-file=${DIR}/.mydevdesktop.conf -e "${SQL}"
+    $MYSQL --defaults-file="${DIR}"/.mydevdesktop.conf -e "${SQL}"
   fi
 }
 
@@ -197,23 +199,23 @@ EOT
 
   echo "Setting Drush permissions..."
   # Drush
-  chown ${PERMS} ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
-  chmod 600 ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
-  chmod -R 777 ${HOMEDIR}/.drush/cache/
+  chown "${PERMS}" "${HOMEDIR}"/.drush/"${SITENAME}".aliases.drushrc.php
+  chmod 600 "${HOMEDIR}"/.drush/"${SITENAME}".aliases.drushrc.php
+  chmod -R 777 "${HOMEDIR}"/.drush/cache/
 }
 
 drupal_install() {
   echo "Running Drupal installation..."
 
-  cd ${WEBROOT}/${SITENAME}/sites/default/
+  cd "${WEBROOT}"/"${SITENAME}"/sites/default/
 
   # Custom installation if we're using Linux
   if [[ $(uname -s) == 'Linux' ]]; then
-    ${DRUSH} site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${CREDS}:${CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
+    ${DRUSH} site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://"${CREDS}":"${CREDS}"@"${DB_HOST}":"${DB_PORT}"/"${SITENAME}" --site-name="${SITENAME}" --site-mail="${CREDS}"@"${SITENAME}"."${SUFFIX}" --account-name="${CREDS}" --account-pass="${CREDS}" --account-mail="${CREDS}"@"${SITENAME}"."${SUFFIX}"
 
   # Custom installation if we're using a Mac
   elif [[ $(uname -s) == 'Darwin' ]]; then
-    ${DRUSH} site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://${DD_CREDS}@${DB_HOST}:${DB_PORT}/${SITENAME} --site-name=${SITENAME} --site-mail=${CREDS}@${SITENAME}.${SUFFIX} --account-name=${CREDS} --account-pass=${CREDS} --account-mail=${CREDS}@${SITENAME}.${SUFFIX}
+    ${DRUSH} site-install standard install_configure_form.update_status_module='array(FALSE,FALSE)' -qy --db-url=mysql://"${DD_CREDS}"@"${DB_HOST}":"${DB_PORT}"/"${SITENAME}" --site-name="${SITENAME}" --site-mail="${CREDS}"@"${SITENAME}"."${SUFFIX}" --account-name="${CREDS}" --account-pass="${CREDS}" --account-mail="${CREDS}"@"${SITENAME}"."${SUFFIX}"
   fi
 
   # Now that Drupal is installed, rebuild Drush commandfile cache to load the alias.
@@ -224,7 +226,7 @@ dev_mode() {
   echo "Setting up development mode..."
   # Enable Simpletest
   cd ../ ; mkdir simpletest ; chmod -R 777 simpletest
-  ${DRUSH} --root=${WEBROOT}/${SITENAME} en -qy simpletest
+  ${DRUSH} --root="${WEBROOT}"/"${SITENAME}" en -qy simpletest
 }
 
 make_file() {
@@ -234,13 +236,13 @@ make_file() {
       d)
         echo "Loading the dev make file..." >&2
         # Drush doesn't place the modules at the right location so we're changing directory manually.
-        cd ${WEBROOT}/${SITENAME}
-        ${DRUSH} make --no-core -qy ${DIR}/dev.make --contrib-destination=.
+        cd "${WEBROOT}"/"${SITENAME}"
+        ${DRUSH} make --no-core -qy "${DIR}"/dev.make --contrib-destination=.
         ;;
       c)
         echo "Loading custom make file..." >&2
-        cd ${WEBROOT}/${SITENAME}
-        ${DRUSH} make --no-core -qy ${DIR}/custom.make --contrib-destination=.
+        cd "${WEBROOT}"/"${SITENAME}"
+        ${DRUSH} make --no-core -qy "${DIR}"/custom.make --contrib-destination=.
         ;;
     esac
   done
@@ -249,19 +251,19 @@ make_file() {
 set_permissions() {
   echo "Setting correct permissions..."
   # Drupal
-  chmod go-w ${WEBROOT}/${SITENAME}/sites/default
-  chmod go-w ${WEBROOT}/${SITENAME}/sites/default/settings.php
-  chmod go-w ${WEBROOT}/${SITENAME}/sites/default/services.yml
-  chmod 777 ${WEBROOT}/${SITENAME}/sites/default/files/
-  chmod -R 777 ${WEBROOT}/${SITENAME}/sites/default/files/config_*/sync
+  chmod go-w "${WEBROOT}"/"${SITENAME}"/sites/default
+  chmod go-w "${WEBROOT}"/"${SITENAME}"/sites/default/settings.php
+  chmod go-w "${WEBROOT}"/"${SITENAME}"/sites/default/services.yml
+  chmod 777 "${WEBROOT}"/"${SITENAME}"/sites/default/files/
+  chmod -R 777 "${WEBROOT}"/"${SITENAME}"/sites/default/files/config_*/sync
   # Supposedly, the below perms are too open, but it's the only way I found to fix broken image styles.
-  chmod 777 ${WEBROOT}/${SITENAME}/sites/default/files/styles
-  chown -R ${PERMS} ${WEBROOT}/${SITENAME}
+  chmod 777 "${WEBROOT}"/"${SITENAME}"/sites/default/files/styles
+  chown -R "${PERMS}" "${WEBROOT}"/"${SITENAME}"
 }
 
 site_check() {
   # Rebuilding Drupal caches
-  ${DRUSH} --root=${WEBROOT}/${SITENAME} cache-rebuild -q
+  ${DRUSH} --root="${WEBROOT}"/"${SITENAME}" cache-rebuild -q
 
   if [[ $(curl -sL -w "%{http_code} %{url_effective}\\n" "http://${SITENAME}.${SUFFIX}" -o /dev/null) ]]; then
     echo -e "${GREEN}Site is available at http://${SITENAME}.${SUFFIX}${COLOR_ENDING}"
@@ -302,26 +304,26 @@ deletion() {
   fi
 
   echo "Deleting Drupal docroot..."
-    rm -Rf ${WEBROOT}/${SITENAME}
+    rm -Rf "${WEBROOT:?}"/"${SITENAME}"
 
   echo "Deleting Apache vHost..."
-    a2dissite ${SITENAME} > /dev/null 2>&1
+    a2dissite "${SITENAME}" > /dev/null 2>&1
     service apache2 reload > /dev/null 2>&1
 
   # First, determine if we're running Apache 2.2 or 2.4
   if [[ -f ${SITES_AVAILABLE}/${SITENAME} ]]; then
-    rm -f ${SITES_AVAILABLE}/${SITENAME}
+    rm -f "${SITES_AVAILABLE}"/"${SITENAME}"
   else
-    rm -f ${SITES_AVAILABLE}/${SITENAME}.conf
-    rm /var/log/apache2/${SITENAME}-access.log && rm /var/log/apache2/${SITENAME}-error.log
+    rm -f "${SITES_AVAILABLE}"/"${SITENAME}".conf
+    rm /var/log/apache2/"${SITENAME}"-access.log && rm /var/log/apache2/"${SITENAME}"-error.log
   fi
 
   echo "Deleting hosts file entry..."
     sed -i "/${SITENAME}.${SUFFIX}/d" /etc/hosts
 
   echo "Deleting database..."
-    ${MYSQL} --defaults-file=${DIR}/.my.conf -e "DROP DATABASE IF EXISTS \`$SITENAME\`"
+    ${MYSQL} --defaults-file="${DIR}"/.my.conf -e "DROP DATABASE IF EXISTS \`$SITENAME\`"
 
   echo "Deleting Drush alias..."
-    rm ${HOMEDIR}/.drush/${SITENAME}.aliases.drushrc.php
+    rm "${HOMEDIR}"/.drush/"${SITENAME}".aliases.drushrc.php
 }

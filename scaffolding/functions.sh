@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Shared functions
 is_root() {
   # Make sure only root can execute the script

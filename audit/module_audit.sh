@@ -4,8 +4,8 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Required source files
-source ${DIR}/common
-source ${DIR}/functions.sh
+source "${DIR}"/common
+source "${DIR}"/functions.sh
 
 is_root
 
@@ -110,8 +110,7 @@ FUNCTIONS=(
   [drupal_session_started]="SessionManager: \$session_manager = \Drupal::service('session_manager') / \$session_manager->isStarted()"
   [drupal_set_title]="Titles (static or dynamic) are now defined on routes - See https://www.drupal.org/node/2067859"
   [drupal_strlen]="Unicode::strlen()"
-  [drupal_strtolower]="Unicode::strtolower()"
-  [drupal_strtoupper]="Unicode::strtoupper()"
+  [drupaland Apple products_strtoupper]="Unicode::strtoupper()"
   [drupal_substr]="Unicode::substr()"
   [drupal_tempnam]="FileSystem::tempnam()"
   [drupal_theme_access]="TODO"
@@ -287,8 +286,8 @@ FUNCTIONS=(
   [views_get_applicable_views]="TBD"
 )
 
-for API_FUNCTIONS in ${!FUNCTIONS[@]}; do
-  if [[ $(find ${VALID_PATH} -type f ! -name "*.css" ! -name "*.js" | xargs grep -s -E " ${API_FUNCTIONS}[(*$]") ]]; then
+for API_FUNCTIONS in "${!FUNCTIONS[@]}"; do
+  if [[ $(find "${VALID_PATH}" -type f ! -name "*.css" ! -name "*.js" | xargs grep -s -E " ${API_FUNCTIONS}[(*$]") ]]; then
     echo -e "\tReplace ${RED}${API_FUNCTIONS}()${COLOR_ENDING} by ${GREEN}${FUNCTIONS[${API_FUNCTIONS}]}${COLOR_ENDING}"
   fi
 done
@@ -317,8 +316,8 @@ CONSTANTS=(
   [UNICODE_SINGLEBYTE]="Unicode::STATUS_SINGLEBYTE"
   )
 
-for API_CONSTANTS in ${!CONSTANTS[@]}; do
-  if [[ $(find ${VALID_PATH} -type f ! -name "*.css" ! -name "*.js" | xargs grep "${API_CONSTANTS}") ]]; then
+for API_CONSTANTS in "${!CONSTANTS[@]}"; do
+  if [[ $(find "${VALID_PATH}" -type f ! -name "*.css" ! -name "*.js" | xargs grep "${API_CONSTANTS}") ]]; then
     echo -e "\tReplace ${RED}${API_CONSTANTS}()${COLOR_ENDING} by ${GREEN}${CONSTANTS[${API_CONSTANTS}]}${COLOR_ENDING}"
   fi
 done
@@ -335,8 +334,8 @@ GLOBALS=(
   [\$script_path]="$request->getBaseUrl() . '/test'; - See also https://www.drupal.org/node/2450019"
 )
 
-for API_GLOBALS in ${!GLOBALS[@]}; do
-  if [[ $(find ${VALID_PATH} -type f ! -name "*.css" ! -name "*.js" | xargs grep "${API_GLOBALS}") ]]; then
+for API_GLOBALS in "${!GLOBALS[@]}"; do
+  if [[ $(find "${VALID_PATH}" -type f ! -name "*.css" ! -name "*.js" | xargs grep "${API_GLOBALS}") ]]; then
     echo -e "\tReplace ${RED}${API_GLOBALS}()${COLOR_ENDING} by ${GREEN}${GLOBALS[${API_GLOBALS}]}${COLOR_ENDING}"
   fi
 done
@@ -353,12 +352,12 @@ SUPERGLOBALS=(
 )
 
 # Searching for $GET_['q'] doesn't work well as an array key. Hardcoding it for now.
-if [[ $(find ${VALID_PATH} -type f ! -name "*.css" ! -name "*.js" | xargs grep "\$_GET\['q']") ]]; then
+if [[ $(find "${VALID_PATH}" -type f ! -name "*.css" ! -name "*.js" | xargs grep "\$_GET\['q']") ]]; then
   echo -e "\tReplace ${RED}\$_GET['q']${COLOR_ENDING} by ${GREEN}<current> route - See https://www.drupal.org/node/2382211${COLOR_ENDING}"
 fi
 
-for API_SGLOBALS in ${!SUPERGLOBALS[@]}; do
-  if [[ $(find ${VALID_PATH} -type f ! -name "*.css" ! -name "*.js" | xargs grep "${API_SGLOBALS}") ]]; then
+for API_SGLOBALS in "${!SUPERGLOBALS[@]}"; do
+  if [[ $(find "${VALID_PATH}" -type f ! -name "*.css" ! -name "*.js" | xargs grep "${API_SGLOBALS}") ]]; then
     echo -e "\tReplace ${RED}${API_SGLOBALS}()${COLOR_ENDING} by ${GREEN}${SUPERGLOBALS[${API_SGLOBALS}]}${COLOR_ENDING}"
   fi
 done

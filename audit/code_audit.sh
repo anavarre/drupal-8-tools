@@ -4,8 +4,8 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Required source files
-source ${DIR}/common
-source ${DIR}/functions.sh
+source "${DIR}"/common
+source "${DIR}"/functions.sh
 
 is_root
 
@@ -36,7 +36,7 @@ BUILD="build"
 # File structure
 echo -e "${BLUE}Auditing block file structure...${COLOR_ENDING}"
 # namespace
-if [[ -z $(grep -w --color=auto "namespace Drupal\\\\${MODULE}\\\Plugin\\\Block;" ${BLOCK_FILES}) ]]; then
+if [[ -z $(grep -w --color=auto "namespace Drupal\\\\${MODULE}\\\Plugin\\\Block;" "${BLOCK_FILES}") ]]; then
   echo -e "${RED}The namespace is missing or incorrectly set!${COLOR_ENDING}"
   echo "The correct namespace to use is: Drupal\\${MODULE}\Plugin\Block;"
 else
@@ -44,7 +44,7 @@ else
 fi
 
 # BlockBase use statement
-if [[ -z $(grep -w --color=auto "use Drupal\\\Core\\\Block\\\\${BLOCKBASE};" ${BLOCK_FILES}) ]]; then
+if [[ -z $(grep -w --color=auto "use Drupal\\\Core\\\Block\\\\${BLOCKBASE};" "${BLOCK_FILES}") ]]; then
   echo -e "${RED}The use statement for ${BLOCKBASE} is missing or incorrectly set!${COLOR_ENDING}"
   echo "The correct use statement to invoke is: Drupal\\Core\\Block\\${BLOCKBASE};"
 else
@@ -52,7 +52,7 @@ else
 fi
 
 # FormStateInterface use statement
-if [[ -z $(grep -w --color=auto "use Drupal\\\Core\\\Form\\\\${FORMSTATEINTERFACE};" ${BLOCK_FILES}) ]]; then
+if [[ -z $(grep -w --color=auto "use Drupal\\\Core\\\Form\\\\${FORMSTATEINTERFACE};" "${BLOCK_FILES}") ]]; then
   echo -e "${RED}The use statement for ${FORMSTATEINTERFACE} is missing or incorrectly set!${COLOR_ENDING}"
   echo "The correct use statement to invoke is: Drupal\\Core\\Block\\${FORMSTATEINTERFACE};"
 else
@@ -60,7 +60,7 @@ else
 fi
 
 # @Block annotation
-if [[ -z $(grep -w --color=auto "${BLOCK_ANNOTATION}(" ${BLOCK_FILES}) ]]; then
+if [[ -z $(grep -w --color=auto "${BLOCK_ANNOTATION}(" "${BLOCK_FILES}") ]]; then
   echo -e "${RED}The ${BLOCK_ANNOTATION} annotation is missing or not correctly set!${COLOR_ENDING}"
   echo "The correct annotation to use is: ${BLOCK_ANNOTATION}"
 else
@@ -68,7 +68,7 @@ else
 fi
 
 # @Block id annotation
-if [[ -z $(grep -w --color=auto "${BLOCK_ID}" ${BLOCK_FILES}) ]]; then
+if [[ -z $(grep -w --color=auto "${BLOCK_ID}" "${BLOCK_FILES}") ]]; then
   echo -e "${RED}The ${BLOCK_ANNOTATION} id annotation is missing or not correctly set!${COLOR_ENDING}"
   echo "The correct id annotation to use is: ${BLOCK_ID}"
 else
@@ -76,7 +76,7 @@ else
 fi
 
 # @Block admin_label annotation
-if [[ -z $(grep -w --color=auto "${BLOCK_LABEL}" ${BLOCK_FILES}) ]]; then
+if [[ -z $(grep -w --color=auto "${BLOCK_LABEL}" "${BLOCK_FILES}") ]]; then
   echo -e "${RED}The ${BLOCK_ANNOTATION} label annotation is missing or not correctly set!${COLOR_ENDING}"
   echo "The correct label annotation to use is: ${BLOCK_LABEL}"
 else
@@ -84,7 +84,7 @@ else
 fi
 
 # @Block category annotation
-if [[ -z $(grep -w --color=auto "${BLOCK_CATEGORY}" ${BLOCK_FILES}) ]]; then
+if [[ -z $(grep -w --color=auto "${BLOCK_CATEGORY}" "${BLOCK_FILES}") ]]; then
   echo -e "${RED}The ${BLOCK_ANNOTATION} category annotation is missing or not correctly set!${COLOR_ENDING}"
   echo "The correct category annotation to use is: ${BLOCK_CATEGORY}"
 else
@@ -94,7 +94,7 @@ fi
 # Block methods
 echo -e "${BLUE}Auditing block methods...${COLOR_ENDING}"
 # blockForm()
-if [[ -z $(grep -w --color=auto "public function ${BLOCKFORM}(\$form, ${FORMSTATEINTERFACE} \$form_state)" ${BLOCK_FILES}) ]]; then
+if [[ -z $(grep -w --color=auto "public function \"${BLOCKFORM}\"(\$form, ${FORMSTATEINTERFACE} \$form_state)" "${BLOCK_FILES}") ]]; then
   echo -e "${RED}The ${BLOCKFORM}() function is missing or not correctly instantiated!${COLOR_ENDING}"
   echo -e "\tThe correct implementation is: ${GREEN}public function ${BLOCKFORM}(\$form, FormStateInterface \$form_state)${COLOR_ENDING}"
 else
@@ -102,7 +102,7 @@ else
 fi
 
 # blockSubmit()
-if [[ -z $(grep -w --color=auto "public function ${BLOCKSUBMIT}(\$form, ${FORMSTATEINTERFACE} \$form_state)" ${BLOCK_FILES}) ]]; then
+if [[ -z $(grep -w --color=auto "public function ${BLOCKSUBMIT}(\$form, ${FORMSTATEINTERFACE} \$form_state)" "${BLOCK_FILES}") ]]; then
   echo -e "${RED}The ${BLOCKSUBMIT}() function is missing or not correctly instantiated!${COLOR_ENDING}"
   echo -e "\tThe correct implementation is: ${GREEN}public function ${BLOCKSUBMIT}(\$form, ${FORMSTATEINTERFACE} \$form_state)${COLOR_ENDING}"
 else
@@ -110,7 +110,7 @@ else
 fi
 
 # build()
-if [[ -z $(grep -w --color=auto "public function ${BUILD}()" ${BLOCK_FILES}) ]]; then
+if [[ -z $(grep -w --color=auto "public function ${BUILD}()" "${BLOCK_FILES}") ]]; then
   echo -e "${RED}The ${BUILD}() function is missing or not correctly instantiated!${COLOR_ENDING}"
   echo -e "\tThe correct implementation is: ${GREEN}public function ${BUILD}()${COLOR_ENDING}"
 else

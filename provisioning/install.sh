@@ -4,8 +4,8 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Required source files
-source ${DIR}/common
-source ${DIR}/functions.sh
+source "${DIR}"/common
+source "${DIR}"/functions.sh
 
 is_root
 

@@ -4,8 +4,8 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Required source files
-source ${DIR}/common
-source ${DIR}/functions.sh
+source "${DIR}"/common
+source "${DIR}"/functions.sh
 
 is_root
 
@@ -60,7 +60,7 @@ else
 fi
 
 # If XDebug is enabled, then check max_nesting_level.
-if [[ "${XDEBUG_NESTING}" < 256 ]] || [[ "${XDEBUG_NESTING_CLI}" < 256 ]]; then
+if [[ "${XDEBUG_NESTING}" -lt 256 ]] || [[ "${XDEBUG_NESTING_CLI}" -lt 256 ]]; then
   echo -e "PHP's xdebug.max_nesting_level should be set to 256 at a minimum. ${RED}[ERROR]${COLOR_ENDING}"
 else
   echo -e "PHP's xdebug.max_nesting_level is correctly set ${GREEN}[OK]${COLOR_ENDING}"
