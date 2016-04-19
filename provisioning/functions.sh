@@ -74,6 +74,12 @@ checkout() {
   fi
 }
 
+composer_dependencies() {
+  echo "Pulling composer dependencies..."
+  cd "${WEBROOT}"/"${SITENAME}"
+  composer install -q
+}
+
 settings_files() {
   echo "Creating settings.testing.php file..." # See https://www.drupal.org/node/2230005
   touch "${WEBROOT}"/"${SITENAME}"/sites/default/settings.testing.php

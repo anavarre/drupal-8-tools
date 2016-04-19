@@ -20,6 +20,7 @@ head_symlink
 # Prepare deployment
 installer
 checkout
+composer_dependencies
 
 # Prepare Drupal files
 settings_files
